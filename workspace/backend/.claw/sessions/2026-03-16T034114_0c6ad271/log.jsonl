@@ -1,0 +1,148 @@
+{"ts":"2026-03-16T03:41:14.509Z","level":"debug","msg":"InMemoryToolRegistry initialized"}
+{"ts":"2026-03-16T03:41:14.511Z","level":"info","msg":"Initialized 1 MCP server configurations","ctx":{"serverCount":1,"serverIds":["agent-skills"]}}
+{"ts":"2026-03-16T03:41:14.662Z","level":"info","msg":"MCP server connected: agent-skills","ctx":{"serverId":"agent-skills","transport":"stdio"}}
+{"ts":"2026-03-16T03:41:14.663Z","level":"info","msg":"MCP server connection results: 1 connected, 0 failed","ctx":{"connected":1,"failed":0,"total":1}}
+{"ts":"2026-03-16T03:41:14.672Z","level":"debug","msg":"Listed 44 tools from agent-skills","ctx":{"serverId":"agent-skills","toolCount":44}}
+{"ts":"2026-03-16T03:41:14.674Z","level":"debug","msg":"Registered MCP tool: agent-skills:typescript-code-generation","ctx":{"serverId":"agent-skills","toolName":"typescript-code-generation"}}
+{"ts":"2026-03-16T03:41:14.675Z","level":"debug","msg":"Registered MCP tool: agent-skills:python-code-generation","ctx":{"serverId":"agent-skills","toolName":"python-code-generation"}}
+{"ts":"2026-03-16T03:41:14.676Z","level":"debug","msg":"Registered MCP tool: agent-skills:full-stack-application-delivery","ctx":{"serverId":"agent-skills","toolName":"full-stack-application-delivery"}}
+{"ts":"2026-03-16T03:41:14.676Z","level":"debug","msg":"Registered MCP tool: agent-skills:microservices-architecture","ctx":{"serverId":"agent-skills","toolName":"microservices-architecture"}}
+{"ts":"2026-03-16T03:41:14.677Z","level":"debug","msg":"Registered MCP tool: agent-skills:static-code-analysis","ctx":{"serverId":"agent-skills","toolName":"static-code-analysis"}}
+{"ts":"2026-03-16T03:41:14.677Z","level":"debug","msg":"Registered MCP tool: agent-skills:refactoring-code","ctx":{"serverId":"agent-skills","toolName":"refactoring-code"}}
+{"ts":"2026-03-16T03:41:14.678Z","level":"debug","msg":"Registered MCP tool: agent-skills:security-vulnerability-scanning","ctx":{"serverId":"agent-skills","toolName":"security-vulnerability-scanning"}}
+{"ts":"2026-03-16T03:41:14.678Z","level":"debug","msg":"Registered MCP tool: agent-skills:pandas-data-analysis","ctx":{"serverId":"agent-skills","toolName":"pandas-data-analysis"}}
+{"ts":"2026-03-16T03:41:14.678Z","level":"debug","msg":"Registered MCP tool: agent-skills:advanced-data-analytics","ctx":{"serverId":"agent-skills","toolName":"advanced-data-analytics"}}
+{"ts":"2026-03-16T03:41:14.679Z","level":"debug","msg":"Registered MCP tool: agent-skills:dockerfile-creation","ctx":{"serverId":"agent-skills","toolName":"dockerfile-creation"}}
+{"ts":"2026-03-16T03:41:14.679Z","level":"debug","msg":"Registered MCP tool: agent-skills:kubernetes-deployment","ctx":{"serverId":"agent-skills","toolName":"kubernetes-deployment"}}
+{"ts":"2026-03-16T03:41:14.679Z","level":"debug","msg":"Registered MCP tool: agent-skills:infrastructure-as-code","ctx":{"serverId":"agent-skills","toolName":"infrastructure-as-code"}}
+{"ts":"2026-03-16T03:41:14.680Z","level":"debug","msg":"Registered MCP tool: agent-skills:ci/cd-pipeline-engineering","ctx":{"serverId":"agent-skills","toolName":"ci/cd-pipeline-engineering"}}
+{"ts":"2026-03-16T03:41:14.680Z","level":"debug","msg":"Registered MCP tool: agent-skills:javascript-debugging","ctx":{"serverId":"agent-skills","toolName":"javascript-debugging"}}
+{"ts":"2026-03-16T03:41:14.680Z","level":"debug","msg":"Registered MCP tool: agent-skills:python-debugging","ctx":{"serverId":"agent-skills","toolName":"python-debugging"}}
+{"ts":"2026-03-16T03:41:14.681Z","level":"debug","msg":"Registered MCP tool: agent-skills:unit-testing","ctx":{"serverId":"agent-skills","toolName":"unit-testing"}}
+{"ts":"2026-03-16T03:41:14.681Z","level":"debug","msg":"Registered MCP tool: agent-skills:integration-testing","ctx":{"serverId":"agent-skills","toolName":"integration-testing"}}
+{"ts":"2026-03-16T03:41:14.681Z","level":"debug","msg":"Registered MCP tool: agent-skills:advanced-testing-strategies","ctx":{"serverId":"agent-skills","toolName":"advanced-testing-strategies"}}
+{"ts":"2026-03-16T03:41:14.682Z","level":"debug","msg":"Registered MCP tool: agent-skills:load-testing-and-capacity-planning","ctx":{"serverId":"agent-skills","toolName":"load-testing-and-capacity-planning"}}
+{"ts":"2026-03-16T03:41:14.682Z","level":"debug","msg":"Registered MCP tool: agent-skills:react-development","ctx":{"serverId":"agent-skills","toolName":"react-development"}}
+{"ts":"2026-03-16T03:41:14.682Z","level":"debug","msg":"Registered MCP tool: agent-skills:css-styling-and-layout","ctx":{"serverId":"agent-skills","toolName":"css-styling-and-layout"}}
+{"ts":"2026-03-16T03:41:14.682Z","level":"debug","msg":"Registered MCP tool: agent-skills:advanced-frontend-patterns","ctx":{"serverId":"agent-skills","toolName":"advanced-frontend-patterns"}}
+{"ts":"2026-03-16T03:41:14.683Z","level":"debug","msg":"Registered MCP tool: agent-skills:api-design-and-rest/graphql","ctx":{"serverId":"agent-skills","toolName":"api-design-and-rest/graphql"}}
+{"ts":"2026-03-16T03:41:14.683Z","level":"debug","msg":"Registered MCP tool: agent-skills:llm-prompting-and-engineering","ctx":{"serverId":"agent-skills","toolName":"llm-prompting-and-engineering"}}
+{"ts":"2026-03-16T03:41:14.683Z","level":"debug","msg":"Registered MCP tool: agent-skills:machine-learning-model-development","ctx":{"serverId":"agent-skills","toolName":"machine-learning-model-development"}}
+{"ts":"2026-03-16T03:41:14.683Z","level":"debug","msg":"Registered MCP tool: agent-skills:model-fine-tuning-and-adaptation","ctx":{"serverId":"agent-skills","toolName":"model-fine-tuning-and-adaptation"}}
+{"ts":"2026-03-16T03:41:14.684Z","level":"debug","msg":"Registered MCP tool: agent-skills:multimodal-systems","ctx":{"serverId":"agent-skills","toolName":"multimodal-systems"}}
+{"ts":"2026-03-16T03:41:14.684Z","level":"debug","msg":"Registered MCP tool: agent-skills:code-security-analysis","ctx":{"serverId":"agent-skills","toolName":"code-security-analysis"}}
+{"ts":"2026-03-16T03:41:14.684Z","level":"debug","msg":"Registered MCP tool: agent-skills:secure-architecture-design","ctx":{"serverId":"agent-skills","toolName":"secure-architecture-design"}}
+{"ts":"2026-03-16T03:41:14.685Z","level":"debug","msg":"Registered MCP tool: agent-skills:authentication-and-authorization","ctx":{"serverId":"agent-skills","toolName":"authentication-and-authorization"}}
+{"ts":"2026-03-16T03:41:14.685Z","level":"debug","msg":"Registered MCP tool: agent-skills:api-documentation","ctx":{"serverId":"agent-skills","toolName":"api-documentation"}}
+{"ts":"2026-03-16T03:41:14.685Z","level":"debug","msg":"Registered MCP tool: agent-skills:system-design-and-architecture","ctx":{"serverId":"agent-skills","toolName":"system-design-and-architecture"}}
+{"ts":"2026-03-16T03:41:14.686Z","level":"debug","msg":"Registered MCP tool: agent-skills:database-design-and-optimization","ctx":{"serverId":"agent-skills","toolName":"database-design-and-optimization"}}
+{"ts":"2026-03-16T03:41:14.686Z","level":"debug","msg":"Registered MCP tool: agent-skills:git-workflow-and-collaboration","ctx":{"serverId":"agent-skills","toolName":"git-workflow-and-collaboration"}}
+{"ts":"2026-03-16T03:41:14.686Z","level":"debug","msg":"Registered MCP tool: agent-skills:error-handling-and-resilience","ctx":{"serverId":"agent-skills","toolName":"error-handling-and-resilience"}}
+{"ts":"2026-03-16T03:41:14.686Z","level":"debug","msg":"Registered MCP tool: agent-skills:performance-optimization-engineering","ctx":{"serverId":"agent-skills","toolName":"performance-optimization-engineering"}}
+{"ts":"2026-03-16T03:41:14.687Z","level":"debug","msg":"Registered MCP tool: agent-skills:observability-and-monitoring","ctx":{"serverId":"agent-skills","toolName":"observability-and-monitoring"}}
+{"ts":"2026-03-16T03:41:14.687Z","level":"debug","msg":"Registered MCP tool: agent-skills:multi-agent-orchestration","ctx":{"serverId":"agent-skills","toolName":"multi-agent-orchestration"}}
+{"ts":"2026-03-16T03:41:14.687Z","level":"debug","msg":"Registered MCP tool: agent-skills:agent-patterns-and-architectures","ctx":{"serverId":"agent-skills","toolName":"agent-patterns-and-architectures"}}
+{"ts":"2026-03-16T03:41:14.688Z","level":"debug","msg":"Registered MCP tool: agent-skills:complex-workflow-composition","ctx":{"serverId":"agent-skills","toolName":"complex-workflow-composition"}}
+{"ts":"2026-03-16T03:41:14.688Z","level":"debug","msg":"Registered MCP tool: agent-skills:custom-tool-integration","ctx":{"serverId":"agent-skills","toolName":"custom-tool-integration"}}
+{"ts":"2026-03-16T03:41:14.688Z","level":"debug","msg":"Registered MCP tool: agent-skills:rag-(retrieval-augmented-generation)","ctx":{"serverId":"agent-skills","toolName":"rag-(retrieval-augmented-generation)"}}
+{"ts":"2026-03-16T03:41:14.688Z","level":"debug","msg":"Registered MCP tool: agent-skills:advanced-prompt-optimization","ctx":{"serverId":"agent-skills","toolName":"advanced-prompt-optimization"}}
+{"ts":"2026-03-16T03:41:14.689Z","level":"debug","msg":"Registered MCP tool: agent-skills:knowledge-synthesis-and-research","ctx":{"serverId":"agent-skills","toolName":"knowledge-synthesis-and-research"}}
+{"ts":"2026-03-16T03:41:14.689Z","level":"info","msg":"Registered 44 MCP tools","ctx":{"totalTools":44}}
+{"ts":"2026-03-16T03:41:14.690Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:typescript-code-generation"}}
+{"ts":"2026-03-16T03:41:14.691Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:typescript-code-generation"}}
+{"ts":"2026-03-16T03:41:14.692Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:python-code-generation"}}
+{"ts":"2026-03-16T03:41:14.692Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:python-code-generation"}}
+{"ts":"2026-03-16T03:41:14.693Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:full-stack-application-delivery"}}
+{"ts":"2026-03-16T03:41:14.693Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:full-stack-application-delivery"}}
+{"ts":"2026-03-16T03:41:14.693Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:microservices-architecture"}}
+{"ts":"2026-03-16T03:41:14.694Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:microservices-architecture"}}
+{"ts":"2026-03-16T03:41:14.694Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:static-code-analysis"}}
+{"ts":"2026-03-16T03:41:14.695Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:static-code-analysis"}}
+{"ts":"2026-03-16T03:41:14.695Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:refactoring-code"}}
+{"ts":"2026-03-16T03:41:14.695Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:refactoring-code"}}
+{"ts":"2026-03-16T03:41:14.696Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:security-vulnerability-scanning"}}
+{"ts":"2026-03-16T03:41:14.696Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:security-vulnerability-scanning"}}
+{"ts":"2026-03-16T03:41:14.697Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:pandas-data-analysis"}}
+{"ts":"2026-03-16T03:41:14.697Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:pandas-data-analysis"}}
+{"ts":"2026-03-16T03:41:14.698Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:advanced-data-analytics"}}
+{"ts":"2026-03-16T03:41:14.698Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:advanced-data-analytics"}}
+{"ts":"2026-03-16T03:41:14.699Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:dockerfile-creation"}}
+{"ts":"2026-03-16T03:41:14.699Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:dockerfile-creation"}}
+{"ts":"2026-03-16T03:41:14.699Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:kubernetes-deployment"}}
+{"ts":"2026-03-16T03:41:14.700Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:kubernetes-deployment"}}
+{"ts":"2026-03-16T03:41:14.700Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:infrastructure-as-code"}}
+{"ts":"2026-03-16T03:41:14.701Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:infrastructure-as-code"}}
+{"ts":"2026-03-16T03:41:14.701Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:ci/cd-pipeline-engineering"}}
+{"ts":"2026-03-16T03:41:14.701Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:ci/cd-pipeline-engineering"}}
+{"ts":"2026-03-16T03:41:14.702Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:javascript-debugging"}}
+{"ts":"2026-03-16T03:41:14.702Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:javascript-debugging"}}
+{"ts":"2026-03-16T03:41:14.702Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:python-debugging"}}
+{"ts":"2026-03-16T03:41:14.703Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:python-debugging"}}
+{"ts":"2026-03-16T03:41:14.703Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:unit-testing"}}
+{"ts":"2026-03-16T03:41:14.704Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:unit-testing"}}
+{"ts":"2026-03-16T03:41:14.704Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:integration-testing"}}
+{"ts":"2026-03-16T03:41:14.705Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:integration-testing"}}
+{"ts":"2026-03-16T03:41:14.705Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:advanced-testing-strategies"}}
+{"ts":"2026-03-16T03:41:14.706Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:advanced-testing-strategies"}}
+{"ts":"2026-03-16T03:41:14.706Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:load-testing-and-capacity-planning"}}
+{"ts":"2026-03-16T03:41:14.706Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:load-testing-and-capacity-planning"}}
+{"ts":"2026-03-16T03:41:14.707Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:react-development"}}
+{"ts":"2026-03-16T03:41:14.707Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:react-development"}}
+{"ts":"2026-03-16T03:41:14.708Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:css-styling-and-layout"}}
+{"ts":"2026-03-16T03:41:14.709Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:css-styling-and-layout"}}
+{"ts":"2026-03-16T03:41:14.709Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:advanced-frontend-patterns"}}
+{"ts":"2026-03-16T03:41:14.709Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:advanced-frontend-patterns"}}
+{"ts":"2026-03-16T03:41:14.710Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:api-design-and-rest/graphql"}}
+{"ts":"2026-03-16T03:41:14.710Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:api-design-and-rest/graphql"}}
+{"ts":"2026-03-16T03:41:14.711Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:llm-prompting-and-engineering"}}
+{"ts":"2026-03-16T03:41:14.712Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:llm-prompting-and-engineering"}}
+{"ts":"2026-03-16T03:41:14.712Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:machine-learning-model-development"}}
+{"ts":"2026-03-16T03:41:14.712Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:machine-learning-model-development"}}
+{"ts":"2026-03-16T03:41:14.713Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:model-fine-tuning-and-adaptation"}}
+{"ts":"2026-03-16T03:41:14.713Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:model-fine-tuning-and-adaptation"}}
+{"ts":"2026-03-16T03:41:14.714Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:multimodal-systems"}}
+{"ts":"2026-03-16T03:41:14.714Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:multimodal-systems"}}
+{"ts":"2026-03-16T03:41:14.714Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:code-security-analysis"}}
+{"ts":"2026-03-16T03:41:14.715Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:code-security-analysis"}}
+{"ts":"2026-03-16T03:41:14.715Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:secure-architecture-design"}}
+{"ts":"2026-03-16T03:41:14.716Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:secure-architecture-design"}}
+{"ts":"2026-03-16T03:41:14.716Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:authentication-and-authorization"}}
+{"ts":"2026-03-16T03:41:14.717Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:authentication-and-authorization"}}
+{"ts":"2026-03-16T03:41:14.717Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:api-documentation"}}
+{"ts":"2026-03-16T03:41:14.718Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:api-documentation"}}
+{"ts":"2026-03-16T03:41:14.718Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:system-design-and-architecture"}}
+{"ts":"2026-03-16T03:41:14.718Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:system-design-and-architecture"}}
+{"ts":"2026-03-16T03:41:14.719Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:database-design-and-optimization"}}
+{"ts":"2026-03-16T03:41:14.719Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:database-design-and-optimization"}}
+{"ts":"2026-03-16T03:41:14.719Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:git-workflow-and-collaboration"}}
+{"ts":"2026-03-16T03:41:14.720Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:git-workflow-and-collaboration"}}
+{"ts":"2026-03-16T03:41:14.720Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:error-handling-and-resilience"}}
+{"ts":"2026-03-16T03:41:14.721Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:error-handling-and-resilience"}}
+{"ts":"2026-03-16T03:41:14.721Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:performance-optimization-engineering"}}
+{"ts":"2026-03-16T03:41:14.722Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:performance-optimization-engineering"}}
+{"ts":"2026-03-16T03:41:14.722Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:observability-and-monitoring"}}
+{"ts":"2026-03-16T03:41:14.723Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:observability-and-monitoring"}}
+{"ts":"2026-03-16T03:41:14.723Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:multi-agent-orchestration"}}
+{"ts":"2026-03-16T03:41:14.724Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:multi-agent-orchestration"}}
+{"ts":"2026-03-16T03:41:14.724Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:agent-patterns-and-architectures"}}
+{"ts":"2026-03-16T03:41:14.724Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:agent-patterns-and-architectures"}}
+{"ts":"2026-03-16T03:41:14.725Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:complex-workflow-composition"}}
+{"ts":"2026-03-16T03:41:14.725Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:complex-workflow-composition"}}
+{"ts":"2026-03-16T03:41:14.726Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:custom-tool-integration"}}
+{"ts":"2026-03-16T03:41:14.726Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:custom-tool-integration"}}
+{"ts":"2026-03-16T03:41:14.726Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:rag-(retrieval-augmented-generation)"}}
+{"ts":"2026-03-16T03:41:14.727Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:rag-(retrieval-augmented-generation)"}}
+{"ts":"2026-03-16T03:41:14.727Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:advanced-prompt-optimization"}}
+{"ts":"2026-03-16T03:41:14.728Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:advanced-prompt-optimization"}}
+{"ts":"2026-03-16T03:41:14.728Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"mcp:agent-skills:knowledge-synthesis-and-research"}}
+{"ts":"2026-03-16T03:41:14.728Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"mcp:agent-skills:knowledge-synthesis-and-research"}}
+{"ts":"2026-03-16T03:41:14.729Z","level":"info","msg":"Discovered 44 tools from MCP servers","ctx":{"toolCount":44}}
+{"ts":"2026-03-16T03:41:14.729Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"save_memory"}}
+{"ts":"2026-03-16T03:41:14.730Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"save_memory"}}
+{"ts":"2026-03-16T03:41:14.730Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"search_memory"}}
+{"ts":"2026-03-16T03:41:14.730Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"search_memory"}}
+{"ts":"2026-03-16T03:41:14.731Z","level":"debug","msg":"Memory tools registered (save, search)"}
+{"ts":"2026-03-16T03:41:14.731Z","level":"debug","msg":"Agent session manager registered"}
+{"ts":"2026-03-16T03:41:14.731Z","level":"debug","msg":"Communication services registered"}
+{"ts":"2026-03-16T03:41:14.732Z","level":"debug","msg":"Sub-agent services registered"}
+{"ts":"2026-03-16T03:41:14.744Z","level":"debug","msg":"Scheduler services registered and started"}

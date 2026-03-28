@@ -1,0 +1,10 @@
+{"ts":"2026-03-12T07:05:58.818Z","level":"debug","msg":"InMemoryToolRegistry initialized"}
+{"ts":"2026-03-12T07:05:58.819Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"save_memory"}}
+{"ts":"2026-03-12T07:05:58.820Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"save_memory"}}
+{"ts":"2026-03-12T07:05:58.821Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"search_memory"}}
+{"ts":"2026-03-12T07:05:58.821Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"search_memory"}}
+{"ts":"2026-03-12T07:05:58.822Z","level":"debug","msg":"Memory tools registered (save, search)"}
+{"ts":"2026-03-12T07:05:58.823Z","level":"debug","msg":"Agent session manager registered"}
+{"ts":"2026-03-12T07:05:58.824Z","level":"debug","msg":"Communication services registered"}
+{"ts":"2026-03-12T07:05:58.824Z","level":"debug","msg":"Sub-agent services registered"}
+{"ts":"2026-03-12T07:05:58.826Z","level":"debug","msg":"Scheduler services registered and started"}

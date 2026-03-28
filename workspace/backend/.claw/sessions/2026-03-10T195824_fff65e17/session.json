@@ -1,0 +1,15 @@
+{
+  "sessionId": "fff65e17-87e5-4d23-8e24-f7b90ec7a10d",
+  "startedAt": "2026-03-10T19:58:24.214Z",
+  "endedAt": null,
+  "durationMs": null,
+  "model": "glm-4-flash",
+  "parentSessionId": null,
+  "status": "running",
+  "summary": {
+    "messagesCount": 0,
+    "toolCalls": 0,
+    "errors": 0,
+    "subAgentsSpawned": 0
+  }
+}

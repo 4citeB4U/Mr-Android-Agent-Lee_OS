@@ -1,0 +1,12 @@
+INFO:     127.0.0.1:49470 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49472 - "POST /act HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49473 - "GET /screen HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54298 - "GET /stream/state HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58243 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58246 - "GET /screen HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55305 - "GET /stream/state HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58609 - "GET /stream/state HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49935 - "GET /stream/state HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57304 - "GET /stream/state HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57495 - "GET /stream/state HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54870 - "GET /stream/state HTTP/1.1" 404 Not Found

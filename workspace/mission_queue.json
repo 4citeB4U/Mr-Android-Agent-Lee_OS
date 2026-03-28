@@ -1,0 +1,542 @@
+[
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "1107d47a-8fe3-4dda-b97f-7a335359834d",
+    "status": "queued",
+    "queued_at": "2026-03-16T04:54:19.478203+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2368,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.237 below 0.6 threshold",
+    "id": "54fb7940-0ac7-4546-8e30-753b00262972",
+    "status": "queued",
+    "queued_at": "2026-03-16T04:54:19.479711+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "9ad3b510-64b8-4624-b6c1-423b7f1b966a",
+    "status": "queued",
+    "queued_at": "2026-03-16T04:54:19.482760+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "7de1ffa9-ba48-40b9-bd7f-d06fbda1d6c6",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:04:19.491349+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "2a49bf10-539e-4625-9ad7-ed7e59c6635f",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:04:19.513956+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "bd10c957-e6e2-4782-aed3-1f6d161dd264",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:04:19.516926+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "570edd70-459c-49dd-bdb1-8f5619620270",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:14:19.546752+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "b53b163b-4859-4fb9-ab77-269ba39f6157",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:14:19.573865+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "d42db363-c32b-4500-bf52-cc3ff6daacff",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:14:19.579598+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "de84d29c-9904-404d-8735-3ddad8c7a744",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:24:19.641333+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "48576409-2902-4ac4-9af9-e143aacdf16b",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:24:19.732488+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "ece859a5-2db5-4595-9a65-eb02814ea6f9",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:24:19.754472+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "db3b36ee-266a-4ba2-941c-61eb0e985cfa",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:34:19.793224+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "194dfea9-c864-41c8-882e-865210a48cda",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:34:19.836225+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "b81ca86e-bc2c-42ec-8752-08cc40bd72be",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:34:19.840502+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "879eb92d-f6d3-4564-a4e5-c8d01ca67711",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:44:19.866229+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "bc41028c-2c16-4f9f-9f15-25f3d2ee2d74",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:44:19.906792+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "aafa168a-dd10-4d86-b2fa-2840130e42f3",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:44:19.915270+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "29801a69-ebf1-4ce4-a94e-f20e210427db",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:54:19.947090+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "51ac16b0-1529-42e8-a914-428398a4be59",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:54:19.988500+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "860cfe2f-e8f1-40d0-8a45-5d27098e8c25",
+    "status": "queued",
+    "queued_at": "2026-03-16T05:54:19.992410+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "805952a9-eb49-4bb0-8417-57b03accf922",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:04:20.004712+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "33056e48-1531-4b8c-9d46-c416a85fdf11",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:04:20.043617+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "14875443-d4af-4891-b995-4511a49ab25d",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:04:20.050725+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "a06ab797-940f-4f45-a119-aafaa40e79d6",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:14:20.083801+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "264b7c8d-bd9a-4ecd-b351-8603810ec15d",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:14:20.118611+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "a217d865-0882-4ef8-9350-2f73b6f6187e",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:14:20.123119+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "676291f8-c48f-4c31-ad01-8168a43be90c",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:24:20.143371+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "56d1d650-4520-412c-974c-0350273f1414",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:24:20.186727+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "10d55e08-dfcc-40fe-a0c7-1360649e25b3",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:24:20.191498+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "34aea621-4dc6-4a1c-bc5c-88ea734b0f11",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:34:20.240927+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "864628ca-f611-4903-a8f1-f580f062612a",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:34:20.301792+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "f5d7184a-e474-4f58-b105-d29d04afaf5c",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:34:20.306916+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "00dbc3dc-4c0c-44b2-8039-da932222fe97",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:44:20.312409+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "2bc51d3b-2382-41d7-8a5c-95549546009c",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:44:20.355284+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "409fec59-6ca6-47f7-8eb8-74a1b09d1fb4",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:44:20.363857+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "e5c9d1cb-05c8-4188-9cfd-014285863b27",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:54:20.403230+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "9e086ba2-ea1c-4890-a28e-8e5a09bcbaaf",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:54:20.446332+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "ef4e9047-d3a9-4708-9f19-021f96a80a6c",
+    "status": "queued",
+    "queued_at": "2026-03-16T06:54:20.452868+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "78082602-7c3c-440f-8515-dc2cc7eea827",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:04:20.485791+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "2d2cb0b6-43fa-4d41-a09f-6e8dd831db63",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:04:20.534018+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "1f426958-af8d-4bd0-b0e5-ba947c6c2086",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:04:20.539536+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "15a36e3b-4a87-4ca5-a2d9-2233d09100e4",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:14:20.573417+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "ce242a18-d60e-4c30-ae49-facacfa1e6c2",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:14:20.624173+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "2e52a170-fc4d-48de-ab25-c6b922227941",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:14:20.630124+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "313ac4e4-5572-43d5-b758-d1f29ec6d3e8",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:24:20.685640+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "77b0ebbc-93fd-4eac-9af3-0e85d84b2d96",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:24:20.742516+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "08f3cf9e-1176-44dd-8f70-7400780e0420",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:24:20.747582+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "cd219357-d8ee-40d7-afc0-910cc7da6df5",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:34:20.769894+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2425,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.242 below 0.6 threshold",
+    "id": "7302fe66-7df9-42ba-8a2f-5b5ff28716c9",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:34:20.955804+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5572,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.557 below 0.6 threshold",
+    "id": "fae2dc7c-2672-4eac-b345-2408f9fc872a",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:34:20.976436+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "code",
+    "avg_reward": 0.5291,
+    "target_difficulty": 0.5,
+    "reason": "avg_reward 0.529 below 0.6 threshold",
+    "id": "98333be4-5a62-4780-ab9c-d03b98c87dee",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:44:21.002664+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "general",
+    "avg_reward": 0.2394,
+    "target_difficulty": 0.3,
+    "reason": "avg_reward 0.239 below 0.6 threshold",
+    "id": "68666f03-ccd4-47c9-9989-8b1a45cc614c",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:44:21.048770+00:00"
+  },
+  {
+    "type": "curriculum_drill",
+    "domain": "ui",
+    "avg_reward": 0.5555,
+    "target_difficulty": 0.4,
+    "reason": "avg_reward 0.556 below 0.6 threshold",
+    "id": "ec43beb6-ebde-4aa2-8449-1ff11da845f3",
+    "status": "queued",
+    "queued_at": "2026-03-16T07:44:21.052729+00:00"
+  }
+]

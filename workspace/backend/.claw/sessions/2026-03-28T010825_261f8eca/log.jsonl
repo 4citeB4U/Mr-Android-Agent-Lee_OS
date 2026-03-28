@@ -1,0 +1,13 @@
+{"ts":"2026-03-28T01:08:25.795Z","level":"debug","msg":"InMemoryToolRegistry initialized"}
+{"ts":"2026-03-28T01:08:25.816Z","level":"info","msg":"No MCP servers configured"}
+{"ts":"2026-03-28T01:08:25.828Z","level":"info","msg":"MCP server connection results: 0 connected, 0 failed","ctx":{"connected":0,"failed":0,"total":0}}
+{"ts":"2026-03-28T01:08:25.850Z","level":"info","msg":"Discovered 0 tools from MCP servers","ctx":{"toolCount":0}}
+{"ts":"2026-03-28T01:08:25.859Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"save_memory"}}
+{"ts":"2026-03-28T01:08:25.875Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"save_memory"}}
+{"ts":"2026-03-28T01:08:25.880Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"search_memory"}}
+{"ts":"2026-03-28T01:08:25.894Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"search_memory"}}
+{"ts":"2026-03-28T01:08:25.901Z","level":"debug","msg":"Memory tools registered (save, search)"}
+{"ts":"2026-03-28T01:08:25.905Z","level":"debug","msg":"Agent session manager registered"}
+{"ts":"2026-03-28T01:08:25.909Z","level":"debug","msg":"Communication services registered"}
+{"ts":"2026-03-28T01:08:25.916Z","level":"debug","msg":"Sub-agent services registered"}
+{"ts":"2026-03-28T01:08:25.924Z","level":"debug","msg":"Scheduler services registered and started"}

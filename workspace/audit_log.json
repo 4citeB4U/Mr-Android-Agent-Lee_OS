@@ -1,0 +1,420 @@
+[
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:31.327Z",
+    "prevHash": "0e43287a5adae653a48559b75fb6570b4fc92dcab9155438cdc9bd981e7f346e",
+    "hash": "013d43a5da5a615c7c636cb2fbbc6e6af23766087d2852bf9e7fd1408035604b"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/session",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:31.467Z",
+    "prevHash": "013d43a5da5a615c7c636cb2fbbc6e6af23766087d2852bf9e7fd1408035604b",
+    "hash": "862ab935adcb78ebcceb942332b4f925204e1f520c26fef4bd09d120889ff513"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:31.521Z",
+    "prevHash": "862ab935adcb78ebcceb942332b4f925204e1f520c26fef4bd09d120889ff513",
+    "hash": "cc9e8c02f11f588c451d68988d504ed5954493b9dbbe1969089f5f203f244e88"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/__nonexistent_route__",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:31.978Z",
+    "prevHash": "cc9e8c02f11f588c451d68988d504ed5954493b9dbbe1969089f5f203f244e88",
+    "hash": "1c49631919e12c928bb147241db4613931aef09a6f60b9f43f9c624191baf28c"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/recovery/status",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:32.812Z",
+    "prevHash": "1c49631919e12c928bb147241db4613931aef09a6f60b9f43f9c624191baf28c",
+    "hash": "b5b96bf86a4dba1333a3b1755a4149b7a879b7adfce21a160c78430f752079ef"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/__nonexistent_route__",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:54.118Z",
+    "prevHash": "cc566bd8c8f0b68a4912f282d15382c71b9522966294f47313c3354d083ac8e7",
+    "hash": "d0e4b8e22ba0285b0de8868b7d0daecc37d2b5d2e3886ae800935c0222285ffb"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/session",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:58.188Z",
+    "prevHash": "2bbe838710b4facc3348de25a047d3a2a1b48d087c3d920d4871bccdeb9521ea",
+    "hash": "1a39475da15e03c25caec0ff707f791df4c81284316fc829bccd9795c34b4d4d"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:58.352Z",
+    "prevHash": "1a39475da15e03c25caec0ff707f791df4c81284316fc829bccd9795c34b4d4d",
+    "hash": "4c576bc0a177d04018a0afd7179c9898f8ced56e39d502700be24a3bc78a4e36"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:58.371Z",
+    "prevHash": "4c576bc0a177d04018a0afd7179c9898f8ced56e39d502700be24a3bc78a4e36",
+    "hash": "501777a8ac0a43330531ad906dd6a9eb0d2a7e82f43fabcd5af3f70f312beb43"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/__nonexistent_route__",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:58.521Z",
+    "prevHash": "501777a8ac0a43330531ad906dd6a9eb0d2a7e82f43fabcd5af3f70f312beb43",
+    "hash": "204a65adbed4534bf60f93145bd0494b0e32859f816c170ee35791e346b015ff"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/recovery/status",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:00:59.674Z",
+    "prevHash": "204a65adbed4534bf60f93145bd0494b0e32859f816c170ee35791e346b015ff",
+    "hash": "b6e2080ecaff00c7ceef7519d91ee09eb3b4cca6ec12adf0ea46a9c45b04b194"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/session",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:10.704Z",
+    "prevHash": "b6e2080ecaff00c7ceef7519d91ee09eb3b4cca6ec12adf0ea46a9c45b04b194",
+    "hash": "16a62df9b61045ccee1c876926e93ab1cda1e072ce5bdeadcfb1bf591f3c9436"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:10.930Z",
+    "prevHash": "16a62df9b61045ccee1c876926e93ab1cda1e072ce5bdeadcfb1bf591f3c9436",
+    "hash": "d793ee0ee770d35e52dda012eeb1d8626de0148187c605e1481390c390a2b52f"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:10.956Z",
+    "prevHash": "d793ee0ee770d35e52dda012eeb1d8626de0148187c605e1481390c390a2b52f",
+    "hash": "c3d2fc9ce5e272f02018c4aa9d6a015abdc28c3865a4ffe6326d0621b75bffe8"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/__nonexistent_route__",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:14.920Z",
+    "prevHash": "c3d2fc9ce5e272f02018c4aa9d6a015abdc28c3865a4ffe6326d0621b75bffe8",
+    "hash": "0805d516578fb9625ea14a24380e91ad143b6bf67389b432e562ff1a6dffc797"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/recovery/status",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:14.949Z",
+    "prevHash": "0805d516578fb9625ea14a24380e91ad143b6bf67389b432e562ff1a6dffc797",
+    "hash": "f6c852a6fb5a88a5565e7ac19e87e8d5ef7febde09d87ff3a18906c25ff895b7"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/session",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:20.875Z",
+    "prevHash": "f6c852a6fb5a88a5565e7ac19e87e8d5ef7febde09d87ff3a18906c25ff895b7",
+    "hash": "44646cbb91708e2ee79e063ffd18f67526616166f4023325267855e50745f9ce"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:20.907Z",
+    "prevHash": "44646cbb91708e2ee79e063ffd18f67526616166f4023325267855e50745f9ce",
+    "hash": "505366895ac140e3208a91ddaf6ab2da20a81a66fe43bdb3b9cce61c7b81d929"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:20.929Z",
+    "prevHash": "505366895ac140e3208a91ddaf6ab2da20a81a66fe43bdb3b9cce61c7b81d929",
+    "hash": "d0250dc381f0e76aba1e4bb5545a616e8ff56510b2601ea9fc944defc93665fe"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/__nonexistent_route__",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:23.940Z",
+    "prevHash": "d0250dc381f0e76aba1e4bb5545a616e8ff56510b2601ea9fc944defc93665fe",
+    "hash": "7d1e6571e6a27bb68db6f4dc6d74c9da1d18a7ad25ab5a1dc50dbb2a44a94c2f"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/recovery/status",
+    "status": "SUCCESS",
+    "timestamp": "2026-02-26T06:52:23.963Z",
+    "prevHash": "7d1e6571e6a27bb68db6f4dc6d74c9da1d18a7ad25ab5a1dc50dbb2a44a94c2f",
+    "hash": "e7f6c6c08a80730fe7d69dfaba517aeb02c2cc641ac61d4f08abbf5a1a0ff8ff"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/session",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:53:11.231Z",
+    "prevHash": "e7f6c6c08a80730fe7d69dfaba517aeb02c2cc641ac61d4f08abbf5a1a0ff8ff",
+    "hash": "ef45ec9a47c259bd2f55c2b1dfd13a33ccbacf16a57a13470662904cbe8c67d5"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:53:11.460Z",
+    "prevHash": "ef45ec9a47c259bd2f55c2b1dfd13a33ccbacf16a57a13470662904cbe8c67d5",
+    "hash": "23a62183a13902c239d6cb6e29b6ded102bff8c9e982ce234705ba3558d0c9fa"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:53:11.481Z",
+    "prevHash": "23a62183a13902c239d6cb6e29b6ded102bff8c9e982ce234705ba3558d0c9fa",
+    "hash": "ae86137e57826802ed3299ae1ae60934e5fd3d58c421d8a90a74a6cc2252bfc4"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/__nonexistent_route__",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:53:11.837Z",
+    "prevHash": "ae86137e57826802ed3299ae1ae60934e5fd3d58c421d8a90a74a6cc2252bfc4",
+    "hash": "f955123f64ee0081401faefaec5c27f5ba48e3b79c900f4906d9df6b371fe27d"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/recovery/status",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:53:11.858Z",
+    "prevHash": "f955123f64ee0081401faefaec5c27f5ba48e3b79c900f4906d9df6b371fe27d",
+    "hash": "550a562b6f744c36564f3b5dc3684d322332f99d93e99f6700b0fc5bdb4944f4"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/session",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:55:44.696Z",
+    "prevHash": "550a562b6f744c36564f3b5dc3684d322332f99d93e99f6700b0fc5bdb4944f4",
+    "hash": "96ca436931495a229598cd8a84722e7a0cdbc4509ca4d57857957831eaf6548d"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:55:44.816Z",
+    "prevHash": "96ca436931495a229598cd8a84722e7a0cdbc4509ca4d57857957831eaf6548d",
+    "hash": "28023a4ecb23fb60dd989f5e868429c90e65d6efa6c3d01555af53947fa656ac"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/terminal/execute",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:55:44.851Z",
+    "prevHash": "28023a4ecb23fb60dd989f5e868429c90e65d6efa6c3d01555af53947fa656ac",
+    "hash": "93001cb0805f2d54400bfa2c2cbdcaf900480d3af0365a20e875a029bce793ae"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/__nonexistent_route__",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:55:45.222Z",
+    "prevHash": "93001cb0805f2d54400bfa2c2cbdcaf900480d3af0365a20e875a029bce793ae",
+    "hash": "5b55907f44afa991c3cd5841743b76ba5a14303ce2ff0f3cc77838e46a882377"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "AGENT_LEE_ADMIN",
+    "action": "API_REQUEST",
+    "resource": "/recovery/status",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-01T17:55:45.241Z",
+    "prevHash": "5b55907f44afa991c3cd5841743b76ba5a14303ce2ff0f3cc77838e46a882377",
+    "hash": "4947fae33f193cf77d2ba1509d700d34958a34f3ef6f20c69baa0db3618be9bb"
+  },
+  {
+    "level": "IMPORTANT",
+    "deviceId": "handshake",
+    "action": "DEVICE_ACT",
+    "resource": "/api/device/act",
+    "status": "REQUESTED",
+    "meta": {
+      "ip": "127.0.0.1",
+      "action": "move",
+      "hasCoordinates": true,
+      "hasText": false,
+      "hasKeys": false
+    },
+    "timestamp": "2026-03-16T01:32:57.534Z",
+    "prevHash": "4947fae33f193cf77d2ba1509d700d34958a34f3ef6f20c69baa0db3618be9bb",
+    "hash": "61c0e5c46387961407332b319814a69d9564f229f94673aea068c1b2aeb408ea"
+  },
+  {
+    "level": "IMPORTANT",
+    "deviceId": "handshake",
+    "action": "DEVICE_ACT",
+    "resource": "/api/device/act",
+    "status": "REQUESTED",
+    "meta": {
+      "ip": "127.0.0.1",
+      "action": "move",
+      "hasCoordinates": true,
+      "hasText": false,
+      "hasKeys": false
+    },
+    "timestamp": "2026-03-16T01:33:11.600Z",
+    "prevHash": "61c0e5c46387961407332b319814a69d9564f229f94673aea068c1b2aeb408ea",
+    "hash": "4d63f3e2e5fa3f193e62b744b5fc09fae7e2fb2c97511778b2610dabeed39b05"
+  },
+  {
+    "level": "IMPORTANT",
+    "deviceId": "handshake",
+    "action": "DEVICE_ACT",
+    "resource": "/api/device/act",
+    "status": "REQUESTED",
+    "meta": {
+      "ip": "127.0.0.1",
+      "action": "move",
+      "hasCoordinates": true,
+      "hasText": false,
+      "hasKeys": false
+    },
+    "timestamp": "2026-03-16T01:33:28.585Z",
+    "prevHash": "4d63f3e2e5fa3f193e62b744b5fc09fae7e2fb2c97511778b2610dabeed39b05",
+    "hash": "1f9c97126a7d8317cb5733a154fb87f0b2c8d440adc7b2dd58c6a12b48085844"
+  },
+  {
+    "level": "IMPORTANT",
+    "deviceId": "handshake",
+    "action": "DEVICE_ACT",
+    "resource": "/api/device/act",
+    "status": "REQUESTED",
+    "meta": {
+      "ip": "127.0.0.1",
+      "action": "move",
+      "hasCoordinates": true,
+      "hasText": false,
+      "hasKeys": false
+    },
+    "timestamp": "2026-03-16T01:42:00.292Z",
+    "prevHash": "1f9c97126a7d8317cb5733a154fb87f0b2c8d440adc7b2dd58c6a12b48085844",
+    "hash": "b8af5541855831291e4aa61741ba4f054d56ba57e44e22fbc0cad0062b01fbbb"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "MOBILE_ACCESS",
+    "action": "API_REQUEST",
+    "resource": "/files/content",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-16T04:20:26.524Z",
+    "prevHash": "b8af5541855831291e4aa61741ba4f054d56ba57e44e22fbc0cad0062b01fbbb",
+    "hash": "e2a948ea82d80bfc486ccc344dea26b2f759b30c1bcb3bba3f10ec991f9ed4ea"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "MOBILE_ACCESS",
+    "action": "API_REQUEST",
+    "resource": "/files/content",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-16T04:49:06.046Z",
+    "prevHash": "e2a948ea82d80bfc486ccc344dea26b2f759b30c1bcb3bba3f10ec991f9ed4ea",
+    "hash": "313a06e97a74c5973fb515c98e677da89ae501d8caba0b32b6a438e78808610b"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "MOBILE_ACCESS",
+    "action": "API_REQUEST",
+    "resource": "/files/content",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-16T04:50:32.959Z",
+    "prevHash": "313a06e97a74c5973fb515c98e677da89ae501d8caba0b32b6a438e78808610b",
+    "hash": "8483752e2b725e2ea38f3d24e8861fac4ddc375510bed934137bb19d6e5d2731"
+  },
+  {
+    "level": "INFO",
+    "deviceId": "MOBILE_ACCESS",
+    "action": "API_REQUEST",
+    "resource": "/files/content",
+    "status": "SUCCESS",
+    "timestamp": "2026-03-16T04:52:36.982Z",
+    "prevHash": "8483752e2b725e2ea38f3d24e8861fac4ddc375510bed934137bb19d6e5d2731",
+    "hash": "ac250ace9231591f3eb6602321536c79a2c48a6ee61980fd92ae368fde3aed02"
+  }
+]

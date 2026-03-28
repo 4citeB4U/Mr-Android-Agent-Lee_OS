@@ -1,0 +1,65 @@
+[ai] GLM-4.7-Flash (text) + GLM-4.6V-Flash (vision) initialized via Zhipu BigModel API.
+[layers] Loaded 50 layers. Kernel: 27 always-on.
+[health] Initializing autonomous telemetry monitoring...
+[ws] Neural Bridge WebSocket active on port 7003
+   Agent Lee OS - Backend API [HARDENED]
+═══════════════════════════════════════════════════════
+   Host: 0.0.0.0
+   Port: 7001
+   Health: http://0.0.0.0:7001/health
+   File API: http://0.0.0.0:7001/api/files
+[router] Reconstituted 62 mission cycles.
+Server listening on http://0.0.0.0:7001
+[2026-03-16T02:49:05.234Z] INFO: Agent Lee runtime bootstrapping…
+[2026-03-16T02:49:05.261Z] INFO: Initialized 1 MCP server configurations {"serverCount":1,"serverIds":["agent-skills"]}
+[2026-03-16T02:49:05.494Z] INFO: MCP server connected: agent-skills {"serverId":"agent-skills","transport":"stdio"}
+[2026-03-16T02:49:05.495Z] INFO: MCP server connection results: 1 connected, 0 failed {"connected":1,"failed":0,"total":1}
+[2026-03-16T02:49:05.579Z] INFO: Registered 44 MCP tools {"totalTools":44}
+[2026-03-16T02:49:05.582Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:typescript-code-generation"}
+[2026-03-16T02:49:05.588Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:python-code-generation"}
+[2026-03-16T02:49:05.591Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:full-stack-application-delivery"}
+[2026-03-16T02:49:05.593Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:microservices-architecture"}
+[2026-03-16T02:49:05.597Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:static-code-analysis"}
+[2026-03-16T02:49:05.600Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:refactoring-code"}
+[2026-03-16T02:49:05.603Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:security-vulnerability-scanning"}
+[2026-03-16T02:49:05.607Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:pandas-data-analysis"}
+[2026-03-16T02:49:05.612Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:advanced-data-analytics"}
+[2026-03-16T02:49:05.615Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:dockerfile-creation"}
+[2026-03-16T02:49:05.617Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:kubernetes-deployment"}
+[2026-03-16T02:49:05.621Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:infrastructure-as-code"}
+[2026-03-16T02:49:05.625Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:ci/cd-pipeline-engineering"}
+[2026-03-16T02:49:05.628Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:javascript-debugging"}
+[2026-03-16T02:49:05.630Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:python-debugging"}
+[2026-03-16T02:49:05.631Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:unit-testing"}
+[2026-03-16T02:49:05.633Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:integration-testing"}
+[2026-03-16T02:49:05.637Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:advanced-testing-strategies"}
+[2026-03-16T02:49:05.641Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:load-testing-and-capacity-planning"}
+[2026-03-16T02:49:05.643Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:react-development"}
+[2026-03-16T02:49:05.644Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:css-styling-and-layout"}
+[2026-03-16T02:49:05.646Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:advanced-frontend-patterns"}
+[2026-03-16T02:49:05.647Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:api-design-and-rest/graphql"}
+[2026-03-16T02:49:05.649Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:llm-prompting-and-engineering"}
+[2026-03-16T02:49:05.651Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:machine-learning-model-development"}
+[2026-03-16T02:49:05.654Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:model-fine-tuning-and-adaptation"}
+[2026-03-16T02:49:05.657Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:multimodal-systems"}
+[2026-03-16T02:49:05.659Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:code-security-analysis"}
+[2026-03-16T02:49:05.660Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:secure-architecture-design"}
+[2026-03-16T02:49:05.662Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:authentication-and-authorization"}
+[2026-03-16T02:49:05.665Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:api-documentation"}
+[2026-03-16T02:49:05.672Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:system-design-and-architecture"}
+[2026-03-16T02:49:05.675Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:database-design-and-optimization"}
+[2026-03-16T02:49:05.677Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:git-workflow-and-collaboration"}
+[2026-03-16T02:49:05.680Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:error-handling-and-resilience"}
+[2026-03-16T02:49:05.683Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:performance-optimization-engineering"}
+[2026-03-16T02:49:05.686Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:observability-and-monitoring"}
+[2026-03-16T02:49:05.690Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:multi-agent-orchestration"}
+[2026-03-16T02:49:05.692Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:agent-patterns-and-architectures"}
+[2026-03-16T02:49:05.694Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:complex-workflow-composition"}
+[2026-03-16T02:49:05.696Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:custom-tool-integration"}
+[2026-03-16T02:49:05.698Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:rag-(retrieval-augmented-generation)"}
+[2026-03-16T02:49:05.700Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:advanced-prompt-optimization"}
+[2026-03-16T02:49:05.707Z] INFO: Tool registered successfully {"toolName":"mcp:agent-skills:knowledge-synthesis-and-research"}
+[2026-03-16T02:49:05.711Z] INFO: Discovered 44 tools from MCP servers {"toolCount":44}
+[2026-03-16T02:49:05.714Z] INFO: Tool registered successfully {"toolName":"save_memory"}
+[2026-03-16T02:49:05.716Z] INFO: Tool registered successfully {"toolName":"search_memory"}
+[2026-03-16T02:49:05.744Z] INFO: Agent Lee runtime ready

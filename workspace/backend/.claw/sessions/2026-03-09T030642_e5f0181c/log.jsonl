@@ -1,0 +1,17 @@
+{"ts":"2026-03-09T03:06:42.623Z","level":"debug","msg":"InMemoryToolRegistry initialized"}
+{"ts":"2026-03-09T03:06:42.624Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"save_memory"}}
+{"ts":"2026-03-09T03:06:42.626Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"save_memory"}}
+{"ts":"2026-03-09T03:06:42.626Z","level":"debug","msg":"Attempting to register tool","ctx":{"toolName":"search_memory"}}
+{"ts":"2026-03-09T03:06:42.630Z","level":"info","msg":"Tool registered successfully","ctx":{"toolName":"search_memory"}}
+{"ts":"2026-03-09T03:06:42.631Z","level":"debug","msg":"Memory tools registered (save, search)"}
+{"ts":"2026-03-09T03:06:42.632Z","level":"debug","msg":"Agent session manager registered"}
+{"ts":"2026-03-09T03:06:42.632Z","level":"debug","msg":"Communication services registered"}
+{"ts":"2026-03-09T03:06:42.633Z","level":"debug","msg":"Sub-agent services registered"}
+{"ts":"2026-03-09T03:06:42.638Z","level":"debug","msg":"Scheduler services registered and started"}
+{"ts":"2026-03-09T03:06:58.200Z","level":"info","msg":"AgentSessionManager initialized — session bd7382eb-69c7-4f7e-b924-1e76d6de8bbe"}
+{"ts":"2026-03-09T03:06:58.200Z","level":"info","msg":"Agent session started: bd7382eb-69c7-4f7e-b924-1e76d6de8bbe"}
+{"ts":"2026-03-09T03:07:08.868Z","level":"info","msg":"AgentSessionManager initialized — session 721c2bd2-c2af-422d-8f73-73ba379f4665"}
+{"ts":"2026-03-09T03:07:08.868Z","level":"info","msg":"Agent session started: 721c2bd2-c2af-422d-8f73-73ba379f4665"}
+{"ts":"2026-03-09T03:07:54.802Z","level":"debug","msg":"Listing all tools","ctx":{"totalTools":2}}
+{"ts":"2026-03-09T03:07:58.954Z","level":"debug","msg":"Listing all tools","ctx":{"totalTools":2}}
+{"ts":"2026-03-09T03:08:17.426Z","level":"info","msg":"Agent session stopped: 721c2bd2-c2af-422d-8f73-73ba379f4665"}
