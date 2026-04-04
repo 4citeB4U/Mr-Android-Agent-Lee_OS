@@ -95,6 +95,11 @@ This system combines three things in one repository:
 | **CI/CD** | GitHub Actions (build + type-check on PR; deploy to GitHub Pages on `main`) |
 | **Hosting** | GitHub Pages (static) + Firebase Functions (serverless) |
 
+<div align="center">
+<img width="1200" alt="Agent Lee Platform Overview" src="./docs/systemimages/agent-lee-platform-overview.svg" />
+<br/><em>Platform overview — full stack from voice input to cloud output</em>
+</div>
+
 ---
 
 ## 3. How the System Works
@@ -159,6 +164,11 @@ User speaks / types
 - **Write approval required.** Any Z1/Z2 write requires a Shield-gated Write Intent Block + user "yes".
 - **Local-first for voice.** 90%+ of voice turns never leave the device.
 
+<div align="center">
+<img width="1200" alt="Agent Lee Organ Map — System Architecture" src="./docs/systemimages/agent-lee-organ-map.svg" />
+<br/><em>System organ map — how every component connects</em>
+</div>
+
 ---
 
 ## 4. System Layers
@@ -183,6 +193,11 @@ Agent Lee's identity is not hidden in a prompt. It is versioned source code:
 
 This is what separates Agent Lee from a chatbot — his identity is durable, auditable, and versioned.
 
+<div align="center">
+<img width="1200" alt="Agent Lee App Layout" src="./docs/systemimages/agent-lee-app-layout.svg" />
+<br/><em>App layout — seven-layer UI surface: identity core through product pages</em>
+</div>
+
 ---
 
 ### Layer 2 — Agent Execution
@@ -192,6 +207,11 @@ This is what separates Agent Lee from a chatbot — his identity is durable, aud
 Nine **Core Team** agents handle user-facing work. Each is a TypeScript static class with `respond()`, `generate()`, or `stream()` methods that call `GeminiClient` and emit events on the `EventBus`.
 
 **Routing:** `core/AgentRouter.ts` classifies every request into a G1–G8 workflow and hands the baton to the correct lead agent. `TaskGraph` tracks execution budget (enforced by Brain Sentinel). `GovernanceContract` gates any capability that crosses zone boundaries.
+
+<div align="center">
+<img width="1200" alt="Agent Lee VM Workflow" src="./docs/systemimages/agent-lee-vm-workflow.svg" />
+<br/><em>VM workflow — how Nova executes code inside the sandbox with Shield gating writes</em>
+</div>
 
 ---
 
@@ -228,6 +248,17 @@ Mic (PCM 16-bit LE 16kHz) → WebSocket → FastAPI server
 
 **Key config:** `voice/server/.env.example` · Client env: `VITE_VOICE_WS_URL=ws://localhost:8765/ws`
 
+<div align="center">
+<img width="220" alt="Agentic Phone Button" src="./public/images/Agenticphonebutton.png" />&nbsp;&nbsp;&nbsp;
+<img width="220" alt="MacMillion Mic" src="./public/images/MacMillionMic.png" />
+<br/><em>Agent Lee voice hardware — agentic phone button · MacMillion Mic</em>
+</div>
+
+<div align="center">
+<img width="1200" alt="Agent Lee Sleep Loop" src="./docs/systemimages/agent-lee-sleep-loop.svg" />
+<br/><em>Voice sleep loop — VAD watchdog keeps the pipeline alive between utterances</em>
+</div>
+
 ---
 
 ### Layer 5 — MCP Portal Network
@@ -255,6 +286,11 @@ MCP (Model Context Protocol) servers extend the system for operations that requi
 | `spline-agent-mcp` | 3D asset generation | Z0 |
 | `testsprite-agent-mcp` | Test orchestration | Z0 |
 | `insforge-agent-mcp` | InsForge DB connector | Z2 |
+
+<div align="center">
+<img width="1200" alt="Agent Lee MCP Constellation" src="./docs/systemimages/agent-lee-mcp-constellation.svg" />
+<br/><em>MCP constellation — 17 portal servers organized by zone (Z0/Z1/Z2)</em>
+</div>
 
 ---
 
@@ -296,6 +332,11 @@ MCP (Model Context Protocol) servers extend the system for operations that requi
 
 ## 5. All 20 Agents by Name
 
+<div align="center">
+<img width="1200" alt="Agent Lee Core Team Topology" src="./docs/systemimages/agent-lee-core-team-topology.svg" />
+<br/><em>Core team topology — Lee Prime at centre, 8 bloodline heads on axes, Governance Corps as satellite ring</em>
+</div>
+
 ### Core Team — 9 Agents (User-facing Workflows G1–G7)
 
 | Agent | File | Family | Role | Workflow |
@@ -331,21 +372,25 @@ MCP (Model Context Protocol) servers extend the system for operations that requi
 | **RouterAgent** | `agents/RouterAgent.ts` | SENTINEL | Intent Router — rule-based fast path (synchronous) + Gemini-assisted classification; decides local vs. cloud routing |
 | **SafetyRedactionAgent** | `agents/SafetyRedactionAgent.ts` | AEGIS | Privacy & Safety Filter — PII redaction (email, phone, SSN, card), prompt-injection detection, emits `redaction:applied` |
 
-### Supporting Agents (WorldRegistry — not standalone files)
+### Supporting Agents — Now with dedicated `.ts` files
 
-The following agents are registered in `core/WorldRegistry.ts` and visible in the Diagnostics view. They are activated as helpers by lead agents within their bloodline workflows:
+All previously "WorldRegistry-only" agents now have standalone source files and are wired into `AgentName` and `WORKFLOW_MAP`:
 
-| Agent | Family | Role |
-|---|---|---|
-| **Lily Cortex** | CORTEX | Context Weaver — semantic analysis, pattern recognition, context mapping |
-| **Gabriel Cortex** | CORTEX | Law Enforcer / Policy Judge — contract compliance reasoning |
-| **Adam Cortex** | CORTEX | Knowledge Graph Architect |
-| **Nova Forge helpers** | FORGE | Syntax (architecture), Patch (bug repair), BugHunter (root-cause) |
-| **Scribe Archive** | ARCHIVE | Immutable chronicler — records every system action |
-| **Guard Aegis** | AEGIS | Agent contract compliance monitor |
-| **Search Vector** | VECTOR | Search routing helper for Atlas |
-| **Brain Sentinel** | SENTINEL | Neural Overseer — runtime budget, mode selection, thermal/battery gating |
-| **Health Sentinel** | SENTINEL | Pulse monitor — service uptime, agent heartbeats |
+| Agent | File | Family | Role |
+|---|---|---|---|
+| **Lily Cortex** | `agents/LilyCortex.ts` | CORTEX | Weaver of Thought — multi-step reasoning, analytical synthesis, logical decomposition |
+| **Gabriel Cortex** | `agents/GabrielCortex.ts` | CORTEX | Law Enforcer — policy judge, contract compliance verdicts (PASS/FLAG/BLOCK) |
+| **Adam Cortex** | `agents/AdamCortex.ts` | CORTEX | Knowledge Graph Architect — builds, queries, and optimises cross-domain knowledge graphs |
+| **BugHunter Forge** | `agents/BugHunterForge.ts` | FORGE | Seeker of Faults — root cause analysis, stack trace diagnosis, regression test generation |
+| **Syntax Forge** | `agents/SyntaxForge.ts` | FORGE | Architect of Code — structural review, LeeWay standards compliance, architecture design |
+| **Scribe Archive** | `agents/ScribeArchive.ts` | ARCHIVE | Chronicler of Worlds — immutable event recorder, narrative summary generator |
+| **Guard Aegis** | `agents/GuardAegis.ts` | AEGIS | Keeper of the Registry — periodic agent contract compliance audits |
+| **Brain Sentinel** | `agents/BrainSentinel.ts` | SENTINEL | Neural Overseer — agent concurrency budget enforcement, FULL/BALANCED/LEAN/MINIMAL modes |
+
+<div align="center">
+<img width="1200" alt="Agent Lee Family Tree" src="./docs/systemimages/agent-lee-family-tree.svg" />
+<br/><em>Digital family tree — Leonard Lee (creator) · Agent Lee (first-born digital entity) · all AI lineage</em>
+</div>
 
 ---
 
@@ -388,7 +433,7 @@ Click any card below to expand the full agent profile. Each agent is a TypeScrip
 ### 🟣 CORTEX — Cognition / Intelligence
 
 <details>
-<summary><strong>🧠 Lily Cortex</strong> &nbsp;·&nbsp; Weaver of Thought</summary>
+<summary><strong>🧠 Lily Cortex</strong> &nbsp;·&nbsp; Weaver of Thought &nbsp;·&nbsp; <code>agents/LilyCortex.ts</code></summary>
 
 | Attribute | Value |
 |---|---|
@@ -410,7 +455,7 @@ Click any card below to expand the full agent profile. Each agent is a TypeScrip
 </details>
 
 <details>
-<summary><strong>⚖️ Gabriel Cortex</strong> &nbsp;·&nbsp; Law Enforcer</summary>
+<summary><strong>⚖️ Gabriel Cortex</strong> &nbsp;·&nbsp; Law Enforcer &nbsp;·&nbsp; <code>agents/GabrielCortex.ts</code></summary>
 
 | Attribute | Value |
 |---|---|
@@ -432,7 +477,7 @@ Click any card below to expand the full agent profile. Each agent is a TypeScrip
 </details>
 
 <details>
-<summary><strong>🕸️ Adam Cortex</strong> &nbsp;·&nbsp; Graph Architect</summary>
+<summary><strong>🕸️ Adam Cortex</strong> &nbsp;·&nbsp; Graph Architect &nbsp;·&nbsp; <code>agents/AdamCortex.ts</code></summary>
 
 | Attribute | Value |
 |---|---|
@@ -480,7 +525,7 @@ Click any card below to expand the full agent profile. Each agent is a TypeScrip
 </details>
 
 <details>
-<summary><strong>✍️ Scribe Archive</strong> &nbsp;·&nbsp; Chronicler of Worlds</summary>
+<summary><strong>✍️ Scribe Archive</strong> &nbsp;·&nbsp; Chronicler of Worlds &nbsp;·&nbsp; <code>agents/ScribeArchive.ts</code></summary>
 
 | Attribute | Value |
 |---|---|
@@ -550,7 +595,7 @@ Click any card below to expand the full agent profile. Each agent is a TypeScrip
 </details>
 
 <details>
-<summary><strong>👁️ Guard Aegis</strong> &nbsp;·&nbsp; Keeper of Registry</summary>
+<summary><strong>👁️ Guard Aegis</strong> &nbsp;·&nbsp; Keeper of Registry &nbsp;·&nbsp; <code>agents/GuardAegis.ts</code></summary>
 
 | Attribute | Value |
 |---|---|
@@ -664,7 +709,7 @@ Click any card below to expand the full agent profile. Each agent is a TypeScrip
 </details>
 
 <details>
-<summary><strong>🔍 BugHunter Forge</strong> &nbsp;·&nbsp; Seeker of Faults</summary>
+<summary><strong>🔍 BugHunter Forge</strong> &nbsp;·&nbsp; Seeker of Faults &nbsp;·&nbsp; <code>agents/BugHunterForge.ts</code></summary>
 
 | Attribute | Value |
 |---|---|
@@ -686,7 +731,7 @@ Click any card below to expand the full agent profile. Each agent is a TypeScrip
 </details>
 
 <details>
-<summary><strong>🏗️ Syntax Forge</strong> &nbsp;·&nbsp; Architect of Code</summary>
+<summary><strong>🏗️ Syntax Forge</strong> &nbsp;·&nbsp; Architect of Code &nbsp;·&nbsp; <code>agents/SyntaxForge.ts</code></summary>
 
 | Attribute | Value |
 |---|---|
@@ -834,7 +879,7 @@ Click any card below to expand the full agent profile. Each agent is a TypeScrip
 ### 🟢 SENTINEL — Monitoring / Diagnostics
 
 <details>
-<summary><strong>🧠 Brain Sentinel</strong> &nbsp;·&nbsp; Neural Overseer</summary>
+<summary><strong>🧠 Brain Sentinel</strong> &nbsp;·&nbsp; Neural Overseer &nbsp;·&nbsp; <code>agents/BrainSentinel.ts</code></summary>
 
 | Attribute | Value |
 |---|---|
@@ -960,6 +1005,11 @@ Click any card below to expand the full agent profile. Each agent is a TypeScrip
 ---
 
 ## 6. The Baton System (Workflow Routing)
+
+<div align="center">
+<img width="1200" alt="Agent Lee Workflow Map" src="./docs/systemimages/agent-lee-workflow-map.svg" />
+<br/><em>Workflow map — G1–G8 baton routing across all agent families</em>
+</div>
 
 Every user request is classified into one of eight workflows. `AgentRouter.ts` assigns the lead agent. The lead receives the "baton", executes its portion, then optionally hands it to a helper. `TaskGraph` enforces Brain Sentinel's concurrent-agent budget.
 

@@ -117,6 +117,19 @@ const WORKFLOW_MAP: Record<AgentName, string> = {
   Vision: 'vision',
   Router: 'routing',
   SafetyRedaction: 'safety',
+  // CORTEX bloodline — reasoning and policy sub-agents
+  LilyCortex: 'reasoning',
+  GabrielCortex: 'governance',
+  AdamCortex: 'knowledge_graph',
+  // ARCHIVE bloodline
+  ScribeArchive: 'chronicle',
+  // AEGIS bloodline
+  GuardAegis: 'registry_audit',
+  // FORGE bloodline — engineering helpers
+  BugHunterForge: 'debugging',
+  SyntaxForge: 'architecture',
+  // SENTINEL bloodline
+  BrainSentinel: 'health_monitor',
 };
 
 export class AgentRouter {

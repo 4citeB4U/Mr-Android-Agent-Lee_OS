@@ -42,7 +42,17 @@ export type AgentName =
   | 'AgentLee' | 'Atlas' | 'Nova' | 'Echo' 
   | 'Sage' | 'Shield' | 'Pixel' | 'Nexus' | 'Aria'
   | 'LiveConductor' | 'StreamingSTT' | 'StreamingTTS'
-  | 'Vision' | 'Router' | 'SafetyRedaction';
+  | 'Vision' | 'Router' | 'SafetyRedaction'
+  // CORTEX bloodline
+  | 'LilyCortex' | 'GabrielCortex' | 'AdamCortex'
+  // ARCHIVE bloodline
+  | 'ScribeArchive'
+  // AEGIS bloodline
+  | 'GuardAegis'
+  // FORGE bloodline
+  | 'BugHunterForge' | 'SyntaxForge'
+  // SENTINEL bloodline
+  | 'BrainSentinel';
 
 export type GeminiModel = 
   | 'gemini-2.0-flash'
