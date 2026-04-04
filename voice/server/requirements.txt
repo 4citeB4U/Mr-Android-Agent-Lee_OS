@@ -1,0 +1,37 @@
+fastapi==0.111.1
+uvicorn[standard]==0.30.1
+websockets==12.0
+python-dotenv==1.0.1
+pydantic==2.7.4
+pydantic-settings==2.3.4
+
+# VAD
+silero-vad==5.1.2
+torch==2.6.0
+torchaudio==2.6.0
+
+# STT
+faster-whisper==1.0.3
+
+# TTS (piper-tts wraps the piper binary; piper itself must be installed separately)
+# See docs/SETUP.md for Piper installation
+piper-phonemize==1.1.0
+
+# Gemini
+google-generativeai==0.7.2
+
+# Local LLM (llama-cpp-python – CPU build)
+llama-cpp-python==0.2.77
+
+# Utilities
+numpy==1.26.4
+aiofiles==23.2.1
+anyio==4.4.0
+httpx==0.27.0
+
+# Testing
+pytest==8.2.2
+pytest-asyncio==0.23.7
+
+# Linting (dev)
+ruff==0.5.0

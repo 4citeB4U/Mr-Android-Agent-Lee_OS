@@ -40,7 +40,9 @@ import { getAuth } from 'firebase/auth';
 
 export type AgentName = 
   | 'AgentLee' | 'Atlas' | 'Nova' | 'Echo' 
-  | 'Sage' | 'Shield' | 'Pixel' | 'Nexus' | 'Aria';
+  | 'Sage' | 'Shield' | 'Pixel' | 'Nexus' | 'Aria'
+  | 'LiveConductor' | 'StreamingSTT' | 'StreamingTTS'
+  | 'Vision' | 'Router' | 'SafetyRedaction';
 
 export type GeminiModel = 
   | 'gemini-2.0-flash'

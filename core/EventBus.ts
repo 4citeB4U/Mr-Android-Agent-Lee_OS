@@ -86,6 +86,32 @@ type EventMap = {
   'verification:result': { mission_id: string; verdict: import('./VerificationCorps').GovernanceVerdict; scenarios: import('./VerificationCorps').ScenarioResult[] };
   /** Leeway Standards compliance audit completed */
   'standards:compliance': { score: number; violations: number; total_files: number; recommendation: string };
+
+  // ── Voice Pipeline events (LiveConductor / STT / TTS / Vision / Router) ─────
+  /** LiveConductorAgent changed pipeline state */
+  'conductor:state': { state: 'idle' | 'listening' | 'thinking' | 'speaking'; sessionId: string };
+  /** StreamingSTTAgent produced a partial transcript */
+  'stt:partial': { text: string; confidence: number };
+  /** StreamingSTTAgent detected speech start (VAD) */
+  'stt:speech_start': {};
+  /** StreamingSTTAgent detected speech end (VAD) */
+  'stt:speech_end': { durationMs: number };
+  /** StreamingTTSAgent started speaking an utterance */
+  'tts:speaking': { text: string; prosody: { pace: string; pitch: string; emotion: string } };
+  /** StreamingTTSAgent finished an utterance */
+  'tts:done': { durationMs: number };
+  /** StreamingTTSAgent utterance was cancelled mid-stream (barge-in) */
+  'tts:cancelled': { reason: 'barge_in' | 'interrupt' };
+  /** VisionAgent extracted text from a screen capture */
+  'vision:screen_text': { text: string; confidence: number };
+  /** VisionAgent produced a scene summary */
+  'vision:scene_summary': { summary: string };
+  /** VisionAgent detected UI hints (buttons / inputs visible on screen) */
+  'vision:ui_hints': { hints: string[] };
+  /** RouterAgent classified the user intent for the current turn */
+  'router:intent': { intent: string; mode: 'local' | 'gemini'; confidence: number; reason: string };
+  /** SafetyRedactionAgent applied redaction to outgoing text */
+  'redaction:applied': { originalLength: number; redactedLength: number; categories: string[] };
 };
 
 type Listener<T> = (data: T) => void;
