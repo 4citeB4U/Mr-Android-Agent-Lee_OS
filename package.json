@@ -2,6 +2,7 @@
   "name": "agent-lee-agentic-os",
   "private": true,
   "version": "1.0.0",
+  "homepage": "https://4citeb4u.github.io/Mr-Android-Agent-Lee_OS/",
   "description": "Agent Lee Agentic Operating System — a sovereign, voice-first, VM-first multi-agent platform by LeeWay Innovations.",
   "author": "Leonard Lee <leeway@leewayinnovations.com> (LeeWay Innovations)",
   "type": "module",
