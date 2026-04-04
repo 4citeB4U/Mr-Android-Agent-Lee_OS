@@ -31,6 +31,7 @@
     "functions",
     "node_modules",
     "dist",
+    "MCP agents",
     "voice/client_core/standaloneAgent.ts",
     "voice/client_core/wsAgent.ts"
   ]
