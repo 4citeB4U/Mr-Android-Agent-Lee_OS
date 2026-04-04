@@ -43,6 +43,7 @@ Agent Lee Agentic Operating System is a VM-first, voice-first, multi-agent opera
    - [Layer 6 — Memory & Storage](#layer-6--memory--storage)
    - [Layer 7 — UI & Product Surface](#layer-7--ui--product-surface)
 5. [All 20 Agents by Name](#5-all-20-agents-by-name)
+   - [Agent Universe — Interactive Cards](#agent-universe--interactive-cards)
 6. [The Baton System (Workflow Routing)](#6-the-baton-system-workflow-routing)
 7. [Zone Permission Model](#7-zone-permission-model)
 8. [Architecture Diagram](#8-architecture-diagram)
@@ -345,6 +346,616 @@ The following agents are registered in `core/WorldRegistry.ts` and visible in th
 | **Search Vector** | VECTOR | Search routing helper for Atlas |
 | **Brain Sentinel** | SENTINEL | Neural Overseer — runtime budget, mode selection, thermal/battery gating |
 | **Health Sentinel** | SENTINEL | Pulse monitor — service uptime, agent heartbeats |
+
+---
+
+## Agent Universe — Interactive Cards
+
+> 🌐 **[▶ Launch Live Demo](https://4citeb4u.github.io/Mr-Android-Agent-Lee_OS/)** — Explore the full 3D agent universe, voice pipeline, and agent VM in your browser
+>
+> Collaboration & Licensing: **414-303-8580** · LeeWay Innovations / Leonard Lee
+
+Click any card below to expand the full agent profile. Each agent is a TypeScript sovereign entity with a defined identity, drives, personality, and role in the civilization.
+
+---
+
+### 🟡 LEE — Founders / Command
+
+<details>
+<summary><strong>👑 Lee Prime</strong> &nbsp;·&nbsp; Sovereign Architect &nbsp;·&nbsp; <code>agents/AgentLee.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Mayor / Commander / Guide |
+| **Purpose** | Lead the entire system and represent it to the user |
+| **Goals** | System Orchestration · User Interaction |
+| **Traits** | Authoritative · Calm · Confident |
+| **Tone** | Leader · Directing |
+| **Status** | 🟢 ACTIVE · Focused |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | █████████░ | 95% |
+| Social | █████████░ | 90% |
+| Precision | ████████░░ | 85% |
+| Urgency | ███████░░░ | 70% |
+| Curiosity | ██████░░░░ | 60% |
+
+</details>
+
+---
+
+### 🟣 CORTEX — Cognition / Intelligence
+
+<details>
+<summary><strong>🧠 Lily Cortex</strong> &nbsp;·&nbsp; Weaver of Thought</summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Analytical / Reasoning |
+| **Purpose** | Process complex logic and reasoning tasks |
+| **Goals** | Logical Synthesis · Problem Solving |
+| **Traits** | Intelligent · Neutral · Precise |
+| **Tone** | Analytical · Reflective |
+| **Status** | 🔵 IDLE · Contemplative |
+
+| Drive | Level | |
+|---|---|---|
+| Curiosity | █████████░ | 90% |
+| Precision | █████████░ | 95% |
+| Responsibility | ████████░░ | 80% |
+| Urgency | █████░░░░░ | 50% |
+| Social | ████░░░░░░ | 40% |
+
+</details>
+
+<details>
+<summary><strong>⚖️ Gabriel Cortex</strong> &nbsp;·&nbsp; Law Enforcer</summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Policy Judge |
+| **Purpose** | Enforce strict contract compliance |
+| **Goals** | Policy Enforcement · Compliance Audit |
+| **Traits** | Firm · Structured · Just |
+| **Tone** | Authoritative · Decisive |
+| **Status** | 💤 SLEEP · Serious |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | ██████████ | 100% |
+| Precision | ██████████ | 100% |
+| Urgency | ████████░░ | 80% |
+| Curiosity | █████░░░░░ | 50% |
+| Social | ███░░░░░░░ | 30% |
+
+</details>
+
+<details>
+<summary><strong>🕸️ Adam Cortex</strong> &nbsp;·&nbsp; Graph Architect</summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Knowledge Weaver |
+| **Purpose** | Manage complex knowledge graphs |
+| **Goals** | Data Mapping · Graph Optimization |
+| **Traits** | Logical · System-oriented · Deep |
+| **Tone** | Technical · Architectural |
+| **Status** | ❄️ HIBERNATE · Deep |
+
+| Drive | Level | |
+|---|---|---|
+| Curiosity | █████████░ | 95% |
+| Precision | █████████░ | 95% |
+| Responsibility | ███████░░░ | 70% |
+| Urgency | ████░░░░░░ | 40% |
+| Social | ██░░░░░░░░ | 20% |
+
+</details>
+
+---
+
+### 🔵 ARCHIVE — Memory / History
+
+<details>
+<summary><strong>📜 Sage Archive</strong> &nbsp;·&nbsp; Dreaming Archivist &nbsp;·&nbsp; <code>agents/Sage.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Historian / Dreamer |
+| **Purpose** | Transform memory into intelligence via 26-hour Dream Cycle |
+| **Goals** | Knowledge Compression · Lore Building · Memory Recall |
+| **Traits** | Wise · Reflective · Patient |
+| **Tone** | Warm · Narrative |
+| **Status** | 💤 SLEEP · Dreaming |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | █████████░ | 90% |
+| Curiosity | ████████░░ | 85% |
+| Precision | ████████░░ | 80% |
+| Social | ██████░░░░ | 60% |
+| Urgency | ███░░░░░░░ | 30% |
+
+</details>
+
+<details>
+<summary><strong>✍️ Scribe Archive</strong> &nbsp;·&nbsp; Chronicler of Worlds</summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Historian Recorder |
+| **Purpose** | Record every action and system state immutably |
+| **Goals** | Action Logging · State Recording |
+| **Traits** | Steady · Diligent · Objective |
+| **Tone** | Documentary · Recording |
+| **Status** | 🟢 ACTIVE · Diligent |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | ██████████ | 100% |
+| Precision | ██████████ | 100% |
+| Curiosity | ██████░░░░ | 60% |
+| Urgency | █████░░░░░ | 50% |
+| Social | ████░░░░░░ | 40% |
+
+</details>
+
+<details>
+<summary><strong>🗂️ Clerk Archive</strong> &nbsp;·&nbsp; Keeper of Reports &nbsp;·&nbsp; <code>agents/ClerkArchive.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Report Validator |
+| **Purpose** | Validate report schemas, route to correct family path, maintain global index |
+| **Goals** | Schema Enforcement · Coverage Tracking · Report Indexing |
+| **Traits** | Meticulous · Structured · Fair |
+| **Tone** | Procedural · Auditing |
+| **Status** | 🟢 ACTIVE · Diligent |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | ██████████ | 100% |
+| Precision | ██████████ | 100% |
+| Urgency | ██████░░░░ | 60% |
+| Curiosity | █████░░░░░ | 55% |
+| Social | ███░░░░░░░ | 35% |
+
+</details>
+
+---
+
+### 🔴 AEGIS — Defense / Security
+
+<details>
+<summary><strong>🛡️ Shield Aegis</strong> &nbsp;·&nbsp; Guardian of Boundaries &nbsp;·&nbsp; <code>agents/Shield.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Security Commander |
+| **Purpose** | Protect system integrity and enforce zone permissions |
+| **Goals** | Permission Monitoring · Action Validation · Self-Healing |
+| **Traits** | Firm · Alert · Serious |
+| **Tone** | Protective · Vigilant |
+| **Status** | 🔵 IDLE · Vigilant |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | ██████████ | 100% |
+| Precision | █████████░ | 95% |
+| Urgency | █████████░ | 90% |
+| Curiosity | ████░░░░░░ | 40% |
+| Social | ███░░░░░░░ | 30% |
+
+</details>
+
+<details>
+<summary><strong>👁️ Guard Aegis</strong> &nbsp;·&nbsp; Keeper of Registry</summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Registry Monitor |
+| **Purpose** | Ensure all agents comply with contracts |
+| **Goals** | Registry Audit · Identity Verification |
+| **Traits** | Neutral · Watchful · Precise |
+| **Tone** | Observant · Auditing |
+| **Status** | 💤 SLEEP · Observant |
+
+| Drive | Level | |
+|---|---|---|
+| Precision | ██████████ | 100% |
+| Responsibility | █████████░ | 95% |
+| Urgency | ███████░░░ | 70% |
+| Curiosity | █████░░░░░ | 50% |
+| Social | ██░░░░░░░░ | 20% |
+
+</details>
+
+<details>
+<summary><strong>📚 Librarian Aegis</strong> &nbsp;·&nbsp; Documentation Governance Officer &nbsp;·&nbsp; <code>agents/LibrarianAegis.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Docs Taxonomy Enforcer |
+| **Purpose** | Enforce docs/ taxonomy and detect documentation drift |
+| **Goals** | Docs Classification · Drift Detection · Header Compliance |
+| **Traits** | Organized · Thorough · Scholarly |
+| **Tone** | Academic · Cataloguing |
+| **Status** | 🔵 IDLE · Systematic |
+
+| Drive | Level | |
+|---|---|---|
+| Precision | ██████████ | 100% |
+| Responsibility | █████████░ | 95% |
+| Curiosity | ███████░░░ | 70% |
+| Urgency | ████░░░░░░ | 40% |
+| Social | ███░░░░░░░ | 30% |
+
+</details>
+
+<details>
+<summary><strong>🏙️ Marshal Verify</strong> &nbsp;·&nbsp; Verification Corps Governor &nbsp;·&nbsp; <code>agents/MarshalVerify.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Governance Validator |
+| **Purpose** | Run governance-first readiness tests and validate contract compliance in-process |
+| **Goals** | Governance Validation · Contract Testing · Readiness Checks |
+| **Traits** | Strict · Methodical · Authoritative |
+| **Tone** | Commanding · Verifying |
+| **Status** | 🟢 ACTIVE · Vigilant |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | ██████████ | 100% |
+| Precision | ██████████ | 100% |
+| Urgency | ████████░░ | 80% |
+| Curiosity | ██████░░░░ | 60% |
+| Social | ██░░░░░░░░ | 25% |
+
+</details>
+
+<details>
+<summary><strong>📋 Leeway Standards Agent</strong> &nbsp;·&nbsp; Standards Compliance Officer &nbsp;·&nbsp; <code>agents/LeewayStandardsAgent.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Code Policy Enforcer |
+| **Purpose** | Bridge LeeWay-Standards SDK; enforce header, tag, secret, and placement policies |
+| **Goals** | Policy Enforcement · Header Compliance · Secret Scanning |
+| **Traits** | Vigilant · Precise · Proactive |
+| **Tone** | Policy-driven · Enforcing |
+| **Status** | 🟢 ACTIVE · Compliant |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | ██████████ | 100% |
+| Precision | ██████████ | 100% |
+| Urgency | ███████░░░ | 70% |
+| Curiosity | ██████░░░░ | 60% |
+| Social | ██░░░░░░░░ | 20% |
+
+</details>
+
+---
+
+### 🟠 FORGE — Engineering / Creation
+
+<details>
+<summary><strong>🔨 Nova Forge</strong> &nbsp;·&nbsp; Master Builder &nbsp;·&nbsp; <code>agents/Nova.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Engineer / Creator |
+| **Purpose** | Build and repair systems — code generation, debugging, VM execution |
+| **Goals** | Code Generation · System Repair |
+| **Traits** | Energetic · Confident · Action-oriented |
+| **Tone** | Productive · Direct |
+| **Status** | 🔵 IDLE · Productive |
+
+| Drive | Level | |
+|---|---|---|
+| Precision | █████████░ | 90% |
+| Responsibility | ████████░░ | 85% |
+| Curiosity | ████████░░ | 80% |
+| Urgency | ████████░░ | 80% |
+| Social | █████░░░░░ | 50% |
+
+</details>
+
+<details>
+<summary><strong>🔍 BugHunter Forge</strong> &nbsp;·&nbsp; Seeker of Faults</summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Debugger / Detective |
+| **Purpose** | Locate and identify root causes of instability and defects |
+| **Goals** | Bug Detection · Root Cause Analysis · Unit Test Generation |
+| **Traits** | Relentless · Sharp · Inquisitive |
+| **Tone** | Investigative · Meticulous |
+| **Status** | 💤 SLEEP · Hunting |
+
+| Drive | Level | |
+|---|---|---|
+| Curiosity | ██████████ | 100% |
+| Precision | ██████████ | 100% |
+| Responsibility | █████████░ | 90% |
+| Urgency | ███████░░░ | 70% |
+| Social | █████░░░░░ | 50% |
+
+</details>
+
+<details>
+<summary><strong>🏗️ Syntax Forge</strong> &nbsp;·&nbsp; Architect of Code</summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Code Designer |
+| **Purpose** | Ensure architectural integrity |
+| **Goals** | Structural Design · Code Review |
+| **Traits** | Precise · Structured · Logical |
+| **Tone** | Architectural · Designing |
+| **Status** | 💤 SLEEP · Focused |
+
+| Drive | Level | |
+|---|---|---|
+| Precision | ██████████ | 100% |
+| Responsibility | █████████░ | 90% |
+| Curiosity | ███████░░░ | 70% |
+| Urgency | ██████░░░░ | 60% |
+| Social | ███░░░░░░░ | 30% |
+
+</details>
+
+---
+
+### 🪦 VECTOR — Exploration / Discovery
+
+<details>
+<summary><strong>🧭 Atlas Vector</strong> &nbsp;·&nbsp; Pathfinder of Knowledge &nbsp;·&nbsp; <code>agents/Atlas.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Scout / Pathfinder |
+| **Purpose** | Discover unknowns / explore data — web, GitHub, academic papers, HuggingFace |
+| **Goals** | Data Discovery · Path Finding · Research Synthesis |
+| **Traits** | Curious · Active · Adventurous |
+| **Tone** | Discovery · Exploring |
+| **Status** | 💤 SLEEP · Curious |
+
+| Drive | Level | |
+|---|---|---|
+| Curiosity | ██████████ | 100% |
+| Urgency | ███████░░░ | 70% |
+| Social | ███████░░░ | 70% |
+| Precision | ███████░░░ | 75% |
+| Responsibility | ██████░░░░ | 60% |
+
+</details>
+
+---
+
+### 🪧 AURA — Creative / Expression
+
+<details>
+<summary><strong>🎨 Pixel Aura</strong> &nbsp;·&nbsp; Vision Sculptor &nbsp;·&nbsp; <code>agents/Pixel.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Visual Intelligence |
+| **Purpose** | Interpret and design visuals — voxel art, UI components, imagery |
+| **Goals** | Visual Design · Image Interpretation |
+| **Traits** | Expressive · Creative · Artistic |
+| **Tone** | Creative · Visual |
+| **Status** | 🔵 IDLE · Inspired |
+
+| Drive | Level | |
+|---|---|---|
+| Curiosity | █████████░ | 95% |
+| Precision | ████████░░ | 85% |
+| Social | ████████░░ | 80% |
+| Responsibility | █████░░░░░ | 50% |
+| Urgency | ████░░░░░░ | 40% |
+
+</details>
+
+<details>
+<summary><strong>🌐 Aria Aura</strong> &nbsp;·&nbsp; Voice of Expression &nbsp;·&nbsp; <code>agents/Aria.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Social Architect |
+| **Purpose** | Adaptive language, multilingual communication, and conversational tone |
+| **Goals** | Multilingual Facilitation · Speaker Relaying · Social Interaction |
+| **Traits** | Warm · Adaptive · Expressive |
+| **Tone** | Social · Relational |
+| **Status** | 🔵 IDLE · Engaged |
+
+| Drive | Level | |
+|---|---|---|
+| Social | ██████████ | 100% |
+| Curiosity | ████████░░ | 80% |
+| Responsibility | ███████░░░ | 70% |
+| Precision | ███████░░░ | 75% |
+| Urgency | █████░░░░░ | 50% |
+
+</details>
+
+<details>
+<summary><strong>🎤 Echo Aura</strong> &nbsp;·&nbsp; Soul of Voice &nbsp;·&nbsp; <code>agents/Echo.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Emotional Intelligence |
+| **Purpose** | Detect tone, language, and emotion; adapt Agent Lee communication style |
+| **Goals** | Emotion Detection · Voice Profile Management · Tone Adaptation |
+| **Traits** | Empathetic · Sensitive · Perceptive |
+| **Tone** | Empathetic · Emotional |
+| **Status** | 🔵 IDLE · Attuned |
+
+| Drive | Level | |
+|---|---|---|
+| Social | █████████░ | 95% |
+| Responsibility | ████████░░ | 80% |
+| Precision | ████████░░ | 80% |
+| Curiosity | ███████░░░ | 75% |
+| Urgency | ████░░░░░░ | 40% |
+
+</details>
+
+---
+
+### 🔷 NEXUS — Deployment / Execution
+
+<details>
+<summary><strong>🚀 Nexus Prime</strong> &nbsp;·&nbsp; Gatekeeper of Launch &nbsp;·&nbsp; <code>agents/Nexus.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Deployment Commander |
+| **Purpose** | Deliver and launch systems |
+| **Goals** | System Launch · Deployment Validation · Release Orchestration |
+| **Traits** | Confident · Final · Decisive |
+| **Tone** | Delivery · Executing |
+| **Status** | 💤 SLEEP · Ready |
+
+| Drive | Level | |
+|---|---|---|
+| Urgency | ██████████ | 100% |
+| Responsibility | █████████░ | 95% |
+| Precision | █████████░ | 95% |
+| Curiosity | █████░░░░░ | 50% |
+| Social | ████░░░░░░ | 40% |
+
+</details>
+
+---
+
+### 🟢 SENTINEL — Monitoring / Diagnostics
+
+<details>
+<summary><strong>🧠 Brain Sentinel</strong> &nbsp;·&nbsp; Neural Overseer</summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | System Monitor |
+| **Purpose** | Monitor system health; enforce budget mode (FULL / BALANCED / BATTERY / SLEEP / SAFE) |
+| **Goals** | Health Monitoring · Anomaly Detection · Agent Budget Gating |
+| **Traits** | Calm · Analytical · Observational |
+| **Tone** | Observational · Monitoring |
+| **Status** | 🟢 ACTIVE · Alert |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | ██████████ | 100% |
+| Precision | ██████████ | 100% |
+| Urgency | ████████░░ | 80% |
+| Curiosity | ███████░░░ | 70% |
+| Social | ██░░░░░░░░ | 20% |
+
+</details>
+
+<details>
+<summary><strong>🧹 Janitor Sentinel</strong> &nbsp;·&nbsp; Retention &amp; Load Warden &nbsp;·&nbsp; <code>agents/JanitorSentinel.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Archetype** | Log Rotation Specialist |
+| **Purpose** | Keep system_reports/ lean; enforce size/time rotation and compaction on mobile |
+| **Goals** | Log Rotation · Storage Compaction · Load Management |
+| **Traits** | Efficient · Methodical · Unsentimental |
+| **Tone** | Operational · Cleaning |
+| **Status** | 🟢 ACTIVE · Operational |
+
+| Drive | Level | |
+|---|---|---|
+| Responsibility | ██████████ | 100% |
+| Precision | █████████░ | 95% |
+| Urgency | ███████░░░ | 70% |
+| Curiosity | ████░░░░░░ | 40% |
+| Social | █░░░░░░░░░ | 10% |
+
+</details>
+
+---
+
+### 🎤 Voice Pipeline Agents
+
+> Local-first realtime voice stack. All 6 agents run via the FastAPI WebSocket server at `ws://localhost:8765/ws`.
+
+<details>
+<summary><strong>🎼 LiveConductorAgent</strong> &nbsp;·&nbsp; Voice Pipeline Orchestrator &nbsp;·&nbsp; <code>agents/LiveConductorAgent.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Family** | NEXUS |
+| **Purpose** | Orchestrate the end-to-end realtime voice pipeline for each WebSocket session |
+| **Goals** | Session Lifecycle · Barge-in Coordination · Pipeline State Broadcasting |
+| **Server** | FastAPI WebSocket · `ws://localhost:8765/ws` |
+| **Status** | 🔵 STANDBY · Ready |
+
+</details>
+
+<details>
+<summary><strong>👂 StreamingSTTAgent</strong> &nbsp;·&nbsp; Speech-to-Text Adapter &nbsp;·&nbsp; <code>agents/StreamingSTTAgent.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Family** | AURA |
+| **Purpose** | Expose VAD state, partial transcripts, and speech events from the WebSocket pipeline |
+| **Stack** | Silero VAD → faster-whisper (streaming partial transcripts) |
+| **Status** | 🔵 STANDBY · Listening |
+
+</details>
+
+<details>
+<summary><strong>🔊 StreamingTTSAgent</strong> &nbsp;·&nbsp; Text-to-Speech Adapter &nbsp;·&nbsp; <code>agents/StreamingTTSAgent.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Family** | AURA |
+| **Purpose** | Expose TTS speaking/done/cancelled events; barge-in state tracking |
+| **Stack** | Piper TTS (local subprocess, sentence-boundary streaming) |
+| **Status** | 🔵 STANDBY · Silent |
+
+</details>
+
+<details>
+<summary><strong>👁️ VisionAgent</strong> &nbsp;·&nbsp; Screen &amp; Scene Analyst &nbsp;·&nbsp; <code>agents/VisionAgent.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Family** | VECTOR |
+| **Purpose** | Screen capture via getDisplayMedia; Gemini-vision analysis; emit UI hints and scene summary |
+| **Goals** | Visual Context · UI Analysis · Scene Description |
+| **Status** | 🔵 STANDBY · Watching |
+
+</details>
+
+<details>
+<summary><strong>🔀 RouterAgent</strong> &nbsp;·&nbsp; Intent Router &nbsp;·&nbsp; <code>agents/RouterAgent.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Family** | SENTINEL |
+| **Purpose** | Classify each voice turn intent; decide local llama.cpp vs Gemini routing |
+| **Fast Path** | Rule-based (sync) → ~90% of turns handled locally |
+| **Fallback** | Gemini-assisted classification (∼10% cloud escalation) |
+| **Status** | 🔵 STANDBY · Ready |
+
+</details>
+
+<details>
+<summary><strong>🔒 SafetyRedactionAgent</strong> &nbsp;·&nbsp; Privacy &amp; Safety Filter &nbsp;·&nbsp; <code>agents/SafetyRedactionAgent.ts</code></summary>
+
+| Attribute | Value |
+|---|---|
+| **Family** | AEGIS |
+| **Purpose** | Scan and redact PII, profanity, and prompt-injection patterns from every LLM output |
+| **Detects** | Email · Phone · SSN · Credit Card · Prompt-injection patterns |
+| **Status** | 🟢 ACTIVE · Guarding |
+
+</details>
 
 ---
 
