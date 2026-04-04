@@ -76,14 +76,14 @@ export class VisionAgent {
 
     let raw: string;
     try {
-      raw = await GeminiClient.generate({
+      const resp = await GeminiClient.generate({
         prompt: 'Analyse this image.',
         systemPrompt: VISION_SYSTEM,
         agent: 'Vision',
         model: 'gemini-2.0-flash',
         imageBase64,
-        imageMimeType: mimeType,
       });
+      raw = resp.text;
     } catch (err) {
       eventBus.emit('agent:error', { agent: 'Vision', error: `Gemini vision call failed: ${String(err)}` });
       return;
@@ -109,7 +109,9 @@ export class VisionAgent {
   private static async _captureScreenBase64(): Promise<string> {
     const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
     const track = stream.getVideoTracks()[0];
-    const imageCapture = new (window as typeof window & { ImageCapture: new (t: MediaStreamTrack) => ImageCapture }).ImageCapture(track);
+    const IC = (window as unknown as { ImageCapture: new (t: MediaStreamTrack) => { grabFrame(): Promise<ImageBitmap> } }).ImageCapture;
+    if (!IC) throw new Error('ImageCapture API not available in this browser.');
+    const imageCapture = new IC(track);
     const bitmap = await imageCapture.grabFrame();
     track.stop();
 

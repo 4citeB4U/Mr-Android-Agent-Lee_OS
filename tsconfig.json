@@ -30,6 +30,8 @@
   "exclude": [
     "functions",
     "node_modules",
-    "dist"
+    "dist",
+    "voice/client_core/standaloneAgent.ts",
+    "voice/client_core/wsAgent.ts"
   ]
 }

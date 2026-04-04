@@ -41,9 +41,8 @@ let _session: VoiceSession | null = null;
 let _sessionId = '';
 
 const callbacks: VoiceSessionCallbacks = {
-  onState(state, sessionId) {
-    _sessionId = sessionId;
-    eventBus.emit('conductor:state', { state, sessionId });
+  onState(state) {
+    eventBus.emit('conductor:state', { state, sessionId: _sessionId });
   },
   onPartialTranscript(text, confidence) {
     eventBus.emit('stt:partial', { text, confidence });
@@ -59,24 +58,24 @@ const callbacks: VoiceSessionCallbacks = {
   },
   onSessionId(id) {
     _sessionId = id;
+    eventBus.emit('conductor:state', { state: 'idle', sessionId: id });
   },
-  onError(msg) {
-    eventBus.emit('agent:error', { agent: 'LiveConductor', error: msg });
+  onError(_code, message) {
+    eventBus.emit('agent:error', { agent: 'LiveConductor', error: message });
   },
-  onSpeakingStart(text, prosody) {
-    eventBus.emit('tts:speaking', { text, prosody });
+  onSpeakingStart() {
+    eventBus.emit('tts:speaking', { text: '', prosody: { pace: 'normal', pitch: 'normal', emotion: 'neutral' } });
   },
-  onSpeakingEnd(durationMs) {
-    eventBus.emit('tts:done', { durationMs });
+  onSpeakingEnd() {
+    eventBus.emit('tts:done', { durationMs: 0 });
   },
 };
 
 export class LiveConductorAgent {
   /** Start the voice pipeline; connects to the WebSocket voice server. */
-  static start(wsUrl?: string): void {
+  static start(): void {
     if (_session) return; // already running
-    const url = wsUrl ?? (import.meta.env.VITE_VOICE_WS_URL as string | undefined) ?? 'ws://localhost:8765/ws';
-    _session = new VoiceSession(url, callbacks);
+    _session = new VoiceSession(callbacks);
     _session.start();
     eventBus.emit('conductor:state', { state: 'idle', sessionId: '' });
     eventBus.emit('agent:active', { agent: 'LiveConductor', task: 'Voice pipeline started' });

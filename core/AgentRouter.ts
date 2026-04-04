@@ -110,6 +110,13 @@ const WORKFLOW_MAP: Record<AgentName, string> = {
   Pixel: 'visual',
   Nexus: 'deployment',
   Aria: 'social',
+  // Realtime voice pipeline agents — handled locally, no workflow doc
+  LiveConductor: 'voice_pipeline',
+  StreamingSTT: 'voice_pipeline',
+  StreamingTTS: 'voice_pipeline',
+  Vision: 'vision',
+  Router: 'routing',
+  SafetyRedaction: 'safety',
 };
 
 export class AgentRouter {

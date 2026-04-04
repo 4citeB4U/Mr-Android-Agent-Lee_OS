@@ -96,13 +96,14 @@ export class RouterAgent {
 
     let raw: string;
     try {
-      raw = await GeminiClient.generate({
+      const resp = await GeminiClient.generate({
         prompt: userMessage,
         systemPrompt: ROUTER_SYSTEM,
         agent: 'Router',
         model: 'gemini-2.0-flash',
         temperature: 0.1,
       });
+      raw = resp.text;
     } catch {
       // Fallback: route to local on API failure
       const fallback: RouteDecision = { intent: 'unknown', mode: 'local', confidence: 0.5, reason: 'Router API call failed; defaulting to local.' };

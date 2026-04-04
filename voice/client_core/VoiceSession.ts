@@ -51,6 +51,7 @@ import type {
   FinalResponseTextEvent,
   AudioOutMetadata,
   ErrorEvent,
+  HelloAckEvent,
 } from './types';
 
 // VITE_VOICE_WS_URL must be set in .env.local
@@ -150,7 +151,7 @@ export class VoiceSession {
     });
 
     // hello_ack carries the server-assigned session_id
-    this.socket.on('hello_ack' as never, (e: Record<string, string>) => {
+    this.socket.on<HelloAckEvent>('hello_ack', (e) => {
       if (e?.session_id) this.callbacks.onSessionId?.(e.session_id);
     });
   }
