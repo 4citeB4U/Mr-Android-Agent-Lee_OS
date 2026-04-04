@@ -39,6 +39,9 @@ MIT
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layout, PageId } from './components/Layout';
+import { audioManager } from './utils/audioManager';
+import { audioOrchestrator } from './utils/audioOrchestrator';
+import { idleWatcher } from './utils/idleWatcher';
 import { Home } from './pages/Home';
 import Diagnostics from './pages/Diagnostics';
 import { Settings } from './pages/Settings';
@@ -109,6 +112,16 @@ const App: React.FC = () => {
   const handlePageChange = (page: PageId) => {
     if (page === currentPage) return;
     setCurrentPage(page);
+    idleWatcher.reset();
+    // Route page-specific audio events
+    if (page === 'universe') audioOrchestrator.handleEvent('universe:active');
+    else if (page === 'settings') audioOrchestrator.handleEvent('settings:open');
+    else if (page === 'diagnostics') audioOrchestrator.handleEvent('diagnostics:open');
+    else {
+      // leaving universe — stop ambient layers
+      if (currentPage === 'universe') audioOrchestrator.handleEvent('universe:exit');
+      else if (currentPage === 'diagnostics') audioOrchestrator.handleEvent('diagnostics:close');
+    }
   };
   const [isSystemInitialized, setIsSystemInitialized] = useState(false);
 
@@ -160,6 +173,20 @@ const App: React.FC = () => {
     ));
   }, []);
 
+  // ── Audio system boot ────────────────────────────────────────
+  useEffect(() => {
+    audioManager.preload();
+    audioOrchestrator.handleEvent('app:loading');
+
+    // Idle detection: play idle sound after 3 min inactivity
+    const stopIdle = idleWatcher.start(
+      () => audioOrchestrator.handleEvent('idle:start'),
+      () => audioOrchestrator.handleEvent('idle:end')
+    );
+
+    return () => stopIdle();
+  }, []);
+
   // ── Boot sequence ─────────────────────────────────────────────
   useEffect(() => {
     logIdentityLoad();
@@ -182,6 +209,9 @@ const App: React.FC = () => {
       content: "Hey! I'm Agent Lee — your sovereign agentic OS. I'm fully loaded and ready to build, research, code, or just talk. What are we working on today?",
       streaming: false,
     });
+
+    // Signal app fully loaded → play intro jingle
+    audioOrchestrator.handleEvent('app:loaded');
 
     MemoryDB.get<SavedVoxel[]>('agent_lee_memory_lake').then(saved => {
       if (saved) setSavedVoxels(saved);
@@ -480,6 +510,7 @@ const App: React.FC = () => {
     }]);
     setIsStreaming(true);
     setIsSpeaking(true);
+    audioOrchestrator.setAgentSpeaking(true);
 
     let agentUsed = 'AgentLee';
     let fullResponse = '';
@@ -567,6 +598,7 @@ const App: React.FC = () => {
       streamingIdRef.current = null;
       setIsStreaming(false);
       setIsSpeaking(false);
+      audioOrchestrator.setAgentSpeaking(false);
       setStatus('idle');
 
       // TTS playback
@@ -598,11 +630,14 @@ const App: React.FC = () => {
     recognitionRef.current = rec;
     rec.start();
     setIsListening(true);
+    audioOrchestrator.setAgentListening(true);
+    idleWatcher.reset();
   }, [handleSendMessage, addMessage]);
 
   const stopVoice = useCallback(() => {
     recognitionRef.current?.stop();
     setIsListening(false);
+    audioOrchestrator.setAgentListening(false);
   }, []);
 
   // ── File upload ────────────────────────────────────────────────
@@ -742,6 +777,7 @@ const App: React.FC = () => {
         onSelectFromLake={handleSelectFromLake}
         onSendToStudio={handleSendToStudio}
         backgroundImage={backgroundMode === 'background' ? currentImage : null}
+        messages={messages}
       >
         {renderPage()}
 
