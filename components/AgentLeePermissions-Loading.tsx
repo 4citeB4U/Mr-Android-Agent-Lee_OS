@@ -553,10 +553,9 @@ export class VoxelEngine {
 
 interface LoadingViewProps {
   progress: number;
-  onLoopComplete: () => void;
 }
 
-function LoadingView({ progress, onLoopComplete }: LoadingViewProps) {
+function LoadingView({ progress }: LoadingViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<VoxelEngine | null>(null);
   const [state, setState] = useState<AppState>(AppState.STABLE);
@@ -591,9 +590,6 @@ function LoadingView({ progress, onLoopComplete }: LoadingViewProps) {
       setCurrentModelIndex((prev) => {
         const nextIndex = (prev + 1) % MODELS.length;
         
-        if (nextIndex === 0 && loopStartedRef.current) {
-          onLoopComplete();
-        }
         loopStartedRef.current = true;
 
         engineRef.current?.dismantle();
@@ -612,7 +608,7 @@ function LoadingView({ progress, onLoopComplete }: LoadingViewProps) {
     return () => {
       clearInterval(morphInterval);
     };
-  }, [state, onLoopComplete]);
+  }, [state]);
 
   const [currentModelIndex, setCurrentModelIndex] = useState(0);
 
@@ -677,7 +673,6 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
   const [progress, setProgress] = useState(0);
   const [permissionsGranted, setPermissionsGranted] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [loopComplete, setLoopComplete] = useState(false);
 
   const logAction = (type: string, message: string) => {
     try {
@@ -718,11 +713,11 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
   }, [permissionsGranted, isLoaded]);
 
   useEffect(() => {
-    if (progress >= 100 && loopComplete && !isLoaded) {
+    if (progress >= 100 && !isLoaded) {
       const timer = setTimeout(() => setIsLoaded(true), 2000);
       return () => clearTimeout(timer);
     }
-  }, [progress, loopComplete, isLoaded]);
+  }, [progress, isLoaded]);
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-[#f8fafc] font-mono text-slate-900 shadow-[inset_0_0_120px_rgba(15,23,42,0.15)] transition-shadow duration-1000">
@@ -782,10 +777,7 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
             </div>
           </motion.div>
         ) : !isLoaded ? (
-          <LoadingView 
-            progress={progress} 
-            onLoopComplete={() => setLoopComplete(true)}
-          />
+          <LoadingView progress={progress} />
         ) : (
           <motion.div 
             key="home"
