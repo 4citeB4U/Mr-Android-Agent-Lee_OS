@@ -18,8 +18,7 @@ WHAT = SafetyRedactionAgent — scans and redacts PII, profanity, and prompt-inj
 WHY = Ensures Agent Lee never speaks or displays raw PII or adversarial injections to the user
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/SafetyRedactionAgent.ts
-WHEN = 2026
-HOW = Pattern-based fast-path + optional Gemini safety pass; emits redaction:applied to EventBus
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS

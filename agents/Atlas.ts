@@ -18,8 +18,7 @@ WHAT = Atlas research agent — web search, GitHub scanning, HuggingFace discove
 WHY = Provides grounded research intelligence so Agent Lee can cite real sources and surface actionable knowledge
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Atlas.ts
-WHEN = 2026
-HOW = Static class using GeminiClient with google_search tool grounding and EventBus for UI updates
+WHEN = 2026-04-04 and EventBus for UI updates
 
 AGENTS:
 ASSESS

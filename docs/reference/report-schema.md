@@ -2,7 +2,7 @@
 DOC_CLASS: REFERENCE
 DOC_ID: reference.report-schema
 OWNER: Clerk Archive
-LAST_UPDATED: 2026-04-03
+LAST_UPDATED: 2026-04-04
 -->
 
 # Report Schema
@@ -40,7 +40,7 @@ All operational reports use NDJSON (newline-delimited JSON). Each line is one re
 | `family` | string | ✅ | `LEE\|FORGE\|ARCHIVE\|AEGIS\|VECTOR\|CORTEX\|AURA\|NEXUS\|SENTINEL\|SYSTEM` |
 | `agent_id` | string | if AGENT | e.g. `Nova_Forge` |
 | `severity` | string | ✅ | `TRACE\|INFO\|WARN\|ERROR\|CRITICAL` |
-| `workflow` | string | if applicable | `G1…G7` |
+| `workflow` | string | if applicable | `G1…G8\|VOICE` |
 | `task_id` | string | if applicable | e.g. `G3-ENG-014` |
 | `step_id` | string | if applicable | e.g. `G3-ENG-014.03` |
 | `zone` | string | if applicable | `Z0_AGENTVM\|Z1_HOST_FILES\|Z2_MEMORY_DB` |
@@ -67,6 +67,16 @@ RETENTION_DELETE   — Old log file deleted per policy
 DOCS_DRIFT_DETECTED — Markdown file found outside docs/ taxonomy
 DOCS_PROPOSAL_READY — Librarian Aegis prepared a move/correction proposal
 SECURITY_EVENT     — Shield detected a threat or policy violation
+REDACTION_APPLIED  — SafetyRedactionAgent redacted PII or injection content
+VOICE_TURN_STARTED — LiveConductorAgent opened a new voice turn
+VOICE_TURN_ENDED   — LiveConductorAgent closed a voice turn
+VOICE_BARGE_IN     — User interrupted active TTS playback
+STT_TRANSCRIPT     — StreamingSTTAgent produced a transcription
+TTS_CHUNK_SENT     — StreamingTTSAgent streamed a TTS audio chunk
+ROUTER_DECISION    — RouterAgent selected an inference backend
+VISION_FRAME       — VisionAgent captured and analyzed a screen frame
+GOVERNANCE_AUDIT   — MarshalVerify ran a G8 governance check
+STANDARDS_VIOLATION — LeewayStandardsAgent detected a header/tag/secret violation
 ```
 
 ## Report Classes

@@ -19,8 +19,7 @@ WHY = Core system files must continuously comply with Leeway header, tag, placem
       this agent enforces that law in-process and writes findings to the governance report system
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/LeewayStandardsAgent.ts
-WHEN = 2026
-HOW = Static class; evaluates compliance policies from LeeWay-Standards/.leeway/config.json definitions,
+WHEN = 2026-04-04
       audits in-system known files, emits compliance events on EventBus, writes GOVERNANCE reports via ReportWriter.
       Works alongside LibrarianAegis (docs), JanitorSentinel (retention), ClerkArchive (archive), MarshalVerify (governance readiness).
       LeeWay-Standards JS agents (AuditAgent, AssessAgent, etc.) run as Node CLI tools;

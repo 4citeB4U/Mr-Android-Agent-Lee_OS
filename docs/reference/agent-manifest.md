@@ -2,82 +2,102 @@
 DOC_CLASS: REFERENCE
 DOC_ID: reference.agent-manifest
 OWNER: Lee Prime
-LAST_UPDATED: 2026-04-03
+LAST_UPDATED: 2026-04-04
 -->
 
-# Agent Manifest — Full Stack Reference
+# Agent Manifest — Quick Reference
 
-> Source stub — original canonical content lives in `FULL_STACK_AGENT_MANIFEST.md` at repo root.
-> This file will supersede it as the taxonomy is finalized.
+> Compact reference. Full details: [`docs/reference/full-stack-manifest.md`](full-stack-manifest.md)
 
-## Agent Families
+## Agent Families (9 Bloodlines · 20 Named Agents)
 
 ### LEE — Sovereign Architect
-| Agent | Role | Workflow |
-|---|---|---|
-| Agent Lee (Lee Prime) | Governor / Orchestrator | All |
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| **Lee Prime** (Agent Lee) | `agents/AgentLee.ts` | Governor / Orchestrator | G1–G7 lead |
 
-### FORGE — Engineering Bloodline
-| Agent | Role | Workflow |
-|---|---|---|
-| Nova | Lead engineer | G3 |
-| Patch | Repair & patch automation | G3 helper |
-| Syntax | Syntax analysis | G3 helper |
-| BugHunter | Bug detection | G3 helper |
+### FORGE — Engineering
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| **Nova** | `agents/Nova.ts` | Lead Engineer | G3 lead |
+| Patch | *(helper)* | Bug patching | G3 helper |
+| Syntax | *(helper)* | Architecture review | G3 helper |
+| BugHunter | *(helper)* | Root-cause analysis | G3 helper |
 
 ### ARCHIVE — Memory & Records
-| Agent | Role | Workflow |
-|---|---|---|
-| Sage | Memory queries, dream compression | G5 |
-| Scribe | Immutable audit chronicler | G5 helper |
-| Clerk Archive | Report schema + index | Governance |
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| **Sage** | `agents/Sage.ts` | Memory Architect + Dream Cycle | G5 lead |
+| Scribe | *(WorldRegistry)* | Immutable chronicler | G5 helper |
+| **Clerk Archive** | `agents/ClerkArchive.ts` | Report schema + NDJSON index | G8 helper |
 
 ### AEGIS — Security & Governance
-| Agent | Role | Workflow |
-|---|---|---|
-| Shield | Security, zone enforcement, self-healing | G6 helper |
-| Librarian Aegis | Docs taxonomy enforcement | Governance |
-| Marshal Verify | Verification Corps Governor; in-process governance testing | Governance |
-| Leeway Standards Agent | LeeWay-Standards policy bridge; header/tag/secret enforcement | Governance |
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| **Shield** | `agents/Shield.ts` | Security, zones, self-healing | G6 helper |
+| Guard | *(WorldRegistry)* | Contract compliance monitor | Passive |
+| **Librarian Aegis** | `agents/LibrarianAegis.ts` | Docs taxonomy enforcement | G8 helper |
+| **Marshal Verify** | `agents/MarshalVerify.ts` | Verification Corps Governor | **G8 lead** |
+| **Leeway Standards Agent** | `agents/LeewayStandardsAgent.ts` | Header/tag/secret policy | G8 helper |
+| **SafetyRedactionAgent** | `agents/SafetyRedactionAgent.ts` | PII + injection redaction | Voice pipeline |
 
-### VECTOR — Research & Search
-| Agent | Role | Workflow |
-|---|---|---|
-| Atlas | Web search, GitHub, research | G2 |
-| Search | Specialized search helper | G2 helper |
+### VECTOR — Research & Discovery
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| **Atlas** | `agents/Atlas.ts` | Lead Researcher | G2 lead |
+| Search | *(WorldRegistry)* | Search routing | G2 helper |
+| **VisionAgent** | `agents/VisionAgent.ts` | Screen capture + scene analysis | Voice pipeline |
 
-### CORTEX — Language & Reasoning
-| Agent | Role | Workflow |
-|---|---|---|
-| Lily | Language generation | Support |
-| Gabriel | Reasoning | Support |
-| Adam | Classification | Support |
+### CORTEX — Cognition & Reasoning
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| Lily Cortex | *(WorldRegistry)* | Context weaver | Supporting |
+| Gabriel Cortex | *(WorldRegistry)* | Policy judge | Supporting |
+| Adam Cortex | *(WorldRegistry)* | Knowledge graph | Supporting |
 
-### AURA — Social & Creative
-| Agent | Role | Workflow |
-|---|---|---|
-| Pixel | Visual design, voxel art | G4 |
-| Aria | Social interaction, translation | G1 helper, G4 helper |
-| Echo | Voice, emotion detection | G4 helper |
+### AURA — Social, Creative & Voice
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| **Pixel** | `agents/Pixel.ts` | Visual Intelligence | G4 lead |
+| **Aria** | `agents/Aria.ts` | Social + Translation | G1/G4 helper |
+| **Echo** | `agents/Echo.ts` | Voice + Emotion | G4 helper |
+| **StreamingSTTAgent** | `agents/StreamingSTTAgent.ts` | STT EventBus adapter | Voice pipeline |
+| **StreamingTTSAgent** | `agents/StreamingTTSAgent.ts` | TTS EventBus adapter | Voice pipeline |
 
-### NEXUS — Deployment
-| Agent | Role | Workflow |
-|---|---|---|
-| Nexus Prime | Deploy, release, servers | G6 |
+### NEXUS — Deployment & Execution
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| **Nexus** | `agents/Nexus.ts` | Deployment Lead | G6 lead |
+| **LiveConductorAgent** | `agents/LiveConductorAgent.ts` | Voice Pipeline Orchestrator | Voice pipeline |
 
-### SENTINEL — System Health
-| Agent | Role | Workflow |
-|---|---|---|
-| Brain Sentinel | Load, budget, mode selection | G7 |
-| Health | System diagnostics | G7 helper |
-| Janitor Sentinel | Retention + load warden; log rotation + compaction | Governance |
+### SENTINEL — Diagnostics & Oversight
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| Brain Sentinel | *(WorldRegistry)* | Runtime budget + mode selection | G7 lead |
+| Health Sentinel | *(WorldRegistry)* | Uptime monitoring | G7 helper |
+| **Janitor Sentinel** | `agents/JanitorSentinel.ts` | Log rotation + compaction | G8 helper |
+| **RouterAgent** | `agents/RouterAgent.ts` | Intent Router + load balancer | Voice pipeline |
+
+## Workflow Map
+
+| ID | Name | Lead | Key Helpers |
+|---|---|---|---|
+| G1 | Conversation | Lee Prime | Aria |
+| G2 | Research | Atlas | Sage |
+| G3 | Engineering | Nova | BugHunter, Patch, Syntax |
+| G4 | Design | Pixel | Aria, Echo |
+| G5 | Memory | Sage | Scribe |
+| G6 | Deployment | Nexus | Shield |
+| G7 | Health | Brain Sentinel | Health, Janitor |
+| G8 | Governance | **Marshal Verify** | Clerk, Janitor, Librarian, Standards |
+| Voice | Realtime Voice | **LiveConductor** | STT, TTS, Router, SafetyRedaction, Vision |
 
 ## MCP Agents (Z1/Z2 Portal Layer)
 
 | MCP ID | Purpose | Zone |
 |---|---|---|
 | planner-agent-mcp | Plan decomposition | Z0 |
-| memory-agent-mcp | Three-layer memory | Z0/Z2 |
+| memory-agent-mcp | Three-layer memory R/W | Z0/Z2 |
 | health-agent-mcp | System health checks | Z0 |
 | reports-clerk-mcp | File I/O for reports | Z1 |
 | retention-janitor-mcp | Log rotation/deletion | Z1 |

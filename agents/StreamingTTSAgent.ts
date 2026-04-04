@@ -18,8 +18,7 @@ WHAT = StreamingTTSAgent — exposes TTS state and subscriptions over the EventB
 WHY = UI components can react to speaking/done/cancelled events without coupling to VoiceSession directly
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/StreamingTTSAgent.ts
-WHEN = 2026
-HOW = Static helper with local state mirroring tts:* EventBus events and typed subscription helpers
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS

@@ -18,7 +18,7 @@ WHAT = Nexus deployment and infrastructure agent — plans deployments, generate
 WHY = Provides production deployment intelligence so Agent Lee can take code from VM to live environment
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Nexus.ts
-WHEN = 2026
+WHEN = 2026-04-04
 HOW = Static class using GeminiClient to generate deployment plans and infrastructure-as-code artifacts
 
 AGENTS:

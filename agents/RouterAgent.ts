@@ -18,8 +18,7 @@ WHAT = RouterAgent — classifies each user turn and decides local LLM vs Gemini
 WHY = Minimises Gemini API spend by handling simple intents locally via llama.cpp
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/RouterAgent.ts
-WHEN = 2026
-HOW = Rule-based fast path + Gemini-assisted fallback; emits router:intent to EventBus
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS

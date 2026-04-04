@@ -2,82 +2,115 @@
 DOC_CLASS: ARCHITECTURE
 DOC_ID: architecture.leeway-runtime-universe
 OWNER: Lee Prime
-LAST_UPDATED: 2026-04-03
+LAST_UPDATED: 2026-04-04
 -->
 
 # Leeway Runtime Universe — Architecture
 
 ## Overview
 
-Agent Lee Agentic OS is a multi-agent civilization running in a React 19 + TypeScript 5.8 + Vite 6 browser application on an edge device (mobile/desktop).
+Agent Lee Agentic OS is a 20-agent multi-family civilization running across three execution surfaces:
+- **Browser** — React 19 + TypeScript 5.8 + Vite 6 (always active)
+- **Voice Server** — FastAPI + WebSocket (local subprocess, optional)
+- **MCP Portal** — Node.js agent servers in `MCP agents/` (optional)
 
-## Stack
+## Technology Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 19, TypeScript 5.8, Vite 6, Tailwind CSS |
-| AI / LLM | Google Gemini 2.0 Flash + Gemini Live (WebSocket audio) |
-| Storage | IndexedDB (via `idb`) — `core/MemoryDB.ts` |
-| Voice | Gemini Live → Edge-TTS (voice-agent-mcp) → Browser TTS |
-| Agents | TypeScript static classes in `agents/` |
-| Core | Governance, routing, prompts in `core/` |
-| MCP | Node.js MCP servers in `MCP agents/` |
+| Layer | Technology | Purpose |
+|---|---|---|
+| Frontend | React 19, TypeScript 5.8, Vite 6, Tailwind CSS v4 | UI + App shell |
+| AI / LLM (cloud) | Google Gemini 2.0 Flash + Gemini Live (WebSocket audio) | Cloud inference |
+| AI / LLM (local) | llama.cpp (`llama-server`) | Offline inference |
+| STT | faster-whisper + Silero VAD | Local speech-to-text |
+| TTS | Piper TTS + Edge-TTS | Local/cloud text-to-speech |
+| Storage | IndexedDB (`idb`) + NDJSON ledger + Firebase | Memory + audit |
+| Auth | Firebase Auth (Google OAuth) → idToken → Cloud Function | Secure Gemini access |
+| Voice Server | Python FastAPI, WebSocket, port 8765 | Local voice pipeline |
+| Agents | TypeScript static classes in `agents/` | Core + Governance + Voice |
+| MCP | Node.js MCP servers in `MCP agents/` | Capability portals |
 
-## Runtime Layers
+## Runtime Layers (7 Total)
 
 ```
-┌─────────────────────────────────────────┐
-│           USER / DEVICE SURFACE         │
-│  React UI (App.tsx, ChatConsole, pages) │
-└──────────────┬──────────────────────────┘
-               │ EventBus (typed events)
-┌──────────────▼──────────────────────────┐
-│         GOVERNANCE LAYER (Z0)           │
-│  AgentRouter → classifyWorkflow(G1-G7)  │
-│  TaskGraph → budget-clamped execution   │
-│  GovernanceContract → zone + caps       │
-│  CheckpointManager → before/after snaps │
-└──────────────┬──────────────────────────┘
-               │ baton dispatch
-┌──────────────▼──────────────────────────┐
-│         AGENT LAYER (Z0)                │
-│  AgentLee (Orchestrator / Governor)     │
-│  Nova, Atlas, Echo, Sage, ...           │
-│  ClerkArchive, JanitorSentinel,         │
-│  LibrarianAegis (governance agents)     │
-└──────────────┬──────────────────────────┘
-               │ Portal Requests (via Shield)
-┌──────────────▼──────────────────────────┐
-│         MCP PORTAL LAYER (Z1/Z2)        │
-│  voice-agent-mcp (Edge-TTS)             │
-│  reports-clerk-mcp (file I/O)           │
-│  retention-janitor-mcp (rotate/delete)  │
-│  docs-librarian-mcp (scan/suggest)      │
-│  memory-agent-mcp, health-agent-mcp,... │
-└─────────────────────────────────────────┘
+┌───────────────────────────────────────────────────┐
+│  LAYER 7 — UI / USER SURFACE (Browser)            │
+│  React UI: App.tsx, ChatConsole, AgentTeamPanel   │
+│  pages/, components/, ParticleTransition          │
+└──────────────────────┬────────────────────────────┘
+                       │ EventBus (typed events)
+┌──────────────────────▼────────────────────────────┐
+│  LAYER 6 — GOVERNANCE CORE (Z0)                   │
+│  AgentRouter → classifyWorkflow(G1-G8+Voice)      │
+│  TaskGraph → budget-clamped execution             │
+│  GovernanceContract → zones + caps                │
+│  CheckpointManager → before/after snapshots       │
+└──────────────────────┬────────────────────────────┘
+       baton dispatch  │  │ voice session
+┌──────────────────────▼──▼────────────────────────┐
+│  LAYER 5 — CORE AGENT TEAM                       │
+│  AgentLee (Orchestrator)    Pixel (Design)        │
+│  Atlas (Research)           Nexus (Deploy)        │
+│  Nova (Engineering)         Aria (Social)         │
+│  Echo (Voice/Emotion)       Sage (Memory)         │
+│  Shield (Security)                                │
+└──────────────────────┬────────────────────────────┘
+                       │ report + audit
+┌──────────────────────▼────────────────────────────┐
+│  LAYER 4 — GOVERNANCE CORPS                       │
+│  MarshalVerify (G8 lead)    JanitorSentinel       │
+│  ClerkArchive               LibrarianAegis        │
+│  LeewayStandardsAgent                             │
+└──────────────────────┬────────────────────────────┘
+                       │ WebSocket (ws://localhost:8765)
+┌──────────────────────▼────────────────────────────┐
+│  LAYER 3 — LOCAL VOICE PIPELINE                   │
+│  LiveConductorAgent (orchestrator)                │
+│  StreamingSTT → RouterAgent → StreamingTTS        │
+│  VisionAgent (screen analysis)                    │
+│  SafetyRedactionAgent (PII/injection filter)      │
+│  Silero VAD → faster-whisper → Piper TTS          │
+└──────────────────────┬────────────────────────────┘
+                       │ Portal Requests (via Shield)
+┌──────────────────────▼────────────────────────────┐
+│  LAYER 2 — MCP PORTAL LAYER (Z1/Z2)              │
+│  voice-agent-mcp     reports-clerk-mcp           │
+│  retention-janitor-mcp   docs-librarian-mcp      │
+│  memory-agent-mcp    health-agent-mcp            │
+│  17 portals total — see full-stack-manifest.md   │
+└──────────────────────┬────────────────────────────┘
+                       │ IndexedDB + NDJSON + Firebase
+┌──────────────────────▼────────────────────────────┐
+│  LAYER 1 — STORAGE & MEMORY                       │
+│  MemoryDB (IndexedDB) + NDJSON ledger            │
+│  Firebase Firestore + Auth                        │
+│  Memory Lake (canonical truth store)             │
+└───────────────────────────────────────────────────┘
 ```
 
-## Voice Priority Chain
+## Voice Pipeline — Local-First Priority Chain
 
-1. **Gemini Live** — bidirectional WebSocket audio (first-line)
-2. **voice-agent-mcp Edge-TTS** — offline REST fallback (`http://127.0.0.1:3010/speak`)
-3. **Browser SpeechSynthesis** — last-resort fallback
+1. **Local Voice Server** (FastAPI, ws://localhost:8765) — Silero VAD → faster-whisper → llama.cpp → Piper TTS
+2. **Gemini Live** — bidirectional WebSocket audio (cloud fallback)
+3. **voice-agent-mcp Edge-TTS** — REST fallback (`http://127.0.0.1:3010/speak`)
+4. **Browser SpeechSynthesis** — last-resort
 
 ## Key Modules
 
 | Module | Path | Purpose |
 |---|---|---|
-| GovernanceContract | `core/GovernanceContract.ts` | G1-G7, zones, caps, prompts, commands |
-| AgentRouter | `core/AgentRouter.ts` | intent classify + baton dispatch |
-| TaskGraph | `core/TaskGraph.ts` | task state-machine, budget enforcement |
-| CheckpointManager | `core/CheckpointManager.ts` | before/after write snapshots |
+| GovernanceContract | `core/GovernanceContract.ts` | G1-G8+Voice, zones, caps |
+| AgentRouter | `core/AgentRouter.ts` | Intent classify + baton dispatch |
+| TaskGraph | `core/TaskGraph.ts` | Task state-machine, budget enforcement |
+| CheckpointManager | `core/CheckpointManager.ts` | Before/after write snapshots |
 | ReportWriter | `core/ReportWriter.ts` | NDJSON event schema + IndexedDB buffer |
 | ReportIndex | `core/ReportIndex.ts` | manifest.json + latest.ndjson |
-| RetentionCleaner | `core/RetentionCleaner.ts` | rotation + compaction + indexing |
-| EventBus | `core/EventBus.ts` | typed singleton, governance events |
-| VoiceService | `core/VoiceService.ts` | 3-tier voice priority chain |
+| RetentionCleaner | `core/RetentionCleaner.ts` | Rotation + compaction + indexing |
+| EventBus | `core/EventBus.ts` | Typed singleton, 30+ governance events |
+| VoiceService | `core/VoiceService.ts` | 4-tier voice priority chain |
+| VoiceSession | `voice/VoiceSession.ts` | React adapter for voice pipeline |
 | MemoryDB | `core/MemoryDB.ts` | IndexedDB wrapper |
-| GeminiLiveClient | `core/GeminiLiveClient.ts` | Live API WebSocket client |
+| GeminiLiveClient | `core/GeminiLiveClient.ts` | Gemini Live API WebSocket client |
+| WorldRegistry | `core/WorldRegistry.ts` | All 20 agents + 12 supporting cast |
 | Shield | `agents/Shield.ts` | security, zone enforcement, break-glass |
 | ClerkArchive | `agents/ClerkArchive.ts` | report schema + index maintenance |
 | JanitorSentinel | `agents/JanitorSentinel.ts` | retention + compaction |

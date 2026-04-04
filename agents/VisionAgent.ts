@@ -18,8 +18,7 @@ WHAT = VisionAgent — captures screen or image frames and extracts text, UI hin
 WHY = Gives the voice pipeline visual context so Agent Lee can answer questions about what is on screen
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/VisionAgent.ts
-WHEN = 2026
-HOW = Uses browser getDisplayMedia / provided ImageData with Gemini vision model; emits to EventBus
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS

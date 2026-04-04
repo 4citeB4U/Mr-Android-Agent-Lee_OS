@@ -18,7 +18,7 @@ WHAT = Pixel visual and voxel agent — generates images, voxelizes scenes, desi
 WHY = Provides visual intelligence so Agent Lee can produce and render image and voxel art assets
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Pixel.ts
-WHEN = 2026
+WHEN = 2026-04-04
 HOW = Static class using generateImage/generateVoxelScene services and GeminiClient for UI design
 
 AGENTS:

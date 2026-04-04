@@ -18,8 +18,7 @@ WHAT = MarshalVerify — Verification Corps Governor; runs governance-first read
 WHY = The system is a contract-driven civilization; tests must validate governance compliance not UI buttons
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/MarshalVerify.ts
-WHEN = 2026
-HOW = Pure in-memory validation against existing runtime: classifyWorkflow, Shield, TaskGraph, CheckpointManager,
+WHEN = 2026-04-04
       ReportWriter, EventBus. ZERO Playwright. ZERO external deps. Edge-device safe.
 
 AGENTS:

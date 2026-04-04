@@ -18,8 +18,7 @@ WHAT = Librarian Aegis — Documentation Governance Officer; enforces docs/ taxo
 WHY = Without a librarian, markdown sprawls outside docs/ and loses classification, making audits impossible
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/LibrarianAegis.ts
-WHEN = 2026
-HOW = Static class; scans known doc paths for missing DOC_CLASS headers; emits drift proposals for Lee Prime
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS

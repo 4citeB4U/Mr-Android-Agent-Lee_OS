@@ -2,7 +2,7 @@
 DOC_CLASS: GOVERNANCE
 DOC_ID: governance.model
 OWNER: Lee Prime
-LAST_UPDATED: 2026-04-03
+LAST_UPDATED: 2026-04-04
 -->
 
 # Agent Lee — Governance Model
@@ -32,7 +32,7 @@ Agent Lee is a sovereign, contract-driven multi-agent civilization. Every task m
 | Scribe Archive | Chronicler — immutable audit logs |
 | Sage Archive | Dreaming Archivist — dream compression |
 
-## Workflows (G1–G7)
+## Workflows (G1–G8 + Voice)
 
 | ID | Name | Lead | Helpers |
 |---|---|---|---|
@@ -43,6 +43,8 @@ Agent Lee is a sovereign, contract-driven multi-agent civilization. Every task m
 | G5 | Memory | Sage | Scribe |
 | G6 | Deployment | Nexus | Shield |
 | G7 | Health | BrainSentinel | Health |
+| G8 | Governance | **MarshalVerify** | ClerkArchive, JanitorSentinel, LibrarianAegis, LeewayStandardsAgent |
+| Voice | Realtime Voice | **LiveConductorAgent** | StreamingSTT, StreamingTTS, RouterAgent, SafetyRedaction, VisionAgent |
 
 ## Brain Sentinel Budget (Runtime Modes)
 

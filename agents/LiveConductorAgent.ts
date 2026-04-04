@@ -18,8 +18,7 @@ WHAT = LiveConductorAgent — orchestrates the end-to-end realtime voice pipelin
 WHY = Centralises session lifecycle, barge-in coordination, and pipeline state broadcasting via EventBus
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/LiveConductorAgent.ts
-WHEN = 2026
-HOW = Class wrapping VoiceSession (voice/client_core/VoiceSession.ts) with EventBus emissions and clean start/stop API
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS

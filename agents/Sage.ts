@@ -18,7 +18,7 @@ WHAT = Sage memory and dream-cycle agent — persistent log storage, 26-hour dre
 WHY = Gives Agent Lee continuous memory, long-term pattern recognition, and dream-derived insight generation
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Sage.ts
-WHEN = 2026
+WHEN = 2026-04-04
 HOW = Static class using Firestore + localStorage fallback, with dream synthesis via GeminiClient
 
 AGENTS:

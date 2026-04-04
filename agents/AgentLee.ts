@@ -14,11 +14,11 @@ family=lucide
 glyph=cpu
 
 5WH:
-WHAT = Lead orchestrator agent for Agent Lee Agentic Operating System
-WHY = Central routing and execution brain — plans, delegates, verifies, and delivers all tasks
+WHAT = Lee Prime — Sovereign Orchestrator of the Agent Lee Agentic OS; routes G1-G8+Voice workflows across 20 named agents
+WHY = Central routing and execution brain — plans, delegates, verifies, and delivers all tasks in a 20-agent civilization
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/AgentLee.ts
-WHEN = 2026
+WHEN = 2026-04-04
 HOW = Static class with respond(), plan(), and verify() methods using GeminiClient and EventBus
 
 AGENTS:

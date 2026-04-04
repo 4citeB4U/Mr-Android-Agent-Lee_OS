@@ -18,8 +18,7 @@ WHAT = Nova code-writing and debugging agent — writes, tests, debugs, and buil
 WHY = Provides VM-first software engineering capability so Agent Lee can produce and verify real working code
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Nova.ts
-WHEN = 2026
-HOW = Static class with writeCode(), debug(), buildApp(), and selfReview() using GeminiClient code_execution tool
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS

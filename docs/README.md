@@ -2,23 +2,34 @@
 DOC_CLASS: REFERENCE
 DOC_ID: docs.readme
 OWNER: Lee Prime
-LAST_UPDATED: 2026-04-03
+LAST_UPDATED: 2026-04-04
 -->
 
-# Agent Lee — Developer Documentation
+# Agent Lee Voxel OS — Developer Documentation
 
 This directory is the **canonical source of truth** for all developer-facing documentation.
+20 named agents · 9 families · G1–G8 + Voice workflows · 17 MCP portals
 
 ## Taxonomy
 
 | Folder | DOC_CLASS | Contents |
 |---|---|---|
-| `canon/` | CANON | Identity, lore, manifestos |
-| `architecture/` | ARCHITECTURE | System design, runtime diagrams |
-| `governance/` | GOVERNANCE | Policies, permissions, zone contracts |
-| `operations/` | OPERATIONS | Runbooks, SITREPs, incident response |
-| `evaluation/` | EVALUATION | Audits, scorecards |
-| `reference/` | REFERENCE | Schemas, registries, contracts |
+| `canon/` | CANON | Identity, lore, agent manifesto, agent-lee-bible |
+| `architecture/` | ARCHITECTURE | 7-layer runtime diagram, master plan, tech stack |
+| `governance/` | GOVERNANCE | G8 model, zone contracts, Shield policy, brain budgets |
+| `operations/` | OPERATIONS | SITREPs, retention policy, runbooks |
+| `evaluation/` | EVALUATION | System audits, agent scorecards |
+| `reference/` | REFERENCE | Full-stack manifest, agent manifest, report schema |
+
+## Quick Links
+
+| What | Doc |
+|---|---|
+| All 20 agents + families | [`reference/full-stack-manifest.md`](reference/full-stack-manifest.md) |
+| Agent quick-reference | [`reference/agent-manifest.md`](reference/agent-manifest.md) |
+| 7-layer runtime architecture | [`architecture/leeway-runtime-universe.md`](architecture/leeway-runtime-universe.md) |
+| G1–G8 + Voice governance model | [`governance/governance-model.md`](governance/governance-model.md) |
+| Agent identity + creed | [`canon/agent-lee-manifesto.md`](canon/agent-lee-manifesto.md) |
 
 ## Rules
 

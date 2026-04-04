@@ -18,8 +18,7 @@ WHAT = Janitor Sentinel — Retention & Load Warden; keeps system_reports/ lean 
 WHY = Unchecked log growth crashes mobile devices; Janitor enforces size/time rotation and compaction
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/JanitorSentinel.ts
-WHEN = 2026
-HOW = Static class; computes RetentionPlan; executes in-memory rotation; delegates Z1 deletes to MCP Portal
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS

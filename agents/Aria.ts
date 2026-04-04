@@ -18,7 +18,7 @@ WHAT = Aria social and multi-language agent — manages multilingual sessions, s
 WHY = Enables Agent Lee to operate in multilingual environments and facilitate cross-language communication
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Aria.ts
-WHEN = 2026
+WHEN = 2026-04-04
 HOW = Static class using Echo.translate() and GeminiClient for multilingual group conversation facilitation
 
 AGENTS:

@@ -18,8 +18,7 @@ WHAT = Clerk Archive — Keeper of Reports; validates schema, routes to correct 
 WHY = Without a clerk, agents skip reporting or use wrong paths; this enforces the reporting contract
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/ClerkArchive.ts
-WHEN = 2026
-HOW = Static class; listens to report:written events, validates schema, updates ReportIndex, emits coverage gaps
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS

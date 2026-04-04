@@ -18,8 +18,7 @@ WHAT = StreamingSTTAgent — provides STT status and direct partial-transcript s
 WHY = Lets UI components and other agents react to speech events without coupling directly to VoiceSession
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/StreamingSTTAgent.ts
-WHEN = 2026
-HOW = Static helper that subscribes to EventBus stt:* events and exposes a clean query API
+WHEN = 2026-04-04
 
 AGENTS:
 ASSESS
