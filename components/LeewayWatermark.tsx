@@ -16,9 +16,9 @@ glyph=copyright
 5WH:
 WHAT = Persistent global watermark for the Agent Lee System
 WHY = To enforce brand presence across the entire OS environment unconditionally
-WHO = Rapid Web Development / Agent Lee System Engineer
+WHO = LeeWay Industries · LeeWay Innovations · Leonard Lee
 WHERE = components/LeewayWatermark.tsx
-WHEN = 2026
+WHEN = 2026-04-04
 HOW = React component with fixed absolute positioning and CSS overrides
 
 AGENTS:
@@ -47,19 +47,22 @@ export const LeewayWatermark = () => {
           letterSpacing: "0.5px"
         }}
       >
-        Powered by Leeway Innovations
+        Designed &amp; Developed by LeeWay Innovations · © Leonard Lee
       </div>
       <div
         style={{
           position: "fixed",
           bottom: "6px",
           right: "10px",
-          opacity: 0.8,
+          opacity: 0.7,
           pointerEvents: "none",
           zIndex: 99999,
+          fontSize: "10px",
+          color: "#94a3b8",
+          letterSpacing: "0.5px"
         }}
       >
-        <img src="/images/RWDLogo.png" alt="RWD Logo" style={{ height: "24px", width: "auto", objectFit: "contain" }} />
+        LeeWay Industries
       </div>
     </>
   );

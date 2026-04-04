@@ -85,7 +85,7 @@ No GGUF file found. Either:
 
 ### Gemini quota exceeded
 
-- Check [Google AI Studio](https://aistudio.google.com/) for usage
+- Check your Gemini API quota via the [LeeWay Innovations Gemini portal](https://leewayinnovations.com) or Google Cloud Console
 - Increase `ROUTER_GEMINI_THRESHOLD` to route fewer requests to Gemini
 - Review RouterAgent patterns to add more local rules
 

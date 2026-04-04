@@ -7,7 +7,7 @@ TAG: CORE.DOCS.PROJECT.README
 5WH:
 WHAT = Primary README for the Agent Lee Agentic Operating System — full-stack, multi-agent, voice-enabled OS
 WHY = To explain the product, architecture, all 20 agents, seven system layers, and developer entry points
-WHO = Leeway Innovations / Agent Lee System Engineer
+WHO = LeeWay Industries · LeeWay Innovations · Leonard Lee (Author & Creator)
 WHERE = README.md (project root)
 WHEN = 2026-04-04
 HOW = Markdown documentation for GitHub, onboarding, technical review, and investor-facing overview
@@ -16,12 +16,14 @@ LICENSE: MIT
 -->
 
 <div align="center">
-<img width="1200" height="475" alt="Agent Lee Agentic Operating System" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+<img width="1200" height="475" alt="Agent Lee — The Future of AI" src="./public/images/agent-lee-banner.png" />
 </div>
 
 # Agent Lee — Agentic Operating System
 
-> **Powered by Leeway Innovations** · April 2026
+> **Designed & Developed by LeeWay Innovations** · Created by **Leonard Lee** · April 2026
+
+> **Collaboration & Licensing:** 414-303-8580
 
 Agent Lee Agentic Operating System is a VM-first, voice-first, multi-agent operating platform that turns a browser tab into a sovereign digital command centre. It hosts **20 named agents** across five functional layers, a local-first realtime voice pipeline, a governance enforcement corps, and an MCP tool network — all running on an edge device with no cloud dependency for core function.
 
@@ -587,7 +589,7 @@ Agent Lee should be understood as a **platform thesis**, not only a UI product.
 |---|---|
 | **Product** | A true digital operating companion for creators, founders, developers, and modern knowledge workers |
 | **Technical** | A modular agent system with local-first and hybrid execution — voice runs on-device, cloud used sparingly |
-| **Brand** | Agent Lee is a character, an operator, and a platform identity — not a feature set |
+| **Brand** | Agent Lee is a character, an operator, and a platform identity — created by Leonard Lee, designed and developed by LeeWay Innovations |
 | **Market** | Users do not only want answers; they want help executing, organizing, monitoring, and growing their digital world |
 
 **Current strategic differentiators:**
@@ -607,4 +609,8 @@ For the long-form internal canon of Agent Lee as a digital entity, see [`docs/ca
 
 ## License
 
-MIT © Leeway Innovations
+MIT © LeeWay Industries · LeeWay Innovations · Leonard Lee
+
+**Author & Creator:** Leonard Lee
+**Design & Development:** LeeWay Industries / LeeWay Innovations
+**Collaboration & Licensing:** 414-303-8580
