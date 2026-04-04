@@ -1,0 +1,153 @@
+
+> aaa-helper-agents@1.0.0 start
+> ts-node src/index.ts
+
+====================================
+Processing health-agent-mcp (Port 4001)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[health-agent-mcp] startup
+[health-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing agent-registry-mcp (Port 4002)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[agent-registry-mcp] startup\ntransport_ready\nhealth_ready
+Endpoint verification: PASS
+====================================
+Processing memory-agent-mcp (Port 4003)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[memory-agent-mcp] startup
+[memory-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing planner-agent-mcp (Port 4004)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[planner-agent-mcp] C:\MCP agents\planner-agent-mcp\index.ts:17
+import { env } from "../shared/env.js";
+         ^
+
+SyntaxError: The requested module '../shared/env.js' does not provide an export named 'env'
+    at ModuleJob._instantiate (node:internal/modules/esm/module_job:220:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:321:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.17.1
+Endpoint verification: FAIL
+ERROR: The process "12908" not found.
+====================================
+Processing scheduling-agent-mcp (Port 4005)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[scheduling-agent-mcp] startup
+[scheduling-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing validation-agent-mcp (Port 4006)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[validation-agent-mcp] startup
+[validation-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing testsprite-agent-mcp (Port 4007)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[testsprite-agent-mcp] C:\MCP agents\testsprite-agent-mcp\index.ts:34
+    throw new Error(`Missing required env: ${key}`);
+          ^
+
+
+Error: Missing required env: MCP_TOOLKIT_PATH
+    at express (C:\MCP agents\testsprite-agent-mcp\index.ts:34:11)
+    at Object.<anonymous> (C:\MCP agents\testsprite-agent-mcp\index.ts:243:2)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object.transformer (C:\MCP agents\testsprite-agent-mcp\node_modules\tsx\dist\register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at cjsLoader (node:internal/modules/esm/translators:266:5)
+    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)
+
+Node.js v22.17.1
+Endpoint verification: FAIL
+ERROR: The process "24612" not found.
+====================================
+Processing playwright-agent-mcp (Port 4008)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[playwright-agent-mcp] startup
+[playwright-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing vision-agent-mcp (Port 4009)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[vision-agent-mcp] startup
+[vision-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing voice-agent-mcp (Port 4010)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[voice-agent-mcp] startup
+[voice-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing desktop-commander-agent-mcp (Port 4011)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[desktop-commander-agent-mcp] 
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+[desktop-commander-agent-mcp] Error: Transform failed with 1 error:
+C:\MCP agents\desktop-commander-agent-mcp\index.ts:14:0: ERROR: Unexpected "}"
+    at failureErrorWithLog (C:\MCP agents\desktop-commander-agent-mcp\node_modules\esbuild\lib\main.js:1467:15)
+    at C:\MCP agents\desktop-commander-agent-mcp\node_modules\esbuild\lib\main.js:736:50
+    at responseCallbacks.<computed> (C:\MCP agents\desktop-commander-agent-mcp\node_modules\esbuild\lib\main.js:603:9)
+    at handleIncomingPacket (C:\MCP agents\desktop-commander-agent-mcp\node_modules\esbuild\lib\main.js:658:12)
+    at Socket.readFromStdout (C:\MCP agents\desktop-commander-agent-mcp\node_modules\esbuild\lib\main.js:581:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {
+  name: 'TransformError'
+}
+
+Node.js v22.17.1

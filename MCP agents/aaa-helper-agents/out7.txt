@@ -1,0 +1,166 @@
+
+> aaa-helper-agents@1.0.0 start
+> ts-node src/index.ts
+
+====================================
+Processing health-agent-mcp (Port 4001)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[health-agent-mcp] startup
+[health-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing agent-registry-mcp (Port 4002)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[agent-registry-mcp] startup\ntransport_ready\nhealth_ready
+Endpoint verification: PASS
+====================================
+Processing memory-agent-mcp (Port 4003)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[memory-agent-mcp] startup
+[memory-agent-mcp] transport_ready
+[memory-agent-mcp] health_ready
+Endpoint verification: PASS
+====================================
+Processing planner-agent-mcp (Port 4004)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[planner-agent-mcp] startup\ntransport_ready\nhealth_ready
+Endpoint verification: PASS
+====================================
+Processing scheduling-agent-mcp (Port 4005)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[scheduling-agent-mcp] startup
+[scheduling-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing validation-agent-mcp (Port 4006)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[validation-agent-mcp] startup
+[validation-agent-mcp] transport_ready
+[validation-agent-mcp] health_ready
+Endpoint verification: PASS
+====================================
+Processing testsprite-agent-mcp (Port 4007)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[testsprite-agent-mcp] startup\ntransport_ready\nhealth_ready
+[testsprite-agent-mcp] TestSpriteAgent MCP HTTP/WS server running on http://127.0.0.1:4007
+Endpoint verification: PASS
+====================================
+Processing playwright-agent-mcp (Port 4008)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[playwright-agent-mcp] startup
+[playwright-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing vision-agent-mcp (Port 4009)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[vision-agent-mcp] startup
+[vision-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing voice-agent-mcp (Port 4010)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[voice-agent-mcp] startup
+[voice-agent-mcp] transport_ready
+[voice-agent-mcp] health_ready
+Endpoint verification: PASS
+====================================
+Processing desktop-commander-agent-mcp (Port 4011)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[desktop-commander-agent-mcp] startup\ntransport_ready\nhealth_ready
+[desktop-commander-agent-mcp] DesktopCommanderAgent MCP HTTP/WS server running on http://127.0.0.1:4011
+Endpoint verification: PASS
+====================================
+Processing docs-rag-agent-mcp (Port 4012)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[docs-rag-agent-mcp] startup\ntransport_ready\nhealth_ready
+[docs-rag-agent-mcp] DocsRAGAgent MCP HTTP/WS server running on http://0.0.0.0:4102
+Endpoint verification: FAIL
+====================================
+Processing stitch-agent-mcp (Port 4013)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[stitch-agent-mcp] 
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+[stitch-agent-mcp] Error: Transform failed with 1 error:
+C:\MCP agents\stitch-agent-mcp\index.ts:103:0: ERROR: Top-level await is currently not supported with the "cjs" output format
+    at failureErrorWithLog (C:\MCP agents\stitch-agent-mcp\node_modules\esbuild\lib\main.js:1467:15)
+    at C:\MCP agents\stitch-agent-mcp\node_modules\esbuild\lib\main.js:736:50
+    at responseCallbacks.<computed> (C:\MCP agents\stitch-agent-mcp\node_modules\esbuild\lib\main.js:603:9)
+    at handleIncomingPacket (C:\MCP agents\stitch-agent-mcp\node_modules\esbuild\lib\main.js:658:12)
+    at Socket.readFromStdout (C:\MCP agents\stitch-agent-mcp\node_modules\esbuild\lib\main.js:581:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {
+  name: 'TransformError'
+}
+
+Node.js v22.17.1
+Endpoint verification: FAIL
+ERROR: The process "33996" not found.
+====================================
+Processing spline-agent-mcp (Port 4014)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[spline-agent-mcp] startup
+[spline-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing insforge-agent-mcp (Port 4015)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[insforge-agent-mcp] startup
+[insforge-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+Done. Final report generated.

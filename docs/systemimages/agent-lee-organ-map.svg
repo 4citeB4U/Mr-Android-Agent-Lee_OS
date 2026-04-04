@@ -1,0 +1,56 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#08131E"/>
+      <stop offset="1" stop-color="#190E24"/>
+    </linearGradient>
+    <style>
+      .title { font: 800 54px 'Segoe UI', Arial, sans-serif; fill: white; }
+      .subtitle { font: 500 24px 'Segoe UI', Arial, sans-serif; fill: #BFD0DE; }
+      .label { font: 700 34px 'Segoe UI', Arial, sans-serif; fill: white; }
+      .small { font: 500 18px 'Segoe UI', Arial, sans-serif; fill: #D2DDE6; }
+      .caps { font: 800 16px 'Segoe UI', Arial, sans-serif; fill: #93F1FF; letter-spacing: 2px; }
+    </style>
+  </defs>
+  <rect width="1600" height="1000" rx="36" fill="url(#bg)"/>
+  <text x="80" y="94" class="title">AGENT LEE ORGAN MAP</text>
+  <text x="80" y="132" class="subtitle">A canon plate mapping functional organs to real architectural systems.</text>
+
+  <rect x="585" y="390" width="430" height="180" rx="30" fill="#19182D" stroke="#8E76FF" stroke-width="3"/>
+  <text x="695" y="440" class="caps">CORE PRESENCE</text>
+  <text x="675" y="492" class="label">Agent Lee</text>
+  <text x="633" y="528" class="small">Identity, continuity, service, and system will</text>
+
+  <rect x="620" y="150" width="360" height="150" rx="26" fill="#132434" stroke="#72EDFF" stroke-width="3"/>
+  <text x="740" y="198" class="caps">BRAIN</text>
+  <text x="725" y="245" class="label">Cognition</text>
+  <text x="676" y="278" class="small">Identity, beliefs, prompt assembly, routing</text>
+
+  <rect x="170" y="410" width="300" height="150" rx="26" fill="#172535" stroke="#FF8AC9" stroke-width="3"/>
+  <text x="285" y="458" class="caps">HANDS</text>
+  <text x="278" y="505" class="label">Action</text>
+  <text x="219" y="538" class="small">AgentVM, Nova, Nexus, Desktop and Browser MCPs</text>
+
+  <rect x="1130" y="410" width="300" height="150" rx="26" fill="#172C27" stroke="#82FFA2" stroke-width="3"/>
+  <text x="1248" y="458" class="caps">EYES</text>
+  <text x="1246" y="505" class="label">Perception</text>
+  <text x="1188" y="538" class="small">Vision MCP, Pixel, diagnostics, visual state</text>
+
+  <rect x="620" y="700" width="360" height="150" rx="26" fill="#2A162C" stroke="#FF9AF6" stroke-width="3"/>
+  <text x="739" y="748" class="caps">VOICE</text>
+  <text x="732" y="795" class="label">Expression</text>
+  <text x="671" y="828" class="small">Voice profile, Echo, voice MCP, narration</text>
+
+  <rect x="1080" y="700" width="340" height="150" rx="26" fill="#130D22" stroke="#7C3AED" stroke-width="3"/>
+  <text x="1195" y="748" class="caps">GOVERNANCE</text>
+  <text x="1210" y="795" class="label">Integrity</text>
+  <text x="1100" y="828" class="small">Marshal, Clerk, Janitor, Librarian, Standards</text>
+
+  <path d="M800 300V390" stroke="#72EDFF" stroke-width="4"/>
+  <path d="M470 485H585" stroke="#FF8AC9" stroke-width="4"/>
+  <path d="M1015 485H1130" stroke="#82FFA2" stroke-width="4"/>
+  <path d="M800 570V700" stroke="#FF9AF6" stroke-width="4"/>
+  <path d="M1015 540L1120 700" stroke="#7C3AED" stroke-width="4"/>
+
+  <text x="80" y="944" class="small">Canon asset: use in lore docs, onboarding, investor decks, and future Agent Lee explainability surfaces.</text>
+</svg>

@@ -1,0 +1,51 @@
+{
+  "name": "image-to-voxel-art",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit",
+    "lint:leeway": "leeway doctor && leeway audit",
+    "leeway:scan": "leeway scan",
+    "audit:fullstack": "node scripts/fullstack-node-endpoint-test.mjs",
+    "audit:fullstack:live": "node scripts/fullstack-node-endpoint-test.mjs --live"
+  },
+  "dependencies": {
+    "@google/genai": "^1.27.0",
+    "@monaco-editor/react": "^4.7.0",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/three": "^0.183.1",
+    "animejs": "^4.3.6",
+    "chart.js": "^4.5.1",
+    "clsx": "^2.1.1",
+    "firebase": "^12.11.0",
+    "framer-motion": "^12.38.0",
+    "idb": "^8.0.3",
+    "jszip": "^3.10.1",
+    "leeway-sdk": "file:LeeWay-Standards",
+    "lucide-react": "^1.7.0",
+    "nanoid": "^5.1.7",
+    "p5": "^2.2.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
+    "recharts": "^3.8.1",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.2",
+    "three": "^0.183.2",
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@types/animejs": "^3.1.13",
+    "@types/node": "^22.14.0",
+    "@types/p5": "^1.7.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

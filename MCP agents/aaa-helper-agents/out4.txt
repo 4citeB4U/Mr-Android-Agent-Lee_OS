@@ -1,0 +1,86 @@
+
+> aaa-helper-agents@1.0.0 start
+> ts-node src/index.ts
+
+====================================
+Processing health-agent-mcp (Port 4001)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[health-agent-mcp] startup
+[health-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing agent-registry-mcp (Port 4002)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[agent-registry-mcp] startup\ntransport_ready\nhealth_ready
+Endpoint verification: PASS
+====================================
+Processing memory-agent-mcp (Port 4003)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[memory-agent-mcp] startup
+[memory-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing planner-agent-mcp (Port 4004)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[planner-agent-mcp] startup\ntransport_ready\nhealth_ready
+Endpoint verification: PASS
+====================================
+Processing scheduling-agent-mcp (Port 4005)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[scheduling-agent-mcp] startup
+[scheduling-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing validation-agent-mcp (Port 4006)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[validation-agent-mcp] startup
+[validation-agent-mcp] transport_ready
+health_ready
+Endpoint verification: PASS
+====================================
+Processing testsprite-agent-mcp (Port 4007)
+Issues found: 0
+Fixed: 0 items.
+Installing and compiling...
+Starting server...
+[testsprite-agent-mcp] C:\MCP agents\testsprite-agent-mcp\index.ts:33
+    throw new Error(`Missing required env: ${key}`);
+          ^
+
+
+Error: Missing required env: MCP_AGENT_HTTP_HOST
+    at express (C:\MCP agents\testsprite-agent-mcp\index.ts:33:11)
+    at Object.<anonymous> (C:\MCP agents\testsprite-agent-mcp\index.ts:242:2)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object.transformer (C:\MCP agents\testsprite-agent-mcp\node_modules\tsx\dist\register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at cjsLoader (node:internal/modules/esm/translators:266:5)
+    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)
+
+Node.js v22.17.1
+Endpoint verification: FAIL
+ERROR: The process "5296" not found.

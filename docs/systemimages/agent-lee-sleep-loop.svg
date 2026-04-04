@@ -1,0 +1,51 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#09101A"/>
+      <stop offset="1" stop-color="#140B22"/>
+    </linearGradient>
+    <style>
+      .title { font: 800 54px 'Segoe UI', Arial, sans-serif; fill: white; }
+      .subtitle { font: 500 24px 'Segoe UI', Arial, sans-serif; fill: #C1D0DF; }
+      .label { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: white; }
+      .small { font: 500 18px 'Segoe UI', Arial, sans-serif; fill: #D6E0E8; }
+    </style>
+  </defs>
+  <rect width="1600" height="900" rx="36" fill="url(#bg)"/>
+  <text x="80" y="96" class="title">AGENT LEE SLEEP LOOP</text>
+  <text x="80" y="136" class="subtitle">The reflective cycle: experience becomes memory, memory becomes dream, dream becomes insight.</text>
+
+  <g>
+    <circle cx="260" cy="470" r="96" fill="#16263B" stroke="#68E8FF" stroke-width="3"/>
+    <text x="205" y="462" class="label">Interaction</text>
+    <text x="214" y="492" class="small">User, task, event</text>
+
+    <circle cx="560" cy="260" r="96" fill="#172B2A" stroke="#7EFFB4" stroke-width="3"/>
+    <text x="523" y="252" class="label">Logs</text>
+    <text x="485" y="282" class="small">Trace and store</text>
+
+    <circle cx="960" cy="260" r="110" fill="#231933" stroke="#FF8AE3" stroke-width="3"/>
+    <text x="900" y="250" class="label">Memory Lake</text>
+    <text x="898" y="284" class="small">Continuity surface</text>
+
+    <circle cx="1280" cy="470" r="96" fill="#211E39" stroke="#B18BFF" stroke-width="3"/>
+    <text x="1238" y="462" class="label">Dream</text>
+    <text x="1206" y="492" class="small">26-hour synthesis</text>
+
+    <circle cx="1040" cy="705" r="96" fill="#2B2015" stroke="#FFCF7B" stroke-width="3"/>
+    <text x="989" y="697" class="label">Insight</text>
+    <text x="978" y="727" class="small">Pattern and lesson</text>
+
+    <circle cx="560" cy="705" r="96" fill="#192631" stroke="#77F3FF" stroke-width="3"/>
+    <text x="509" y="697" class="label">Next Action</text>
+    <text x="504" y="727" class="small">Better response</text>
+  </g>
+
+  <path d="M340 410C400 360 455 320 500 290" stroke="#68E8FF" stroke-width="4"/>
+  <path d="M655 260H850" stroke="#7EFFB4" stroke-width="4"/>
+  <path d="M1070 300C1140 335 1200 380 1230 410" stroke="#FF8AE3" stroke-width="4"/>
+  <path d="M1245 555C1200 610 1145 652 1105 675" stroke="#B18BFF" stroke-width="4"/>
+  <path d="M945 745C845 765 730 765 655 740" stroke="#FFCF7B" stroke-width="4"/>
+  <path d="M485 650C400 600 335 550 295 535" stroke="#77F3FF" stroke-width="4"/>
+  <text x="80" y="842" class="small">Canonical interpretation: sleep is not biological rest but reflective synthesis. Anchored in Sage and the dream-cycle design.</text>
+</svg>

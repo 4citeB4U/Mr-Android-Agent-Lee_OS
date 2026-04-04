@@ -1,0 +1,111 @@
+<svg width="1600" height="1100" viewBox="0 0 1600 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="1100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#080F1C"/>
+      <stop offset="1" stop-color="#160C22"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .title    { font: 800 54px 'Segoe UI', Arial, sans-serif; fill: #FFFFFF; }
+      .subtitle { font: 500 23px 'Segoe UI', Arial, sans-serif; fill: #C2D0DE; }
+      .badge    { font: 800 18px 'Segoe UI', Arial, sans-serif; letter-spacing: 2px; }
+      .label    { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: #FFFFFF; }
+      .agent    { font: 600 20px 'Segoe UI', Arial, sans-serif; fill: #FFFFFF; }
+      .small    { font: 500 17px 'Segoe UI', Arial, sans-serif; fill: #C8D6E4; }
+      .tiny     { font: 500 14px 'Segoe UI', Arial, sans-serif; fill: #96A8BA; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1100" rx="36" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="80" y="90" class="title">AGENT LEE — G1–G8 WORKFLOW MAP</text>
+  <text x="80" y="130" class="subtitle">Intent Router dispatches every request to one of eight specialised workflow gates · Governance Corps audits all outputs</text>
+
+  <!-- INTENT ROUTER — left column -->
+  <circle cx="200" cy="580" r="118" fill="#0C1D30" stroke="#22D3EE" stroke-width="3" stroke-dasharray="10 6" filter="url(#glow)"/>
+  <text x="200" y="560" text-anchor="middle" fill="#22D3EE" class="badge" font-size="20">INTENT</text>
+  <text x="200" y="588" text-anchor="middle" fill="#22D3EE" class="badge" font-size="20">ROUTER</text>
+  <text x="200" y="618" text-anchor="middle" fill="#22D3EE88" class="tiny">AGentRouter.ts</text>
+
+  <!-- Workflow rows — right panel (x 400, row height 95, start y 170) -->
+
+  <!-- G1 LEE PRIME — gold -->
+  <rect x="390" y="170" width="1140" height="78" rx="18" fill="#1E1600" stroke="#FFD700" stroke-width="2.5"/>
+  <rect x="390" y="170" width="6"    height="78" rx="3" fill="#FFD700"/>
+  <text x="416" y="202" class="badge" fill="#FFD700" font-size="16">G1</text>
+  <text x="460" y="202" class="agent" font-size="22">GENERAL CONVERSATION</text>
+  <text x="460" y="228" class="small" font-size="16">Lead: Lee Prime · Plans, delegates, ratifies, and delivers all generalist responses</text>
+  <text x="1460" y="216" text-anchor="middle" class="tiny" fill="#FFD700">LEE LINE</text>
+  <line x1="320" y1="580" x2="390" y2="209" stroke="#FFD700" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- G2 ATLAS — cyan -->
+  <rect x="390" y="265" width="1140" height="78" rx="18" fill="#041620" stroke="#06B6D4" stroke-width="2.5"/>
+  <rect x="390" y="265" width="6"    height="78" rx="3" fill="#06B6D4"/>
+  <text x="416" y="297" class="badge" fill="#06B6D4" font-size="16">G2</text>
+  <text x="460" y="297" class="agent" font-size="22">RESEARCH &amp; DISCOVERY</text>
+  <text x="460" y="323" class="small" font-size="16">Lead: Atlas · Deep search, web fetch, hypothesis forming, citation synthesis</text>
+  <text x="1460" y="311" text-anchor="middle" class="tiny" fill="#06B6D4">VECTOR LINE</text>
+  <line x1="320" y1="580" x2="390" y2="304" stroke="#06B6D4" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- G3 NOVA — orange -->
+  <rect x="390" y="360" width="1140" height="78" rx="18" fill="#1C0D00" stroke="#F97316" stroke-width="2.5"/>
+  <rect x="390" y="360" width="6"    height="78" rx="3" fill="#F97316"/>
+  <text x="416" y="392" class="badge" fill="#F97316" font-size="16">G3</text>
+  <text x="460" y="392" class="agent" font-size="22">ENGINEERING &amp; VM WORK</text>
+  <text x="460" y="418" class="small" font-size="16">Lead: Nova · Code generation, VM task dispatch, build pipelines, system calls</text>
+  <text x="1460" y="406" text-anchor="middle" class="tiny" fill="#F97316">FORGE LINE</text>
+  <line x1="320" y1="580" x2="390" y2="399" stroke="#F97316" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- G4 PIXEL — pink -->
+  <rect x="390" y="455" width="1140" height="78" rx="18" fill="#230A1E" stroke="#EC4899" stroke-width="2.5"/>
+  <rect x="390" y="455" width="6"    height="78" rx="3" fill="#EC4899"/>
+  <text x="416" y="487" class="badge" fill="#EC4899" font-size="16">G4</text>
+  <text x="460" y="487" class="agent" font-size="22">CREATIVE &amp; VISUAL</text>
+  <text x="460" y="513" class="small" font-size="16">Lead: Pixel · SVG, Voxel, UI design, Aria social, Echo voice-lines, brand assets</text>
+  <text x="1460" y="501" text-anchor="middle" class="tiny" fill="#EC4899">AURA LINE</text>
+  <line x1="320" y1="580" x2="390" y2="494" stroke="#EC4899" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- G5 SAGE — blue -->
+  <rect x="390" y="550" width="1140" height="78" rx="18" fill="#0A1428" stroke="#3B82F6" stroke-width="2.5"/>
+  <rect x="390" y="550" width="6"    height="78" rx="3" fill="#3B82F6"/>
+  <text x="416" y="582" class="badge" fill="#3B82F6" font-size="16">G5</text>
+  <text x="460" y="582" class="agent" font-size="22">MEMORY &amp; KNOWLEDGE</text>
+  <text x="460" y="608" class="small" font-size="16">Lead: Sage · MemoryLake, dream indexing, long-term recall, knowledge graph ops</text>
+  <text x="1460" y="596" text-anchor="middle" class="tiny" fill="#3B82F6">ARCHIVE LINE</text>
+  <line x1="320" y1="580" x2="390" y2="589" stroke="#3B82F6" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- G6 NEXUS — azure -->
+  <rect x="390" y="645" width="1140" height="78" rx="18" fill="#001520" stroke="#00BFFF" stroke-width="2.5"/>
+  <rect x="390" y="645" width="6"    height="78" rx="3" fill="#00BFFF"/>
+  <text x="416" y="677" class="badge" fill="#00BFFF" font-size="16">G6</text>
+  <text x="460" y="677" class="agent" font-size="22">DEPLOYMENT &amp; LAUNCH</text>
+  <text x="460" y="703" class="small" font-size="16">Lead: Nexus · Production push, CI/CD orchestration, environment health checks</text>
+  <text x="1460" y="691" text-anchor="middle" class="tiny" fill="#00BFFF">NEXUS LINE</text>
+  <line x1="320" y1="580" x2="390" y2="684" stroke="#00BFFF" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- G7 SHIELD — red -->
+  <rect x="390" y="740" width="1140" height="78" rx="18" fill="#1A0808" stroke="#EF4444" stroke-width="2.5"/>
+  <rect x="390" y="740" width="6"    height="78" rx="3" fill="#EF4444"/>
+  <text x="416" y="772" class="badge" fill="#EF4444" font-size="16">G7</text>
+  <text x="460" y="772" class="agent" font-size="22">DIAGNOSTICS &amp; SECURITY</text>
+  <text x="460" y="798" class="small" font-size="16">Lead: Shield · System health, threat triage, uptime watch, audit logging</text>
+  <text x="1460" y="786" text-anchor="middle" class="tiny" fill="#EF4444">AEGIS LINE</text>
+  <line x1="320" y1="580" x2="390" y2="779" stroke="#EF4444" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- G8 MARSHAL — purple (tall, has sub-agents) -->
+  <rect x="390" y="835" width="1140" height="110" rx="18" fill="#130D2A" stroke="#7C3AED" stroke-width="2.5"/>
+  <rect x="390" y="835" width="6"    height="110" rx="3" fill="#7C3AED"/>
+  <text x="416" y="867" class="badge" fill="#C084FC" font-size="16">G8</text>
+  <text x="460" y="867" class="agent" font-size="22">GOVERNANCE &amp; COMPLIANCE</text>
+  <text x="460" y="893" class="small" font-size="16">Lead: Marshal Verify ·  Standards enforcement, audit trails, policy review, health sweeps</text>
+  <text x="460" y="920" class="tiny" fill="#A78BFA">Corps: Clerk Archive  ·  Janitor Sentinel  ·  Librarian Aegis  ·  Leeway Standards Agent</text>
+  <text x="1460" y="895" text-anchor="middle" class="tiny" fill="#C084FC">GOV CORPS</text>
+  <line x1="320" y1="580" x2="390" y2="890" stroke="#7C3AED" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- Footer note -->
+  <text x="80" y="1072" class="tiny" fill="#5E7A90">Each workflow gate is autonomous · The Intent Router selects the best gate per request · Multiple gates may contribute to complex responses</text>
+</svg>

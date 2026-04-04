@@ -1,0 +1,8 @@
+{
+  "name": "Agent Lee Agentic Operating System",
+  "description": "A sovereign, offline-first, VM-first multi-agent AI operating platform powered by Leeway Innovations.",
+  "version": "1.0.0",
+  "author": "Leeway Innovations",
+  "watermark": "Powered by Leeway Innovations",
+  "requestFramePermissions": ["microphone"]
+}

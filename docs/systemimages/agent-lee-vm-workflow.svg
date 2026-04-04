@@ -1,0 +1,80 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="40" fill="#071019"/>
+  <rect x="40" y="40" width="1520" height="820" rx="32" fill="url(#bg)" stroke="#17364D"/>
+  <text x="92" y="118" fill="#E8FBFF" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700">Agent Lee VM Workstation Flow</text>
+  <text x="92" y="156" fill="#7FB6C9" font-family="Arial, Helvetica, sans-serif" font-size="18">How Agent Lee activates the VM, how the workstation is wired, and how it remains governed by Memory Lake and observed by Diagnostics.</text>
+
+  <rect x="88" y="220" width="250" height="132" rx="24" fill="#0E1E2B" stroke="#1AA6D9" stroke-width="2"/>
+  <text x="118" y="264" fill="#8DE7FF" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">1. User / Task Intent</text>
+  <text x="118" y="298" fill="#D6F6FF" font-family="Arial, Helvetica, sans-serif" font-size="16">Chat, request, upload,</text>
+  <text x="118" y="322" fill="#D6F6FF" font-family="Arial, Helvetica, sans-serif" font-size="16">or workflow demand enters</text>
+  <text x="118" y="346" fill="#D6F6FF" font-family="Arial, Helvetica, sans-serif" font-size="16">Agent Lee's body.</text>
+
+  <rect x="400" y="220" width="270" height="132" rx="24" fill="#14192D" stroke="#905CFF" stroke-width="2"/>
+  <text x="430" y="264" fill="#C6B1FF" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">2. Agent Lee + Router</text>
+  <text x="430" y="298" fill="#F0E9FF" font-family="Arial, Helvetica, sans-serif" font-size="16">Intent is classified by</text>
+  <text x="430" y="322" fill="#F0E9FF" font-family="Arial, Helvetica, sans-serif" font-size="16">AgentRouter and routed to</text>
+  <text x="430" y="346" fill="#F0E9FF" font-family="Arial, Helvetica, sans-serif" font-size="16">Nova, Pixel, or Nexus.</text>
+
+  <rect x="734" y="220" width="286" height="132" rx="24" fill="#10261E" stroke="#23D58B" stroke-width="2"/>
+  <text x="764" y="264" fill="#98FFD3" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">3. Event Bus Activation</text>
+  <text x="764" y="298" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Agents emit vm:open,</text>
+  <text x="764" y="322" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">vm:output, vm:result,</text>
+  <text x="764" y="346" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">and vm:close lifecycle events.</text>
+
+  <rect x="1084" y="220" width="430" height="132" rx="24" fill="#26111C" stroke="#FF5B9A" stroke-width="2"/>
+  <text x="1114" y="264" fill="#FFADD0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">4. VM Sandbox + Code Studio Workstation</text>
+  <text x="1114" y="298" fill="#FFE4EE" font-family="Arial, Helvetica, sans-serif" font-size="16">The VM displays live execution, code, previews,</text>
+  <text x="1114" y="322" fill="#FFE4EE" font-family="Arial, Helvetica, sans-serif" font-size="16">and hands durable work into Code Studio, Agent Lee's</text>
+  <text x="1114" y="346" fill="#FFE4EE" font-family="Arial, Helvetica, sans-serif" font-size="16">true workstation for build, monitor, and system review.</text>
+
+  <path d="M338 286H390" stroke="#57D8FF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M670 286H724" stroke="#B48CFF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M1020 286H1072" stroke="#45F0A8" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="386,276 402,286 386,296" fill="#57D8FF"/>
+  <polygon points="720,276 736,286 720,296" fill="#B48CFF"/>
+  <polygon points="1068,276 1084,286 1068,296" fill="#45F0A8"/>
+
+  <rect x="112" y="470" width="392" height="290" rx="28" fill="#0B1E28" stroke="#1AA6D9"/>
+  <text x="146" y="516" fill="#8DE7FF" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Memory Lake Governance</text>
+  <text x="146" y="552" fill="#D6F6FF" font-family="Arial, Helvetica, sans-serif" font-size="16">Stores body awareness snapshots, task lineage,</text>
+  <text x="146" y="578" fill="#D6F6FF" font-family="Arial, Helvetica, sans-serif" font-size="16">workspace state, files, and deployment history.</text>
+  <text x="146" y="618" fill="#8DE7FF" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Governance Chain</text>
+  <text x="146" y="648" fill="#F6FEFF" font-family="Arial, Helvetica, sans-serif" font-size="15">Memory Lake -&gt; Diagnostics Brain -&gt; VM Surface</text>
+  <text x="146" y="692" fill="#8DE7FF" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Records</text>
+  <text x="146" y="722" fill="#F6FEFF" font-family="Arial, Helvetica, sans-serif" font-size="15">agent_lee_body_awareness, logs, code artifacts,</text>
+  <text x="146" y="746" fill="#F6FEFF" font-family="Arial, Helvetica, sans-serif" font-size="15">manifestations, archives, and route history.</text>
+
+  <rect x="564" y="470" width="472" height="290" rx="28" fill="#161427" stroke="#905CFF"/>
+  <text x="598" y="516" fill="#C6B1FF" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Diagnostics Brain Oversight</text>
+  <text x="598" y="552" fill="#F0E9FF" font-family="Arial, Helvetica, sans-serif" font-size="16">Reads topology and health from the same governed state.</text>
+  <text x="598" y="592" fill="#C6B1FF" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">What it watches</text>
+  <text x="598" y="622" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="15">- VM activation path</text>
+  <text x="598" y="646" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="15">- Build, terminal, and preview health</text>
+  <text x="598" y="670" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="15">- Linked systems: Deployment, Memory Lake, MCP grid</text>
+  <text x="598" y="694" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="15">- Awareness of the active body surface</text>
+  <text x="598" y="734" fill="#F0E9FF" font-family="Arial, Helvetica, sans-serif" font-size="15">The VM workstation should mirror this awareness so Agent Lee can inspect</text>
+  <text x="598" y="758" fill="#F0E9FF" font-family="Arial, Helvetica, sans-serif" font-size="15">the whole body while working, not only when visiting Diagnostics.</text>
+
+  <rect x="1096" y="470" width="380" height="290" rx="28" fill="#10241A" stroke="#23D58B"/>
+  <text x="1128" y="516" fill="#98FFD3" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">VM Wiring Targets</text>
+  <text x="1128" y="556" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Code Studio</text>
+  <text x="1264" y="556" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Builder workstation</text>
+  <text x="1128" y="590" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Deployment</text>
+  <text x="1264" y="590" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Launch and runtime control</text>
+  <text x="1128" y="624" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Settings</text>
+  <text x="1264" y="624" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Policy and operating mode</text>
+  <text x="1128" y="658" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Creators Studio</text>
+  <text x="1264" y="658" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Creative output handoff</text>
+  <text x="1128" y="692" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Memory Lake</text>
+  <text x="1264" y="692" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Governance + persistence</text>
+  <text x="1128" y="726" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Diagnostics</text>
+  <text x="1264" y="726" fill="#DEFFF0" font-family="Arial, Helvetica, sans-serif" font-size="16">Whole-system awareness</text>
+
+  <defs>
+    <linearGradient id="bg" x1="40" y1="40" x2="1560" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1722"/>
+      <stop offset="1" stop-color="#0D111A"/>
+    </linearGradient>
+  </defs>
+</svg>
