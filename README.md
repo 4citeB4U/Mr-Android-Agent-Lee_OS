@@ -396,7 +396,7 @@ All previously "WorldRegistry-only" agents now have standalone source files and 
 
 ## Agent Universe — Interactive Cards
 
-> 🌐 **[▶ Launch Live Demo](https://4citeb4u.github.io/Mr-Android-Agent-Lee_OS/)** — Explore the full 3D agent universe, voice pipeline, and agent VM in your browser
+> 📊 **[▶ View Full Investor Proposal](https://4citeb4u.github.io/Leeway--presents-Agent-Lee-Pitch/)** — Complete pitch deck: vision, market, architecture, and investment thesis
 >
 > Collaboration & Licensing: **414-303-8580** · LeeWay Innovations / Leonard Lee
 
@@ -1243,6 +1243,16 @@ Copy `.env.local` from the project root and fill in the values relevant to the s
 ---
 
 ## 12. For Investors
+
+<div align="center">
+
+### 📊 [View the Full Investment Proposal →](https://4citeb4u.github.io/Leeway--presents-Agent-Lee-Pitch/)
+
+*Complete pitch deck — vision, market opportunity, architecture, and investment thesis*
+
+</div>
+
+---
 
 Agent Lee should be understood as a **platform thesis**, not only a UI product.
 
