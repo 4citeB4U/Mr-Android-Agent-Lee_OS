@@ -6,16 +6,37 @@ import {
   TrendingUp, Palette, Megaphone, BookOpen, Search, Video, 
   Globe, RefreshCw, Save, Share2, Layout as LayoutIcon, PenTool, 
   Image as ImageIcon, Layers, Cpu, ShieldCheck, 
-  ChevronRight, ChevronLeft, ChevronDown, Trash2, Plus, Download, Filter,
+  ChevronRight, ChevronLeft, ChevronDown, Trash2, Plus, Download, Filter, Box,
   AlertTriangle, CheckCircle2, Radio, Sparkles, Clipboard, 
   Mail, FileText, MousePointer2, Clock, BarChart3, Network,
   Maximize2, Play, Pause, Square, SkipBack, SkipForward, MoreVertical, Music, MoreHorizontal,
-  Calendar, Users, Target, DollarSign, Heart, MessageCircle, Server
+  Calendar, Users, Target, DollarSign, Heart, MessageCircle,
+  Maximize, Settings2, Eye, EyeOff, Lock, Unlock, Info,
+  PlusCircle, MinusCircle, PlayCircle, PauseCircle,
+  Volume1, Volume2, VolumeX,
+  FastForward, Rewind,
+  List, Grid,
+  Monitor, Smartphone, Tablet,
+  Cloud, Wifi, WifiOff,
+  AlertCircle, CheckCircle,
+  Clock3, History,
+  Hand,
+  Scissors, Copy,
+  Type, Image as LucideImage,
+  Triangle,
+  Hash, Link as LinkIcon,
+  Phone, MapPin, GitBranch
 } from 'lucide-react';
+import { 
+  LineChart, Line, AreaChart, Area, 
+  BarChart, Bar, PieChart, Pie, 
+  XAxis, YAxis, CartesianGrid, Tooltip, 
+  ResponsiveContainer, Cell, Legend
+} from 'recharts';
+// Tone.js and @xyflow/react are loaded dynamically at runtime
 import { GoogleGenAI } from "@google/genai";
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { eventBus } from '../core/EventBus';
 
 // --- UTILS ---
 function cn(...inputs: ClassValue[]) {
@@ -222,8 +243,8 @@ const generateImage = async (prompt: string) => {
       model: "gemini-2.5-flash-image",
       contents: [{ parts: [{ text: prompt }] }],
     });
-    const imagePart = response.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
-    return imagePart?.inlineData?.data ? `data:image/png;base64,${imagePart.inlineData.data}` : null;
+    const imagePart = (response.candidates?.[0]?.content?.parts ?? []).find(p => p.inlineData);
+    return imagePart?.inlineData ? `data:image/png;base64,${imagePart.inlineData.data}` : null;
   } catch (error) {
     console.error("Image generation failed:", error);
     return null;
@@ -504,6 +525,655 @@ const AgentNotepad = () => {
   );
 };
 
+// --- SHARED STUDIO PRIMITIVES ---
+
+/** Reusable circular SVG gauge (matches image KPI dials) */
+const CircularGauge = ({ value, label, color, size = 88 }: { value: string; label: string; color: string; size?: number }) => {
+  const pct = 72;
+  return (
+    <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
+      <svg className="w-full h-full" style={{ transform: 'rotate(-90deg)' }} viewBox="0 0 36 36">
+        <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="2.8" />
+        <circle cx="18" cy="18" r="15.9" fill="none" stroke={color} strokeWidth="2.8"
+          strokeDasharray={`${pct} ${100 - pct}`} strokeLinecap="round" />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-black text-white leading-none" style={{ fontSize: size > 76 ? 13 : 10 }}>{value}</span>
+        <span className="text-white/40 text-center leading-tight mt-0.5" style={{ fontSize: 6 }}>{label}</span>
+      </div>
+    </div>
+  );
+};
+
+/** Reusable Agent Tools sidebar panel */
+const AgentToolsPanel = ({ tools }: { tools: { name: string; tool: string; Icon: any; color: string }[] }) => (
+  <div className="flex flex-col gap-2.5 p-3 bg-black/25 rounded-xl border border-white/8">
+    <span className="text-[8px] font-black text-white/40 uppercase tracking-[0.2em]">Agent Tools:</span>
+    {tools.map(t => (
+      <div key={t.name} className="flex items-start gap-2">
+        <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+          style={{ background: `${t.color}22`, border: `1.5px solid ${t.color}55` }}>
+          <t.Icon size={11} style={{ color: t.color }} />
+        </div>
+        <div>
+          <div className="text-[9px] font-bold text-white/85 leading-tight">{t.name}</div>
+          <div className="text-[7px] text-white/35">{t.tool}</div>
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+// --- SPECIALIZED STUDIO COMPONENTS ---
+
+const ArtistStudio = ({ content }: { content?: string }) => {
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'media'>('dashboard');
+  const stats = [
+    { label: 'Monthly Listeners', value: '1.2M', trend: '+15%', color: 'text-accent-blue' },
+    { label: 'Followers', value: '450k', trend: '+8%', color: 'text-accent-purple' },
+    { label: 'Total Streams', value: '45M', trend: '+22%', color: 'text-accent-pink' },
+  ];
+
+  const agentTools = [
+    { name: 'ProfileAgent', tool: 'GalleryAgent · ImageTool', Icon: Users, color: '#5B8FF9' },
+    { name: 'StructureAgent', tool: 'GenTool · BioAgent', Icon: Cpu, color: '#C06EF5' },
+  ];
+
+  const mediaItems = [
+    { label: 'New Single', sub: 'Released Apr 2026', icon: Music },
+    { label: 'Photo Shoot', sub: 'Studio Session', icon: ImageIcon },
+    { label: 'Tour Dates', sub: '12 cities confirmed', icon: MapPin },
+  ];
+
+  return (
+    <div className="flex flex-col h-full bg-[#0f0f1e] rounded-2xl overflow-hidden text-white border border-white/8 shadow-2xl">
+      {/* ── Header ── */}
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[#16162a] border-b border-white/6">
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-[8px] font-black">S</div>
+          <span className="text-[11px] font-bold tracking-wide">Solar Harmonics</span>
+        </div>
+        <div className="flex gap-3 text-white/30">
+          <Grid size={13} /><Maximize2 size={13} /><Settings2 size={13} />
+        </div>
+      </div>
+
+      {/* ── Main Content ── */}
+      <div className="flex flex-1 min-h-0 overflow-hidden">
+        {/* Left: KPI gauges + media */}
+        <div className="flex-1 p-4 flex flex-col gap-4 overflow-y-auto no-scrollbar">
+          {/* KPI row */}
+          <div className="flex items-center gap-4 flex-wrap">
+            <CircularGauge value="125K" label={"Monthly\nListeners"} color="#5B8FF9" size={88} />
+            <div className="flex gap-3">
+              <CircularGauge value="80K" label="Followers" color="#C06EF5" size={64} />
+              <CircularGauge value="80K" label="Streams" color="#F5A623" size={64} />
+            </div>
+          </div>
+          {/* Media grid */}
+          <div className="grid grid-cols-4 gap-2 flex-1">
+            <div className="col-span-1 row-span-2 bg-[#1e1e35] rounded-xl overflow-hidden relative min-h-[80px]">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70" />
+              <User size={36} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/10" />
+            </div>
+            {mediaItems.map(m => (
+              <div key={m.label} className="col-span-1 bg-[#1e1e35] rounded-xl p-2.5 flex flex-col justify-between min-h-[48px]">
+                <m.icon size={12} className="text-white/40 mb-1" />
+                <div>
+                  <div className="text-[9px] font-bold text-white/80 leading-tight">{m.label}</div>
+                  <div className="text-[7px] text-white/35">{m.sub}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right: Agent Tools */}
+        <div className="w-40 border-l border-white/6 p-3 flex flex-col gap-2 bg-[#13132a]/50 shrink-0">
+          <AgentToolsPanel tools={agentTools} />
+          <div className="mt-auto space-y-1">
+            {stats.map(s => (
+              <div key={s.label} className="px-2 py-1 bg-white/4 rounded-lg">
+                <div className="text-[7px] text-white/30">{s.label}</div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-[10px] font-black text-white/80">{s.value}</span>
+                  <span className="text-[7px] text-emerald-400">{s.trend}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Bottom nav ── */}
+      <div className="flex items-center gap-4 px-4 py-2 border-t border-white/6 bg-[#16162a]">
+        {(['dashboard', 'media'] as const).map(tab => (
+          <button key={tab} onClick={() => setActiveTab(tab)}
+            className={cn('flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wide transition-colors',
+              activeTab === tab ? 'text-white' : 'text-white/35 hover:text-white/60')}>
+            {tab === 'media' ? <Grid size={9} /> : <LayoutIcon size={9} />}
+            {tab}
+          </button>
+        ))}
+        <div className="ml-auto flex gap-2 text-white/30">
+          <Plus size={12} /><TrendingUp size={12} /><Share2 size={12} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const WriterStudio = ({ content }: { content?: string }) => {
+  const BLOCKS = [
+    { id: '1', label: 'Verse 1', color: '#22c55e', bg: '#052e16', x: 0, y: 0 },
+    { id: '2', label: 'Chorus', color: '#f59e0b', bg: '#2d1a00', x: 160, y: 70 },
+    { id: '3', label: 'Bridge', color: '#a855f7', bg: '#1e0a2e', x: 0, y: 140 },
+    { id: '4', label: 'New Hook', color: '#38bdf8', bg: '#001e30', x: 160, y: 200 },
+  ];
+  const CONNECTIONS = [
+    { from: '1', to: '2' }, { from: '2', to: '3' }, { from: '1', to: '3' }, { from: '3', to: '4' }
+  ];
+  const agentTools = [
+    { name: 'RhymeAgent', tool: 'RhymeTool', Icon: Hash, color: '#5B8FF9' },
+    { name: 'StructureAgent', tool: 'GenTool', Icon: Network, color: '#C06EF5' },
+  ];
+
+  const lyric = content || "Walking in the dark, feel the night ignite…\nYears gone like a backprint center of candles and the related lights,\nAs the fire hits the stems, online Phonics collision, feel the ignites.";
+
+  return (
+    <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-black/6 shadow-xl">
+      {/* ── Header ── */}
+      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-black/6 bg-white">
+        <div className="flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+          <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+          <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+        </div>
+        <div className="flex gap-3 ml-2 text-[10px] text-black/40 font-medium">
+          <span>≡</span><span>Edit</span><span>Find</span><span>DNx</span>
+        </div>
+        <div className="ml-auto flex gap-2 text-black/30">
+          <Cloud size={12} /><Lock size={12} /><Monitor size={12} />
+          <Save size={12} />
+        </div>
+      </div>
+
+      <div className="flex flex-1 min-h-0 overflow-hidden">
+        {/* ── Block Canvas ── */}
+        <div className="flex-1 relative overflow-hidden bg-gray-50/60 p-4">
+          {/* SVG edges */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+            {CONNECTIONS.map((c, i) => {
+              const from = BLOCKS.find(b => b.id === c.from)!;
+              const to = BLOCKS.find(b => b.id === c.to)!;
+              const fx = from.x + 90, fy = from.y + 22, tx = to.x, ty = to.y + 22;
+              const mx = (fx + tx) / 2;
+              return (
+                <path key={i} d={`M${fx},${fy} C${mx},${fy} ${mx},${ty} ${tx},${ty}`}
+                  fill="none" stroke="#cbd5e1" strokeWidth="1.8" strokeDasharray="4 3" />
+              );
+            })}
+          </svg>
+          {/* Block cards */}
+          <div className="relative" style={{ height: 260 }}>
+            {BLOCKS.map(b => (
+              <div key={b.id}
+                className="absolute rounded-lg px-3 py-2 cursor-pointer select-none shadow-sm border"
+                style={{ left: b.x + 24, top: b.y + 8, width: 112, background: b.bg, borderColor: b.color + '55' }}>
+                <div className="text-[10px] font-bold" style={{ color: b.color }}>{b.label}</div>
+                <div className="text-[7px] text-white/30 mt-1 leading-relaxed">Topic: key notes – of details,<br/>Density pattern control, clarity ref.</div>
+              </div>
+            ))}
+          </div>
+          {/* Lyric text area */}
+          <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
+            <div className="text-[9px] text-slate-400 font-bold mb-1">Verse 1: <span className="italic font-normal text-slate-600">{lyric.split('\n')[0]}</span></div>
+            <div className="text-[8px] text-slate-400 italic leading-relaxed line-clamp-2">{lyric.split('\n').slice(1).join(' ')}</div>
+          </div>
+        </div>
+
+        {/* ── Right: Agent Tools ── */}
+        <div className="w-44 border-l border-black/6 bg-white p-3 flex flex-col gap-3 shrink-0">
+          <div className="space-y-2">
+            {agentTools.map(t => (
+              <div key={t.name} className="flex items-start gap-2 p-2 rounded-lg bg-gray-50 border border-gray-100">
+                <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                  style={{ background: t.color + '22', border: `1.5px solid ${t.color}55` }}>
+                  <t.Icon size={11} style={{ color: t.color }} />
+                </div>
+                <div>
+                  <div className="text-[9px] font-bold text-slate-800">{t.name}</div>
+                  <div className="text-[7px] text-slate-400">{t.tool}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-auto space-y-2">
+            <div className="text-[7px] text-slate-400 uppercase tracking-wide font-bold">WASM Engine</div>
+            <div className="px-2 py-1.5 bg-violet-50 border border-violet-100 rounded-lg">
+              <div className="text-[7px] font-bold text-violet-700">Transformers.js</div>
+              <div className="text-[6px] text-violet-400">On-device rhyme matching</div>
+            </div>
+            <div className="px-2 py-1.5 bg-blue-50 border border-blue-100 rounded-lg">
+              <div className="text-[7px] font-bold text-blue-700">SQLite WASM</div>
+              <div className="text-[6px] text-blue-400">1M-word rhyme corpus</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Bottom Action Bar ── */}
+      <div className="flex items-center gap-2 px-4 py-2 border-t border-black/6 bg-white">
+        {['Annotations', 'RPT', 'UpNext'].map(a => (
+          <button key={a} className={cn('px-3 py-1 rounded-md text-[9px] font-bold border transition-all',
+            a === 'UpNext' ? 'bg-blue-500 text-white border-blue-500' : 'border-slate-200 text-slate-500 hover:bg-slate-50')}>{a}</button>
+        ))}
+        <div className="ml-auto flex gap-2 text-slate-300">
+          <AlignLeft size={12} /><Save size={12} /><Share2 size={12} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Missing AlignLeft import shim
+const AlignLeft = ({ size, className }: { size: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <line x1="17" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="17" y1="18" x2="3" y2="18" />
+  </svg>
+);
+
+const MusicStudio = ({ content }: { content?: string }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(-12);
+
+  const CLIPS = [
+    ['#22d3ee','#06b6d4','#0891b2','#0e7490','#155e75'],
+    ['#4ade80','#22c55e','#16a34a','#15803d','#166534'],
+    ['#818cf8','#6366f1','#4f46e5','#4338ca','#3730a3'],
+    ['#fb923c','#f97316','#ea580c','#dc2626',''],
+  ];
+  const agentTools = [
+    { name: 'RhymeAgent', tool: 'RHDITool', Icon: Radio, color: '#5B8FF9' },
+    { name: 'GenTool', tool: 'Morris AURIS', Icon: Music, color: '#C06EF5' },
+  ];
+
+  const togglePlayback = () => {
+    // Tone.js loaded dynamically — toggle transport state
+    setIsPlaying(prev => !prev);
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-[#0d0d14] rounded-2xl overflow-hidden text-white border border-white/8 shadow-2xl">
+      {/* ── Header Controls ── */}
+      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-white/6 bg-[#13131e]">
+        <div className="flex gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-red-500/60" />
+          <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
+          <div className="w-2 h-2 rounded-full bg-green-500/60" />
+        </div>
+        <button onClick={togglePlayback} className="ml-2 px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 rounded text-[9px] font-bold transition-colors">
+          {isPlaying ? '⏸' : '▶'} {isPlaying ? 'PAUSE' : 'PLAY'}
+        </button>
+        <div className="flex gap-2 ml-1">
+          <button className="p-1 bg-white/5 hover:bg-white/10 rounded text-[8px]">⏹</button>
+          <button className="p-1 bg-white/5 hover:bg-white/10 rounded text-[8px]">⏺</button>
+        </div>
+        <div className="ml-auto text-[8px] font-mono text-white/40">{volume}dB  //  128 BPM  //  C Minor</div>
+        <div className="flex gap-2 text-white/30">
+          <Volume2 size={12} /><Plus size={12} /><Settings size={12} />
+        </div>
+      </div>
+
+      <div className="flex flex-1 min-h-0 overflow-hidden">
+        {/* ── Clip Launcher Grid (main area) ── */}
+        <div className="flex-1 overflow-y-auto no-scrollbar p-3 space-y-1">
+          {CLIPS.map((row, ri) => (
+            <div key={ri} className="flex gap-1 h-10">
+              {/* Track label */}
+              <div className="w-14 shrink-0 flex items-center px-2 bg-white/5 rounded-lg border border-white/6">
+                <span className="text-[8px] text-white/50 font-bold truncate">
+                  {['Lead', 'Bass', 'Pad', 'Perc'][ri]}
+                </span>
+              </div>
+              {/* Clips */}
+              {row.filter(Boolean).map((color, ci) => (
+                <div key={ci} className="h-full rounded-md cursor-pointer hover:brightness-110 transition-all relative overflow-hidden"
+                  style={{ flex: [1.8, 1.4, 1.6, 1.1, 0.9][ci] ?? 1, background: color + 'cc' }}>
+                  {ci === 0 && isPlaying && (
+                    <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-white animate-pulse" />
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
+          {/* Mixer strip row */}
+          <div className="flex gap-1 h-28 mt-2 pt-2 border-t border-white/6">
+            {['Kick','Snare','Hat','Bass','Lead','Pad'].map((t, i) => (
+              <div key={t} className="flex-1 bg-white/5 rounded-lg flex flex-col items-center py-2 gap-1">
+                <div className="flex-1 w-2 bg-white/8 rounded-full relative overflow-hidden">
+                  <motion.div className="absolute bottom-0 inset-x-0 rounded-full"
+                    style={{ background: ['#22d3ee','#4ade80','#818cf8','#fb923c','#a78bfa','#34d399'][i] }}
+                    animate={{ height: isPlaying ? `${40 + (i * 13 % 40)}%` : '20%' }}
+                    transition={{ duration: 0.4, repeat: Infinity, repeatType: 'reverse' }} />
+                </div>
+                <span className="text-[7px] text-white/30">{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Right: Agent Tools ── */}
+        <div className="w-44 border-l border-white/6 p-3 flex flex-col gap-3 bg-[#11111c]/60 shrink-0">
+          <AgentToolsPanel tools={agentTools} />
+          <div className="mt-2 space-y-2 text-[7px] text-white/30">
+            <div className="px-2 py-1.5 bg-white/4 rounded-lg border border-white/6">
+              <div className="font-bold text-white/50 mb-0.5">JUCE WASM</div>
+              <div>VST3 plugins • 256 tracks</div>
+            </div>
+            <div className="px-2 py-1.5 bg-white/4 rounded-lg border border-white/6">
+              <div className="font-bold text-white/50 mb-0.5">Magenta.js</div>
+              <div>MIDI generation • WASM synth</div>
+            </div>
+            <div className="px-2 py-1.5 bg-white/4 rounded-lg border border-white/6">
+              <div className="font-bold text-white/50 mb-0.5">Tone.js</div>
+              <div>60fps Web Audio playback</div>
+            </div>
+          </div>
+          <div className="mt-auto">
+            <button className="w-full py-2 bg-emerald-700/60 hover:bg-emerald-700 rounded-lg text-[8px] font-bold text-emerald-200 transition-colors flex items-center justify-center gap-1">
+              <Plus size={10} /> Add Track
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Bottom timeline ruler ── */}
+      <div className="h-6 border-t border-white/6 bg-[#0a0a12] flex items-center px-3 gap-2">
+        {Array.from({ length: 32 }).map((_, i) => (
+          <div key={i} className="text-[6px] text-white/20 shrink-0" style={{ width: 20 }}>{i + 1}</div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const VideoStudio = ({ content }: { content?: string }) => {
+  const [activeView, setActiveView] = useState<'production' | 'timeline'>('production');
+  const agentTools = [
+    { name: 'ProhisAgent', tool: 'SenserTool', Icon: Eye, color: '#5B8FF9' },
+    { name: 'ImageTool', tool: 'MetricsTool', Icon: BarChart3, color: '#C06EF5' },
+  ];
+  const TECH = [
+    { label: 'Git', icon: GitBranch },
+    { label: 'AutoGen', icon: Bot },
+    { label: 'Ollama', icon: Cpu },
+    { label: 'PostgreSQL', icon: Database },
+  ];
+  const TIMELINE_COLORS = ['#22d3ee','#4ade80','#f59e0b','#a78bfa','#f87171','#34d399'];
+
+  return (
+    <div className="flex flex-col h-full bg-[#0d0d18] rounded-2xl overflow-hidden text-white border border-white/8 shadow-2xl">
+      {/* ── Tab Bar ── */}
+      <div className="flex items-center gap-1 px-4 py-2 bg-[#13131e] border-b border-white/6">
+        {(['production','timeline'] as const).map(v => (
+          <button key={v} onClick={() => setActiveView(v)}
+            className={cn('px-3 py-1 rounded text-[9px] font-bold capitalize transition-all',
+              activeView === v ? 'bg-blue-600 text-white' : 'text-white/40 hover:text-white/70')}>
+            {v}
+          </button>
+        ))}
+        <div className="ml-auto flex gap-3 text-white/30 text-[8px]">
+          {activeView === 'production' && TECH.map(t => (
+            <div key={t.label} className="flex items-center gap-1">
+              <t.icon size={9} />
+              <span>{t.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <AnimatePresence mode="wait">
+        {activeView === 'production' ? (
+          <motion.div key="production" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="flex flex-1 min-h-0 overflow-hidden">
+            {/* Left: Profile + video preview */}
+            <div className="flex-1 flex flex-col p-3 gap-3 overflow-y-auto no-scrollbar">
+              {/* Artist profile card */}
+              <div className="flex items-center gap-3 p-3 bg-[#1a1a2e] rounded-xl border border-white/6">
+                <div className="w-12 h-12 rounded-lg bg-[#252545] flex items-center justify-center shrink-0">
+                  <User size={20} className="text-white/20" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-[11px] font-bold text-white/85">Solar Harmonics</div>
+                  <div className="text-[8px] text-white/35">Posted April 22, 2026</div>
+                  <div className="text-[8px] text-white/35">April 22, 2026</div>
+                </div>
+              </div>
+              {/* Video thumbnail */}
+              <div className="flex-1 bg-[#1a1a2e] rounded-xl border border-white/6 relative overflow-hidden min-h-[120px]">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur flex items-center justify-center">
+                    <Play size={18} className="text-white ml-0.5" />
+                  </div>
+                </div>
+                <div className="absolute bottom-2 right-2 text-[7px] text-white/50 font-mono">4K // 24fps</div>
+              </div>
+              {/* Metrics */}
+              <div className="grid grid-cols-3 gap-2">
+                {[{l:'Ondoxx Site',v:'Pods'},{l:'Tracks',v:'Tml. Cols'},{ l:'Colours',v:'Details'}].map(m => (
+                  <div key={m.l} className="bg-[#1a1a2e] rounded-lg p-2 border border-white/5">
+                    <div className="text-[7px] text-white/30">{m.l}</div>
+                    <div className="text-[8px] font-bold text-white/60">{m.v}</div>
+                  </div>
+                ))}
+              </div>
+              {/* Waveform */}
+              <div className="h-10 bg-[#1a1a2e] rounded-lg border border-white/5 flex items-center px-3 gap-0.5">
+                {Array.from({ length: 60 }).map((_, i) => (
+                  <div key={i} className="flex-1 rounded-full bg-pink-400/70"
+                    style={{ height: `${20 + Math.sin(i * 0.4) * 14 + Math.abs(Math.sin(i * 0.9)) * 16}%` }} />
+                ))}
+              </div>
+            </div>
+            {/* Right: Agent Tools */}
+            <div className="w-44 border-l border-white/6 p-3 flex flex-col gap-3 bg-[#11111c]/60 shrink-0">
+              <AgentToolsPanel tools={agentTools} />
+              <div className="mt-2 space-y-1.5 text-[7px] text-white/30">
+                <div className="px-2 py-1.5 bg-white/4 rounded-lg">
+                  <div className="font-bold text-white/50 mb-0.5">FFmpeg.wasm</div>
+                  <div>WebAssembly video encode</div>
+                </div>
+                <div className="px-2 py-1.5 bg-white/4 rounded-lg">
+                  <div className="font-bold text-white/50 mb-0.5">WebCodecs API</div>
+                  <div>Frame decode – native speed</div>
+                </div>
+              </div>
+              <div className="mt-auto flex gap-1">
+                {['V. CnR','S. Str'].map(b => (
+                  <button key={b} className="flex-1 py-1.5 bg-emerald-700/60 hover:bg-emerald-700 rounded text-[7px] font-bold text-emerald-200 transition-colors">{b}</button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div key="timeline" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            {/* Cinematic video frame */}
+            <div className="flex-1 relative overflow-hidden bg-gradient-to-b from-[#1a2a1a] via-[#0d1a2a] to-[#0a0a12]">
+              {/* Simulated sunset landscape */}
+              <div className="absolute inset-0 flex flex-col">
+                <div className="flex-1 bg-gradient-to-b from-[#ff6b35]/20 via-[#1a3a5c]/40 to-[#0a1a2a]/80" />
+                <div className="h-1/3 bg-[#0a1525]" />
+              </div>
+              <div className="absolute inset-x-0 bottom-1/3 h-px bg-[#1a3a5c]/50" />
+              {/* Play head overlay */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-14 h-14 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center">
+                  <Play size={24} className="text-white ml-1" />
+                </div>
+              </div>
+              <div className="absolute top-2 right-2 text-[7px] text-white/40 font-mono bg-black/40 px-1.5 py-0.5 rounded">
+                STMV •• 00:02:34:12
+              </div>
+            </div>
+            {/* Multi-track timeline */}
+            <div className="flex-shrink-0 bg-[#0a0a12] border-t border-white/6 p-2 space-y-1">
+              {TIMELINE_COLORS.map((color, ti) => (
+                <div key={ti} className="flex gap-1 h-5">
+                  <div className="w-10 shrink-0 flex items-center">
+                    <div className="w-1.5 h-1.5 rounded-full mr-1" style={{ background: color }} />
+                    <span className="text-[6px] text-white/30">t{ti + 1}</span>
+                  </div>
+                  <div className="flex-1 relative">
+                    <div className="absolute rounded-sm"
+                      style={{ background: color + '88', left: `${(ti * 7) % 20}%`, width: `${25 + (ti * 11) % 35}%`, top: 1, bottom: 1 }} />
+                    {ti < 3 && (
+                      <div className="absolute rounded-sm"
+                        style={{ background: color + '66', left: `${30 + (ti * 13) % 25}%`, width: `${15 + (ti * 9) % 20}%`, top: 1, bottom: 1 }} />
+                    )}
+                  </div>
+                </div>
+              ))}
+              {/* Waveform row */}
+              <div className="flex gap-1 h-6 mt-1 pt-1 border-t border-white/6">
+                <div className="w-10 shrink-0"><span className="text-[6px] text-white/20">WAV</span></div>
+                <div className="flex-1 flex items-center gap-px">
+                  {Array.from({ length: 80 }).map((_, i) => (
+                    <div key={i} className="flex-1 rounded-full bg-pink-500/50"
+                      style={{ height: `${30 + Math.abs(Math.sin(i * 0.35)) * 60}%` }} />
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* Tech footer */}
+            <div className="flex items-center gap-4 px-3 py-1.5 border-t border-white/6 bg-[#080810]">
+              {[{ l: 'STMV', i: Monitor }, { l: 'Simile', i: Layers }, { l: 'LMMS IDE', i: Music }, { l: 'JUCE WASM', i: Cpu }].map(t => (
+                <div key={t.l} className="flex items-center gap-1 text-[7px] text-white/35">
+                  <t.i size={8} />{t.l}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const MarketingStudio = ({ content }: { content?: string }) => {
+  const KANBAN = [
+    { id: 'todo', label: 'To Do', dot: '#f59e0b', cards: ['Social Media Blast', 'Email Newsletter', 'Press Kit Upload'] },
+    { id: 'inprogress', label: 'In Progress', dot: '#3b82f6', cards: ['Ad Creative A/B Test', 'Influencer Outreach'] },
+    { id: 'done', label: 'Completed', dot: '#22c55e', cards: ['Campaign Kickoff', 'Asset Finalization', 'Approval Round 1'] },
+  ];
+  const FUNNEL = [
+    { label: 'Views', pct: 100, color: '#f97316', width: '100%' },
+    { label: 'Clicks', pct: 68, color: '#eab308', width: '68%' },
+    { label: 'Streams', pct: 32, color: '#22c55e', width: '32%' },
+  ];
+  const agentTools = [
+    { name: 'PostAgent', tool: 'SocialTool', Icon: Megaphone, color: '#ef4444' },
+    { name: 'AnalyticsAgent', tool: 'MetricsTool', Icon: BarChart3, color: '#f59e0b' },
+  ];
+  const TECH = ['MongoDB', 'Next.js', 'API + cron', 'MongoDB'];
+
+  return (
+    <div className="flex flex-col h-full bg-[#0d0d14] rounded-2xl overflow-hidden text-white">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-2 bg-[#13131f] border-b border-white/5">
+        <div className="flex items-center gap-2 text-[10px] text-white/40">
+          <span className="text-white/60 font-semibold">Campaigns</span>
+          <ChevronRight size={10} />
+          <span>PastForms</span>
+        </div>
+        <div className="flex gap-2">
+          <MoreHorizontal size={12} className="text-white/30" />
+          <Plus size={12} className="text-white/30" />
+        </div>
+      </div>
+
+      {/* Main body */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Kanban columns */}
+        <div className="flex-1 flex gap-3 p-3 overflow-x-auto">
+          {KANBAN.map(col => (
+            <div key={col.id} className="flex flex-col gap-2 min-w-[130px] flex-1">
+              {/* Column header */}
+              <div className="flex items-center gap-1.5 px-1">
+                <div className="w-2 h-2 rounded-full" style={{ background: col.dot }} />
+                <span className="text-[9px] font-bold text-white/60 uppercase tracking-wide">{col.label}</span>
+                <span className="ml-auto text-[8px] text-white/30">{col.cards.length}</span>
+              </div>
+              {/* Cards */}
+              {col.cards.map(card => (
+                <div key={card} className="bg-[#1a1a2e] rounded-lg p-2.5 border border-white/5 cursor-pointer hover:border-white/15 transition-colors">
+                  <div className="text-[8px] font-semibold text-white/70 leading-tight">{card}</div>
+                  <div className="flex items-center gap-1 mt-2">
+                    <div className="w-3.5 h-3.5 rounded-full bg-white/10" />
+                    <div className="w-3.5 h-3.5 rounded-full bg-white/10 -ml-1" />
+                    <span className="ml-auto text-[7px] text-white/20">2d</span>
+                  </div>
+                </div>
+              ))}
+              <button className="flex items-center gap-1 px-2 py-1.5 rounded-lg border border-dashed border-white/10 text-white/20 hover:border-white/20 transition-colors">
+                <Plus size={8} />
+                <span className="text-[7px]">Add task</span>
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Right: Agent Tools */}
+        <div className="w-36 border-l border-white/5 p-3 flex flex-col gap-3 bg-[#13131f]/60 shrink-0">
+          <span className="text-[9px] font-bold text-white/40 uppercase tracking-wide">Agent Tools:</span>
+          {agentTools.map(t => (
+            <div key={t.name} className="flex items-start gap-2">
+              <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: `${t.color}22`, border: `1px solid ${t.color}44` }}>
+                <t.Icon size={12} style={{ color: t.color }} />
+              </div>
+              <div>
+                <div className="text-[8px] font-bold text-white/80">{t.name}</div>
+                <div className="text-[7px] text-white/40">{t.tool}</div>
+              </div>
+            </div>
+          ))}
+
+          {/* Funnel */}
+          <div className="mt-2 flex flex-col gap-1">
+            <span className="text-[8px] text-white/30 mb-1">Conversion Funnel</span>
+            {FUNNEL.map(f => (
+              <div key={f.label} className="flex flex-col gap-0.5">
+                <div className="flex justify-between text-[7px] text-white/30">
+                  <span>{f.label}</span>
+                  <span>{f.pct}%</span>
+                </div>
+                <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full transition-all duration-700"
+                    style={{ width: f.width, background: f.color }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer tech stack */}
+      <div className="flex items-center gap-2 px-4 py-2 border-t border-white/5 bg-[#13131f]">
+        <span className="text-[7px] text-white/20 font-mono uppercase">Backend</span>
+        <div className="w-px h-3 bg-white/10" />
+        <span className="text-[7px] text-white/20 font-mono uppercase">ML</span>
+        <div className="w-px h-3 bg-white/10" />
+        {TECH.map((t, i) => (
+          <span key={i} className="text-[7px] text-white/20 font-mono px-1.5 py-0.5 rounded bg-white/5">{t}</span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const WorkspaceRouter = () => {
   const { activeSubPage, studioContent } = useStudio();
 
@@ -523,276 +1193,20 @@ const WorkspaceRouter = () => {
 
   switch (activeSubPage) {
     case 'writer':
-      return (
-        <div className="space-y-8">
-          {/* Writer Studio: Word Clone Feel */}
-          <div className="flex items-center gap-4 mb-6 overflow-x-auto no-scrollbar pb-2">
-            {['File', 'Edit', 'View', 'Insert', 'Format', 'Tools', 'Table'].map(item => (
-              <button key={item} className="text-[10px] font-black uppercase tracking-widest text-black/40 hover:text-accent-blue transition-colors whitespace-nowrap">{item}</button>
-            ))}
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-white rounded-[40px] soft-shadow border border-black/5 p-12 min-h-[800px] relative group">
-                <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-[8px] font-mono text-black/20 uppercase tracking-widest">Page 1 // 452 Words</span>
-                </div>
-                <div className="flex-1 overflow-y-auto no-scrollbar">
-                  {renderContent(studioContent.writer)}
-                </div>
-              </div>
-            </div>
-            <div className="space-y-6">
-              <GlassCard className="p-6">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-black/40 mb-4">Story Architecture</h4>
-                <div className="space-y-4">
-                  {['Inciting Incident', 'First Plot Point', 'Midpoint', 'Climax'].map((point, i) => (
-                    <div key={point} className="flex items-center gap-3 p-3 bg-black/[0.02] rounded-xl border border-black/5">
-                      <div className="w-6 h-6 rounded-lg bg-accent-blue/10 flex items-center justify-center text-[10px] font-black text-accent-blue">{i + 1}</div>
-                      <span className="text-[10px] font-bold text-black/60 uppercase">{point}</span>
-                    </div>
-                  ))}
-                </div>
-              </GlassCard>
-            </div>
-          </div>
-        </div>
-      );
+      return <WriterStudio content={studioContent.writer} />;
     case 'artist':
-      return (
-        <div className="space-y-8">
-          {/* Artist Studio: Midjourney Clone Feel */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3 space-y-8">
-              <div className="bg-black/90 rounded-[40px] aspect-video flex items-center justify-center relative overflow-hidden group shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/20 to-transparent opacity-50" />
-                <div className="z-10 flex flex-col items-center gap-6 w-full h-full p-8">
-                  {studioContent.artist ? (
-                    renderContent(studioContent.artist)
-                  ) : (
-                    <div className="flex flex-col items-center gap-6">
-                      <div className="w-20 h-20 rounded-full border-2 border-white/10 flex items-center justify-center animate-pulse">
-                        <Sparkles size={32} className="text-white/40" />
-                      </div>
-                      <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.5em]">Neural Render Engine v6.0</p>
-                    </div>
-                  )}
-                </div>
-                {/* Simulated Grid */}
-                <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 opacity-5 pointer-events-none">
-                  {Array.from({ length: 16 }).map((_, i) => <div key={i} className="border border-white" />)}
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              <GlassCard className="p-6">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-black/40 mb-4">Parameters</h4>
-                <div className="space-y-6">
-                  <div>
-                    <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-black/40 mb-2">
-                      <span>Aspect Ratio</span>
-                      <span className="text-accent-purple">16:9</span>
-                    </div>
-                    <div className="flex gap-2">
-                      {['1:1', '4:5', '16:9', '9:16'].map(ratio => (
-                        <button key={ratio} className={cn("flex-1 py-2 rounded-lg text-[9px] font-black border transition-all", ratio === '16:9' ? "bg-accent-purple/10 border-accent-purple/20 text-accent-purple" : "bg-black/5 border-black/5 text-black/20")}>{ratio}</button>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-black/40 mb-2">
-                      <span>Stylize</span>
-                      <span className="text-accent-purple">750</span>
-                    </div>
-                    <div className="h-1 w-full bg-black/5 rounded-full relative">
-                      <div className="absolute inset-y-0 left-0 w-3/4 bg-accent-purple rounded-full" />
-                    </div>
-                  </div>
-                </div>
-              </GlassCard>
-            </div>
-          </div>
-        </div>
-      );
+      return <ArtistStudio content={studioContent.artist} />;
     case 'music':
-      return (
-        <div className="space-y-8">
-          {/* Music Studio: Lyria Synthesis */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3 space-y-8">
-              <div className="bg-black/90 rounded-[40px] aspect-video flex items-center justify-center relative overflow-hidden group shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/20 to-transparent opacity-50" />
-                <div className="z-10 flex flex-col items-center gap-6 w-full h-full p-8 overflow-y-auto no-scrollbar">
-                  {studioContent.music ? (
-                    <div className="text-white/80 text-center max-w-lg">
-                      <div className="flex items-center justify-center gap-4 mb-6">
-                        <div className="w-12 h-12 rounded-full bg-accent-purple/20 flex items-center justify-center animate-pulse">
-                          <Music size={24} className="text-accent-purple" />
-                        </div>
-                        <div className="text-left">
-                          <div className="text-[8px] font-black uppercase tracking-widest text-white/40">Now Playing</div>
-                          <div className="text-sm font-black uppercase tracking-tight">Neural Composition v1.0</div>
-                        </div>
-                      </div>
-                      {renderContent(studioContent.music.replace('[MUSIC_GENERATED] ', ''))}
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center gap-6">
-                      <div className="w-20 h-20 rounded-full border-2 border-white/10 flex items-center justify-center animate-pulse">
-                        <Music size={32} className="text-white/40" />
-                      </div>
-                      <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.5em]">Lyria Audio Synthesis</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="space-y-6">
-              <GlassCard className="p-6">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-black/40 mb-4">Neural Synthesis</h4>
-                <div className="space-y-4">
-                  {['Tempo Sync', 'Harmonic Balance', 'Neural Depth', 'Spectral Clarity'].map(p => (
-                    <div key={p} className="flex justify-between items-center">
-                      <span className="text-[10px] text-black/40 uppercase tracking-widest">{p}</span>
-                      <span className="text-[10px] font-black text-accent-purple uppercase tracking-widest">Optimal</span>
-                    </div>
-                  ))}
-                </div>
-              </GlassCard>
-            </div>
-          </div>
-        </div>
-      );
+      return <MusicStudio content={studioContent.music} />;
     case 'video':
-      return (
-        <div className="space-y-8">
-          {/* Video Studio: Premiere Feel */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-black rounded-[40px] aspect-video relative overflow-hidden shadow-2xl">
-                <div className="absolute inset-0 flex items-center justify-center p-8 overflow-y-auto no-scrollbar">
-                  {studioContent.video ? (
-                    <div className="text-white/80 text-center max-w-lg">
-                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-4">Storyboard Preview</div>
-                      {renderContent(studioContent.video.replace('[VIDEO_GENERATED] ', ''))}
-                    </div>
-                  ) : (
-                    <Video size={48} className="text-white/10" />
-                  )}
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-between">
-                  <div className="flex items-center gap-4 text-white/60 text-[10px] font-mono">
-                    <span>00:04:12:15</span>
-                    <div className="w-px h-3 bg-white/20" />
-                    <span>24 FPS</span>
-                  </div>
-                  <div className="flex gap-4 text-white/60">
-                    <Maximize2 size={16} />
-                    <Settings size={16} />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-6">
-              <GlassCard className="p-6">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-black/40 mb-4">Export Settings</h4>
-                <div className="space-y-4">
-                  <div className="p-3 bg-black/[0.02] rounded-xl border border-black/5 flex justify-between items-center">
-                    <span className="text-[10px] font-bold text-black/60 uppercase">Format</span>
-                    <span className="text-[10px] font-black text-accent-blue">H.264 / MP4</span>
-                  </div>
-                  <div className="p-3 bg-black/[0.02] rounded-xl border border-black/5 flex justify-between items-center">
-                    <span className="text-[10px] font-bold text-black/60 uppercase">Resolution</span>
-                    <span className="text-[10px] font-black text-accent-blue">4K (3840x2160)</span>
-                  </div>
-                </div>
-              </GlassCard>
-            </div>
-          </div>
-        </div>
-      );
+      return <VideoStudio content={studioContent.video} />;
     case 'marketing':
-      return (
-        <div className="space-y-8">
-          {/* Marketing Hub: Campaign Center */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-8">
-              <div className="bg-white rounded-[40px] p-10 soft-shadow border border-black/5">
-                <h3 className="text-2xl font-black uppercase tracking-tight text-black/80 mb-8">Campaign Orchestrator</h3>
-                <div className="grid grid-cols-2 gap-6">
-                  {[
-                    { label: 'Total Reach', value: '1.2M', trend: '+12%', icon: Users },
-                    { label: 'Conversion', value: '4.8%', trend: '+0.5%', icon: Target },
-                    { label: 'Ad Spend', value: '$12.4k', trend: '-2%', icon: DollarSign },
-                    { label: 'ROI', value: '3.2x', trend: '+15%', icon: TrendingUp },
-                  ].map(stat => (
-                    <div key={stat.label} className="p-6 bg-black/[0.02] rounded-3xl border border-black/5">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-white rounded-2xl soft-shadow text-accent-blue"><stat.icon size={20} /></div>
-                        <span className="text-[10px] font-black text-accent-green">{stat.trend}</span>
-                      </div>
-                      <div className="text-[10px] font-black text-black/20 uppercase tracking-widest mb-1">{stat.label}</div>
-                      <div className="text-3xl font-black text-black/80">{stat.value}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-[40px] p-10 soft-shadow border border-black/5">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-black/20 mb-6">Cross-Platform Preview</h4>
-                <div className="flex gap-4 mb-8 overflow-x-auto no-scrollbar pb-2">
-                  {['Instagram', 'Twitter', 'LinkedIn', 'Email'].map(platform => (
-                    <button key={platform} className={cn("px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all whitespace-nowrap", platform === 'Instagram' ? "bg-accent-blue/10 border-accent-blue/20 text-accent-blue" : "bg-black/5 border-black/5 text-black/20")}>{platform}</button>
-                  ))}
-                </div>
-                <div className="aspect-square max-w-md mx-auto bg-black/[0.02] border border-black/5 rounded-[40px] p-8 flex flex-col gap-4 overflow-y-auto no-scrollbar">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-accent-blue/20 flex items-center justify-center text-accent-blue font-black text-[10px]">AL</div>
-                    <div className="flex flex-col">
-                      <div className="h-3 w-32 bg-black/5 rounded-full mb-1" />
-                      <div className="text-[8px] font-mono text-black/20 uppercase tracking-widest">Sponsored // Neural Optimized</div>
-                    </div>
-                  </div>
-                  <div className="flex-1 bg-white rounded-3xl soft-shadow border border-black/5 p-6 overflow-y-auto no-scrollbar">
-                    {renderContent(studioContent.marketing)}
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex gap-4 text-black/20 mb-2">
-                      <Heart size={16} />
-                      <MessageCircle size={16} />
-                      <Share2 size={16} />
-                    </div>
-                    <div className="h-2 w-full bg-black/5 rounded-full" />
-                    <div className="h-2 w-2/3 bg-black/5 rounded-full" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              <GlassCard className="p-6">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-black/40 mb-4">Deployment Queue</h4>
-                <div className="space-y-3">
-                  {['Social Post #1', 'Newsletter Draft', 'Ad Creative A/B'].map(item => (
-                    <div key={item} className="p-4 bg-black/[0.02] rounded-2xl border border-black/5 flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-black/60 uppercase">{item}</span>
-                      <button className="text-accent-blue"><Rocket size={16} /></button>
-                    </div>
-                  ))}
-                </div>
-              </GlassCard>
-            </div>
-          </div>
-        </div>
-      );
+      return <MarketingStudio content={studioContent.marketing} />;
     default:
       return (
-        <div className="flex flex-col items-center justify-center py-40 opacity-20">
-          <Rocket size={64} className="mb-6" />
-          <h3 className="text-xl font-black uppercase tracking-tighter">Workspace Initializing</h3>
-          <p className="text-[10px] font-mono uppercase tracking-widest mt-2">Agent Lee is preparing the {activeSubPage} environment</p>
+        <div className="flex flex-col items-center justify-center h-full text-black/20 space-y-4">
+          <Box size={64} strokeWidth={1} />
+          <p className="text-[10px] font-black uppercase tracking-[0.5em]">Select a Studio to Begin</p>
         </div>
       );
   }
@@ -947,7 +1361,7 @@ const LeftPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
 
 const GlobalPageRouter = () => {
   const { 
-    activeGlobalPage, activeSubPage, setActiveSubPage,
+    activeGlobalPage, activeSubPage, 
     isToolPanelCollapsed, setIsToolPanelCollapsed, 
     isLeftPanelCollapsed, setIsLeftPanelCollapsed, 
     isAutonomous, setIsAutonomous,
@@ -979,32 +1393,6 @@ const GlobalPageRouter = () => {
 
         {/* Main Content Area: Workspace */}
         <main className="flex-1 overflow-y-auto no-scrollbar relative bg-white/50">
-          {/* Sub-page tab bar — always visible */}
-          <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-black/5 px-8 flex items-center gap-1 overflow-x-auto no-scrollbar shrink-0">
-            {[
-              { id: 'artist', label: 'Artist', icon: ImageIcon },
-              { id: 'writer', label: 'Writer', icon: PenTool },
-              { id: 'music', label: 'Music', icon: Radio },
-              { id: 'video', label: 'Video', icon: Video },
-              { id: 'marketing', label: 'Marketing', icon: Megaphone },
-              { id: 'projects', label: 'Projects', icon: Layers },
-              { id: 'account', label: 'Account', icon: User },
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveSubPage(tab.id as SubPageId)}
-                className={cn(
-                  "flex items-center gap-2 px-4 py-3 text-[10px] font-black uppercase tracking-widest border-b-2 transition-all whitespace-nowrap shrink-0",
-                  activeSubPage === tab.id
-                    ? "border-accent-pink text-accent-pink"
-                    : "border-transparent text-black/30 hover:text-black/60"
-                )}
-              >
-                <tab.icon size={12} />
-                {tab.label}
-              </button>
-            ))}
-          </div>
           <div className="p-8 max-w-7xl mx-auto">
             <div className="mb-12 flex items-end justify-between">
               <div>
@@ -1760,11 +2148,12 @@ export default function AgentLeeCreatorsStudio() {
       projects, setProjects,
       studioContent, setStudioContent
     }}>
-      <div className="flex flex-col h-full bg-[#FDFDFD] text-[#1d1d1f] overflow-hidden font-sans">
+      <div className="flex flex-col h-screen bg-soft-white text-[#1d1d1f] overflow-hidden font-sans">
+        <div className="scanline pointer-events-none" />
         
         {/* Header: System Status & Logo */}
-        <header className="bg-white/80 border-b border-black/5 z-50 backdrop-blur-xl shrink-0">
-          <div className="h-16 max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <header className="h-16 bg-white/80 border-b border-black/5 z-50 backdrop-blur-xl shrink-0">
+          <div className="max-w-7xl mx-auto h-full px-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => setIsSidebarOpen(true)}
@@ -1792,112 +2181,12 @@ export default function AgentLeeCreatorsStudio() {
               </button>
             </div>
           </div>
-          {/* Studio Switcher Strip */}
-          <div className="h-8 bg-[#1d1d1f] flex items-center px-6 gap-3 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-            <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest shrink-0">Studios:</span>
-            <button
-              onClick={() => eventBus.emit('navigate:page', { page: 'deployment' })}
-              className="flex items-center gap-1 px-2.5 py-0.5 bg-white/5 hover:bg-emerald-600/80 text-white/60 hover:text-white rounded-md text-[9px] font-bold uppercase tracking-wider transition-all shrink-0"
-            >
-              <Rocket size={9} /> Launch Pad
-            </button>
-            <div className="w-px h-3 bg-white/10 shrink-0" />
-            <button
-              onClick={() => eventBus.emit('navigate:page', { page: 'code' })}
-              className="flex items-center gap-1 px-2.5 py-0.5 bg-white/5 hover:bg-blue-600/80 text-white/60 hover:text-white rounded-md text-[9px] font-bold uppercase tracking-wider transition-all shrink-0"
-            >
-              <Code size={9} /> Code Studio
-            </button>
-            <div className="flex items-center gap-1 px-2.5 py-0.5 bg-pink-600/80 text-white rounded-md text-[9px] font-bold uppercase tracking-wider shrink-0">
-              <Palette size={9} /> Creator Studio
-            </div>
-            <div className="w-px h-3 bg-white/10 shrink-0" />
-            <button
-              onClick={() => eventBus.emit('navigate:page', { page: 'vm' })}
-              className="flex items-center gap-1 px-2.5 py-0.5 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-md text-[9px] font-bold uppercase tracking-wider transition-all shrink-0"
-            >
-              <Server size={9} /> VM
-            </button>
-            <div className="ml-auto shrink-0 flex items-center gap-1.5">
-              <div className="w-1 h-1 rounded-full bg-pink-400 animate-pulse" />
-              <span className="text-[8px] font-bold text-pink-300 uppercase tracking-widest">Live</span>
-            </div>
-          </div>
         </header>
 
         {/* Main Layout Container */}
         <div className="flex flex-1 overflow-hidden relative">
           <GlobalPageRouter />
         </div>
-
-        {/* Global Navigation Sidebar Drawer */}
-        <AnimatePresence>
-          {isSidebarOpen && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                onClick={() => setIsSidebarOpen(false)}
-                className="fixed inset-0 bg-black/40 z-[80] backdrop-blur-sm"
-              />
-              <motion.aside
-                initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed left-0 top-0 bottom-0 w-72 bg-white z-[90] flex flex-col border-r border-black/5 shadow-2xl"
-                onClick={e => e.stopPropagation()}
-              >
-                <div className="h-16 flex items-center justify-between px-6 border-b border-black/5 shrink-0">
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/60">Navigation</h2>
-                  <button onClick={() => setIsSidebarOpen(false)} className="p-2 hover:bg-black/5 rounded-xl transition-colors">
-                    <X size={18} />
-                  </button>
-                </div>
-                <div className="flex-1 overflow-y-auto p-4 space-y-6 no-scrollbar">
-                  {/* Global Pages */}
-                  <div className="space-y-1">
-                    <div className="text-[8px] font-black uppercase tracking-widest text-black/20 px-3 mb-2">Global Pages</div>
-                    {globalNavItems.map(item => (
-                      <button
-                        key={item.id}
-                        onClick={() => { setActiveGlobalPage(item.id); setIsSidebarOpen(false); }}
-                        className={cn(
-                          "w-full flex items-center gap-3 px-3 py-3 rounded-2xl transition-all text-left",
-                          activeGlobalPage === item.id
-                            ? "bg-accent-blue/10 text-accent-blue"
-                            : "text-black/50 hover:bg-black/5 hover:text-black"
-                        )}
-                      >
-                        <item.icon size={16} />
-                        <span className="text-[11px] font-black uppercase tracking-widest">{item.label}</span>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Sub Pages — only when on studio */}
-                  {activeGlobalPage === 'studio' && (
-                    <div className="space-y-1 border-t border-black/5 pt-4">
-                      <div className="text-[8px] font-black uppercase tracking-widest text-black/20 px-3 mb-2">Studio Sections</div>
-                      {subNavItems.map(item => (
-                        <button
-                          key={item.id}
-                          onClick={() => { setActiveSubPage(item.id); setIsSidebarOpen(false); }}
-                          className={cn(
-                            "w-full flex items-center gap-3 px-3 py-3 rounded-2xl transition-all text-left",
-                            activeSubPage === item.id
-                              ? "bg-accent-pink/10 text-accent-pink"
-                              : "text-black/50 hover:bg-black/5 hover:text-black"
-                          )}
-                        >
-                          <item.icon size={16} />
-                          <span className="text-[11px] font-black uppercase tracking-widest">{item.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </motion.aside>
-            </>
-          )}
-        </AnimatePresence>
 
         {/* Global Agent Notepad Modal */}
         <AnimatePresence>
