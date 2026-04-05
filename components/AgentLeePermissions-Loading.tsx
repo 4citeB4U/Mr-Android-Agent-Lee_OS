@@ -723,38 +723,131 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
     <div className="relative w-full h-screen overflow-hidden bg-[#f8fafc] font-mono text-slate-900 shadow-[inset_0_0_120px_rgba(15,23,42,0.15)] transition-shadow duration-1000">
       <AnimatePresence mode="wait">
         {!permissionsGranted ? (
-          <motion.div 
+          <motion.div
             key="permissions"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-50 flex flex-col items-center justify-center p-6 text-center bg-[#f8fafc]"
+            className="absolute inset-0 z-50 flex flex-col items-center justify-center p-6"
+            style={{ background: 'linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 40%, #e8f0fe 100%)' }}
           >
-            <div className="max-w-md space-y-8">
-              <motion.div 
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                className="space-y-2"
+            {/* Subtle tech grid lines */}
+            <div className="absolute inset-0 pointer-events-none" style={{
+              backgroundImage: 'linear-gradient(rgba(100,160,220,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(100,160,220,0.1) 1px, transparent 1px)',
+              backgroundSize: '60px 60px'
+            }} />
+
+            <div className="relative z-10 w-full max-w-sm space-y-8">
+
+              {/* Title */}
+              <motion.div
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                className="text-center space-y-3"
               >
-                <h2 className="text-xl font-black uppercase tracking-[0.4em] text-slate-900">System Access</h2>
-                <p className="text-[10px] text-slate-500 uppercase tracking-widest leading-relaxed">
+                <h2 className="text-2xl font-black uppercase tracking-[0.35em] text-[#1a3a5c]"
+                  style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.35em' }}>
+                  System Access
+                </h2>
+                <p className="text-[10px] text-[#5580a0] uppercase tracking-[0.18em] leading-relaxed max-w-xs mx-auto">
                   Agent Lee requires authorization to access hardware subsystems for optimal performance.
                 </p>
               </motion.div>
 
-              <div className="grid grid-cols-1 gap-4 text-[10px] uppercase tracking-widest">
-                {['Camera', 'Microphone', 'Geolocation'].map((perm) => (
-                  <div key={perm} className="flex items-center justify-between p-4 border border-slate-200 bg-white shadow-sm">
-                    <span className="text-slate-400">{perm} Access</span>
-                    <span className="text-slate-900 font-bold">Required</span>
-                  </div>
-                ))}
-              </div>
+              {/* Permission rows */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="space-y-3"
+              >
+                {[
+                  {
+                    label: 'Camera Access',
+                    icon: (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-7 h-7 text-[#3ab5f5]">
+                        <path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: 'Microphone Access',
+                    icon: (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-7 h-7 text-[#3ab5f5]">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: 'Geolocation Access',
+                    icon: (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-7 h-7 text-[#3ab5f5]">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                      </svg>
+                    ),
+                  },
+                ].map((perm, i) => (
+                  <motion.div
+                    key={perm.label}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 0.25 + i * 0.08 }}
+                    className="flex items-center gap-4 px-4 py-3 rounded-2xl"
+                    style={{
+                      background: 'rgba(255,255,255,0.7)',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(100,180,255,0.35)',
+                      boxShadow: '0 2px 16px rgba(80,160,255,0.08)',
+                    }}
+                  >
+                    {/* Blue glow icon bubble */}
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+                      style={{
+                        background: 'radial-gradient(circle at 40% 35%, rgba(180,230,255,0.9), rgba(100,180,255,0.35))',
+                        boxShadow: '0 0 18px rgba(80,180,255,0.45), inset 0 1px 2px rgba(255,255,255,0.6)',
+                        border: '1px solid rgba(100,200,255,0.5)',
+                      }}
+                    >
+                      {perm.icon}
+                    </div>
 
+                    {/* Label */}
+                    <span className="flex-1 text-sm font-black uppercase tracking-[0.15em] text-[#1a3a5c]">
+                      {perm.label}
+                    </span>
+
+                    {/* Gold REQUIRED badge */}
+                    <div className="flex items-center gap-0 flex-shrink-0">
+                      {/* chevron arrow shape */}
+                      <div style={{
+                        width: 0, height: 0,
+                        borderTop: '14px solid transparent',
+                        borderBottom: '14px solid transparent',
+                        borderRight: '10px solid #c89a2a',
+                      }} />
+                      <div className="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white"
+                        style={{
+                          background: 'linear-gradient(135deg, #c89a2a, #e8b84b)',
+                          boxShadow: '0 2px 8px rgba(180,130,0,0.4)',
+                        }}
+                      >
+                        Required
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* AUTHORIZE SYSTEM button */}
               <motion.button
-                whileHover={{ scale: 1.02, backgroundColor: '#0f172a', color: '#fff' }}
-                whileTap={{ scale: 0.98 }}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                whileHover={{ scale: 1.02, boxShadow: '0 0 40px rgba(60,180,255,0.6)' }}
+                whileTap={{ scale: 0.97 }}
                 onClick={async () => {
                   logAction('permissions', 'Requesting hardware subsystem authorization (Camera, Mic, GPS).');
                   try {
@@ -770,7 +863,14 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
                     setPermissionsGranted(true);
                   }
                 }}
-                className="w-full py-4 border-2 border-slate-900 text-slate-900 font-black uppercase tracking-[0.3em] transition-colors duration-300 pointer-events-auto"
+                className="w-full py-4 font-black uppercase tracking-[0.3em] text-white text-sm pointer-events-auto"
+                style={{
+                  background: 'linear-gradient(135deg, #0d2a4a 0%, #1a4a7a 50%, #0d2a4a 100%)',
+                  borderRadius: '6px',
+                  clipPath: 'polygon(12px 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 12px 100%, 0% 50%)',
+                  boxShadow: '0 0 25px rgba(60,180,255,0.45), 0 0 60px rgba(60,180,255,0.15), inset 0 1px 1px rgba(100,200,255,0.2)',
+                  border: '1px solid rgba(100,200,255,0.5)',
+                }}
               >
                 Authorize System
               </motion.button>
