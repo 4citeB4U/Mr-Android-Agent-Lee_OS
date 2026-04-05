@@ -172,7 +172,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             <span className="absolute inset-0 rounded-full border-2 border-red-400 animate-ping opacity-60 pointer-events-none" />
           )}
           <img
-            src="/images/MacMillionMic.png"
+            src={`${import.meta.env.BASE_URL}images/MacMillionMic.png`}
             alt="Mac Million Mic"
             className={cn(
               "w-[64px] h-[64px] object-contain transition-all drop-shadow-lg group-hover:scale-110",

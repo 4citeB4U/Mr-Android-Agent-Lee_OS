@@ -297,7 +297,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
                 )}
                 title={isListening ? 'Stop listening' : 'Voice input'}
               >
-                <img src="/images/MacMillionMic.png" alt="Voice input" className="w-[18px] h-[18px] object-contain opacity-70 hover:opacity-100" />
+                <img src={`${import.meta.env.BASE_URL}images/MacMillionMic.png`} alt="Voice input" className="w-[18px] h-[18px] object-contain opacity-70 hover:opacity-100" />
               </button>
 
               <button

@@ -227,7 +227,7 @@ export const Layout: React.FC<LayoutProps> = ({
             <span className="absolute inset-0 rounded-full border-2 border-red-400 animate-ping opacity-60 pointer-events-none" />
           )}
           <img
-            src="/images/MacMillionMic.png"
+            src={`${import.meta.env.BASE_URL}images/MacMillionMic.png`}
             alt="Tap to speak"
             className={cn(
               'w-16 h-16 object-contain drop-shadow-lg transition-all',
