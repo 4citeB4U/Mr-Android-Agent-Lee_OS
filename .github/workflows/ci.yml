@@ -1,4 +1,4 @@
-name: CI
+name: CI / Deploy
 
 on:
   push:
@@ -6,8 +6,12 @@ on:
   pull_request:
     branches: [main]
 
+# Allow deployment to GitHub Pages
+permissions:
+  contents: write
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,3 +34,11 @@ jobs:
         run: npm run build
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
