@@ -19,6 +19,9 @@
   "dependencies": {
     "@google/genai": "^1.27.0",
     "@monaco-editor/react": "^4.7.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@react-three/postprocessing": "^3.0.4",
     "@tailwindcss/vite": "^4.2.2",
     "@types/three": "^0.183.1",
     "animejs": "^4.3.6",
@@ -30,6 +33,7 @@
     "jszip": "^3.10.1",
     "leeway-sdk": "file:LeeWay-Standards",
     "lucide-react": "^1.7.0",
+    "motion": "^12.38.0",
     "nanoid": "^5.1.7",
     "p5": "^2.2.3",
     "react": "^19.2.0",
@@ -47,6 +51,8 @@
     "@types/animejs": "^3.1.13",
     "@types/node": "^22.14.0",
     "@types/p5": "^1.7.7",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
