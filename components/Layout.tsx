@@ -201,7 +201,11 @@ export const Layout: React.FC<LayoutProps> = ({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="h-full w-full overflow-y-auto overflow-x-hidden no-scrollbar pb-24"
+            className={
+              ['code', 'creators', 'deployment', 'vm'].includes(currentPage)
+                ? 'h-full w-full overflow-hidden'
+                : 'h-full w-full overflow-y-auto overflow-x-hidden no-scrollbar pb-24'
+            }
           >
             {children}
           </motion.div>

@@ -11,6 +11,15 @@
   --color-accent-green: #22c55e;
   --color-accent-red: #ef4444;
   --color-accent-orange: #f97316;
+
+  /* Code Studio / Creator Studio dark IDE theme colors */
+  --color-bg-primary: #1e1e1e;
+  --color-bg-secondary: #252526;
+  --color-bg-tertiary: #2d2d30;
+  --color-text-primary: #cccccc;
+  --color-text-secondary: #858585;
+  --color-accent: #007acc;
+  --color-border: rgba(255,255,255,0.08);
 }
 
 @layer base {

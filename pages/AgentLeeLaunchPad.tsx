@@ -1662,7 +1662,7 @@ export default function AgentLeeLaunchPad() {
   );
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-100 overflow-hidden">
+    <div className="flex h-full bg-slate-50 text-slate-900 font-sans selection:bg-emerald-100 overflow-hidden">
       
       {/* --- LANE 1: GOVERNANCE & AGENTS --- */}
       <aside className={cn(

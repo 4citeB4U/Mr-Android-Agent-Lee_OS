@@ -760,7 +760,7 @@ export const AgentLeeCodeStudio = () => {
   };
 
   return (
-    <div className="h-[100dvh] w-screen flex flex-col bg-bg-primary text-text-primary font-sans overflow-hidden select-none">
+    <div className="h-full w-full flex flex-col bg-bg-primary text-text-primary font-sans overflow-hidden select-none">
       <TopBar />
       <CommandPalette />
       {!sidebarVisible && <motion.button initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} onClick={() => toggleSidebar(true)} className="absolute left-0 top-1/2 -translate-y-1/2 z-50 w-6 h-24 bg-accent/20 hover:bg-accent/40 backdrop-blur-md border-r border-y border-accent/30 rounded-r-2xl flex items-center justify-center text-accent transition-all group"><ChevronRight size={18} className="group-hover:translate-x-0.5 transition-transform" /></motion.button>}
