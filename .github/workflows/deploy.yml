@@ -28,14 +28,6 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Stub LeeWay-Standards for CI
-        run: |
-          if [ ! -f LeeWay-Standards/package.json ]; then
-            mkdir -p LeeWay-Standards/src
-            echo '{"name":"leeway-sdk","version":"1.0.1","type":"module","main":"src/index.js"}' > LeeWay-Standards/package.json
-            echo 'export default {};' > LeeWay-Standards/src/index.js
-          fi
-
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
