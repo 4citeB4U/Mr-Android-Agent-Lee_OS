@@ -2573,6 +2573,9 @@ const MatrixDashboard: React.FC = () => {
 export default function Diagnostics() {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [autoOpt, setAutoOpt] = useState(true);
+  const [androidCompat, setAndroidCompat] = useState(true);
+  const [memoryLog, setMemoryLog] = useState(false);
   const [isLogsCollapsed, setIsLogsCollapsed] = useState(false);
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
@@ -3739,33 +3742,68 @@ export default function Diagnostics() {
                 <div className="max-w-2xl mx-auto bg-black/40 p-8 rounded-2xl border border-white/10">
                   <h3 className="text-xl font-bold text-white mb-8 uppercase tracking-widest">System Settings</h3>
                   <div className="space-y-6">
-                    <div className="flex items-center justify-between">
+                    {/* Auto-Optimization */}
+                    <button
+                      type="button"
+                      onClick={() => setAutoOpt(v => !v)}
+                      className="w-full flex items-center justify-between text-left group"
+                    >
                       <div>
-                        <div className="font-bold">Auto-Optimization</div>
+                        <div className="font-bold text-white">Auto-Optimization</div>
                         <div className="text-xs text-gray-500">Allow system to self-tune neural pathways</div>
                       </div>
-                      <div className="w-12 h-6 bg-[#00f2ff] rounded-full relative">
-                        <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                      <div
+                        className="w-12 h-6 rounded-full relative flex-shrink-0 transition-colors duration-200"
+                        style={{ background: autoOpt ? '#00f2ff' : 'rgba(255,255,255,0.1)' }}
+                      >
+                        <div
+                          className="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
+                          style={{ left: autoOpt ? '1.75rem' : '0.25rem' }}
+                        />
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between">
+                    </button>
+
+                    {/* Android Compatibility Mode */}
+                    <button
+                      type="button"
+                      onClick={() => setAndroidCompat(v => !v)}
+                      className="w-full flex items-center justify-between text-left group"
+                    >
                       <div>
-                        <div className="font-bold">Android Compatibility Mode</div>
+                        <div className="font-bold text-white">Android Compatibility Mode</div>
                         <div className="text-xs text-gray-500">Optimize UI for mobile diagnostic performance</div>
                       </div>
-                      <div className="w-12 h-6 bg-[#00f2ff] rounded-full relative">
-                        <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                      <div
+                        className="w-12 h-6 rounded-full relative flex-shrink-0 transition-colors duration-200"
+                        style={{ background: androidCompat ? '#00f2ff' : 'rgba(255,255,255,0.1)' }}
+                      >
+                        <div
+                          className="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
+                          style={{ left: androidCompat ? '1.75rem' : '0.25rem' }}
+                        />
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between">
+                    </button>
+
+                    {/* Memory Pipeline Logging */}
+                    <button
+                      type="button"
+                      onClick={() => setMemoryLog(v => !v)}
+                      className="w-full flex items-center justify-between text-left group"
+                    >
                       <div>
-                        <div className="font-bold">Memory Pipeline Logging</div>
+                        <div className="font-bold text-white">Memory Pipeline Logging</div>
                         <div className="text-xs text-gray-500">Detailed reporting of all data transactions</div>
                       </div>
-                      <div className="w-12 h-6 bg-white/10 rounded-full relative">
-                        <div className="absolute left-1 top-1 w-4 h-4 bg-white/40 rounded-full"></div>
+                      <div
+                        className="w-12 h-6 rounded-full relative flex-shrink-0 transition-colors duration-200"
+                        style={{ background: memoryLog ? '#00f2ff' : 'rgba(255,255,255,0.1)' }}
+                      >
+                        <div
+                          className="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
+                          style={{ left: memoryLog ? '1.75rem' : '0.25rem' }}
+                        />
                       </div>
-                    </div>
+                    </button>
                   </div>
                 </div>
               )}
