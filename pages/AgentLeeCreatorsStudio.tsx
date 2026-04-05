@@ -10,11 +10,12 @@ import {
   AlertTriangle, CheckCircle2, Radio, Sparkles, Clipboard, 
   Mail, FileText, MousePointer2, Clock, BarChart3, Network,
   Maximize2, Play, Pause, Square, SkipBack, SkipForward, MoreVertical, Music, MoreHorizontal,
-  Calendar, Users, Target, DollarSign, Heart, MessageCircle
+  Calendar, Users, Target, DollarSign, Heart, MessageCircle, Server
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { eventBus } from '../core/EventBus';
 
 // --- UTILS ---
 function cn(...inputs: ClassValue[]) {
@@ -1762,8 +1763,8 @@ export default function AgentLeeCreatorsStudio() {
       <div className="flex flex-col h-full bg-[#FDFDFD] text-[#1d1d1f] overflow-hidden font-sans">
         
         {/* Header: System Status & Logo */}
-        <header className="h-16 bg-white/80 border-b border-black/5 z-50 backdrop-blur-xl shrink-0">
-          <div className="max-w-7xl mx-auto h-full px-6 flex items-center justify-between">
+        <header className="bg-white/80 border-b border-black/5 z-50 backdrop-blur-xl shrink-0">
+          <div className="h-16 max-w-7xl mx-auto px-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => setIsSidebarOpen(true)}
@@ -1789,6 +1790,37 @@ export default function AgentLeeCreatorsStudio() {
                 <Clipboard size={18} />
                 <span className="text-[8px] font-black uppercase tracking-widest hidden sm:inline">Notepad</span>
               </button>
+            </div>
+          </div>
+          {/* Studio Switcher Strip */}
+          <div className="h-8 bg-[#1d1d1f] flex items-center px-6 gap-3 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+            <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest shrink-0">Studios:</span>
+            <button
+              onClick={() => eventBus.emit('navigate:page', { page: 'deployment' })}
+              className="flex items-center gap-1 px-2.5 py-0.5 bg-white/5 hover:bg-emerald-600/80 text-white/60 hover:text-white rounded-md text-[9px] font-bold uppercase tracking-wider transition-all shrink-0"
+            >
+              <Rocket size={9} /> Launch Pad
+            </button>
+            <div className="w-px h-3 bg-white/10 shrink-0" />
+            <button
+              onClick={() => eventBus.emit('navigate:page', { page: 'code' })}
+              className="flex items-center gap-1 px-2.5 py-0.5 bg-white/5 hover:bg-blue-600/80 text-white/60 hover:text-white rounded-md text-[9px] font-bold uppercase tracking-wider transition-all shrink-0"
+            >
+              <Code size={9} /> Code Studio
+            </button>
+            <div className="flex items-center gap-1 px-2.5 py-0.5 bg-pink-600/80 text-white rounded-md text-[9px] font-bold uppercase tracking-wider shrink-0">
+              <Palette size={9} /> Creator Studio
+            </div>
+            <div className="w-px h-3 bg-white/10 shrink-0" />
+            <button
+              onClick={() => eventBus.emit('navigate:page', { page: 'vm' })}
+              className="flex items-center gap-1 px-2.5 py-0.5 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-md text-[9px] font-bold uppercase tracking-wider transition-all shrink-0"
+            >
+              <Server size={9} /> VM
+            </button>
+            <div className="ml-auto shrink-0 flex items-center gap-1.5">
+              <div className="w-1 h-1 rounded-full bg-pink-400 animate-pulse" />
+              <span className="text-[8px] font-bold text-pink-300 uppercase tracking-widest">Live</span>
             </div>
           </div>
         </header>

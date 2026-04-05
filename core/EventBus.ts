@@ -80,6 +80,9 @@ type EventMap = {
   'brain:budget_changed': { mode: string; maxActiveAgents: number; writePolicy: string };
   /** A report event was written to the IndexedDB buffer */
   'report:written': { key: string; event: import('./ReportWriter').ReportEvent };
+  /** Cross-page navigation — any page can navigate the app shell */
+  'navigate:page': { page: string };
+
   /** Verification Corps mission started */
   'verification:start': { mission_id: string; workflows: string[] };
   /** Verification Corps mission completed with verdict */

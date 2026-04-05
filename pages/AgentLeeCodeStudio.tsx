@@ -42,7 +42,7 @@ import {
   CheckSquare, FileText, Eye, EyeOff, Hash, List, Sparkles,
   Globe, Terminal, Home, Rocket, Settings, Mic, Send, Play,
   CheckCircle2, AlertCircle, Info, Layout,
-  Wifi, RefreshCw, ExternalLink,
+  Wifi, RefreshCw, ExternalLink, Palette, Code, Server,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { eventBus } from '../core/EventBus';
@@ -465,19 +465,52 @@ const TopBar = () => {
   const { editor, files, toggleTheme, toggleCommandPalette } = useAppStore();
   const activeFile = editor.activeFileId ? files[editor.activeFileId] : null;
   return (
-    <div className="h-14 bg-bg-secondary/80 backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-4 shrink-0 z-50">
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1 text-[10px] font-bold text-text-secondary uppercase tracking-widest overflow-hidden">
-          <span className="truncate max-w-[80px]">Code Studio</span>
-          <ChevronRight size={12} className="opacity-30 shrink-0" />
-          <span className={cn("truncate max-w-[120px] transition-colors", activeFile ? "text-text-primary" : "text-text-secondary italic")}>{activeFile ? activeFile.name : 'No file open'}</span>
+    <div className="shrink-0 z-50">
+      <div className="h-14 bg-bg-secondary/80 backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-4">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 text-[10px] font-bold text-text-secondary uppercase tracking-widest overflow-hidden">
+            <span className="truncate max-w-[80px]">Code Studio</span>
+            <ChevronRight size={12} className="opacity-30 shrink-0" />
+            <span className={cn("truncate max-w-[120px] transition-colors", activeFile ? "text-text-primary" : "text-text-secondary italic")}>{activeFile ? activeFile.name : 'No file open'}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          <button onClick={() => toggleCommandPalette()} className="p-2 hover:bg-white/5 rounded-xl text-text-secondary hover:text-text-primary transition-all active:scale-90"><span className="text-[10px] font-black border border-white/20 px-1.5 py-0.5 rounded-md bg-white/5">P</span></button>
+          <button className="p-2 hover:bg-white/5 rounded-xl text-text-secondary hover:text-text-primary transition-all active:scale-90"><Save size={18} /></button>
+          <button className="p-2 bg-accent/10 hover:bg-accent/20 rounded-xl text-accent transition-all active:scale-90 shadow-lg shadow-accent/5"><Play size={18} fill="currentColor" /></button>
+          <button onClick={() => toggleTheme()} className="p-2 hover:bg-white/5 rounded-xl text-text-secondary hover:text-text-primary transition-all active:scale-90"><MoreVertical size={18} /></button>
         </div>
       </div>
-      <div className="flex items-center gap-1">
-        <button onClick={() => toggleCommandPalette()} className="p-2 hover:bg-white/5 rounded-xl text-text-secondary hover:text-text-primary transition-all active:scale-90"><span className="text-[10px] font-black border border-white/20 px-1.5 py-0.5 rounded-md bg-white/5">P</span></button>
-        <button className="p-2 hover:bg-white/5 rounded-xl text-text-secondary hover:text-text-primary transition-all active:scale-90"><Save size={18} /></button>
-        <button className="p-2 bg-accent/10 hover:bg-accent/20 rounded-xl text-accent transition-all active:scale-90 shadow-lg shadow-accent/5"><Play size={18} fill="currentColor" /></button>
-        <button onClick={() => toggleTheme()} className="p-2 hover:bg-white/5 rounded-xl text-text-secondary hover:text-text-primary transition-all active:scale-90"><MoreVertical size={18} /></button>
+      {/* Studio Switcher Strip */}
+      <div className="h-8 bg-black/80 backdrop-blur-xl border-b border-white/5 flex items-center px-4 gap-3 overflow-x-auto no-scrollbar">
+        <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest shrink-0">Studios:</span>
+        <button
+          onClick={() => eventBus.emit('navigate:page', { page: 'deployment' })}
+          className="flex items-center gap-1 px-2.5 py-0.5 bg-white/5 hover:bg-emerald-600/80 text-white/60 hover:text-white rounded-md text-[9px] font-bold uppercase tracking-wider transition-all shrink-0"
+        >
+          <Rocket size={9} /> Launch Pad
+        </button>
+        <div className="w-px h-3 bg-white/10 shrink-0" />
+        <div className="flex items-center gap-1 px-2.5 py-0.5 bg-accent/20 text-accent rounded-md text-[9px] font-bold uppercase tracking-wider shrink-0">
+          <Code size={9} /> Code Studio
+        </div>
+        <button
+          onClick={() => eventBus.emit('navigate:page', { page: 'creators' })}
+          className="flex items-center gap-1 px-2.5 py-0.5 bg-white/5 hover:bg-rose-600/80 text-white/60 hover:text-white rounded-md text-[9px] font-bold uppercase tracking-wider transition-all shrink-0"
+        >
+          <Palette size={9} /> Creator Studio
+        </button>
+        <div className="w-px h-3 bg-white/10 shrink-0" />
+        <button
+          onClick={() => eventBus.emit('navigate:page', { page: 'vm' })}
+          className="flex items-center gap-1 px-2.5 py-0.5 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-md text-[9px] font-bold uppercase tracking-wider transition-all shrink-0"
+        >
+          <Terminal size={9} /> VM
+        </button>
+        <div className="ml-auto shrink-0 flex items-center gap-1.5">
+          <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">Live</span>
+        </div>
       </div>
     </div>
   );

@@ -229,6 +229,11 @@ const App: React.FC = () => {
     const unsubLaunchpadOpen = eventBus.on('launchpad:open', () => {
       setCurrentPage('deployment');
     });
+
+    // Cross-page navigation via EventBus
+    const unsubNavigatePage = eventBus.on('navigate:page', ({ page }) => {
+      setCurrentPage(page as any);
+    });
     const unsubError = eventBus.on('agent:error', ({ agent, error }) => {
       logAction('error', `[${agent}] ${error}`);
     });
@@ -265,6 +270,7 @@ const App: React.FC = () => {
       unsubActive();
       unsubDone();
       unsubLaunchpadOpen();
+      unsubNavigatePage();
       unsubError();
       unsubVmOpen();
       unsubVmOutput();
