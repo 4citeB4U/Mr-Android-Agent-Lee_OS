@@ -1,4 +1,4 @@
-name: CI / Deploy
+name: CI
 
 on:
   push:
@@ -6,12 +6,8 @@ on:
   pull_request:
     branches: [main]
 
-# Allow deployment to GitHub Pages
-permissions:
-  contents: write
-
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +20,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Stub LeeWay-Standards for CI
+        run: |
+          if [ ! -f LeeWay-Standards/package.json ]; then
+            mkdir -p LeeWay-Standards/src
+            echo '{"name":"leeway-sdk","version":"1.0.1","type":"module","main":"src/index.js"}' > LeeWay-Standards/package.json
+            echo 'export default {};' > LeeWay-Standards/src/index.js
+          fi
+
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
@@ -34,11 +38,3 @@ jobs:
         run: npm run build
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-
-      - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          force_orphan: true
