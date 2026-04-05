@@ -25,7 +25,8 @@ import {
   Type, Image as LucideImage,
   Triangle,
   Hash, Link as LinkIcon,
-  Phone, MapPin, GitBranch
+  Phone, MapPin, GitBranch,
+  Wand2, Flame, ExternalLink, Film, Rss, ArrowDown, Layers3
 } from 'lucide-react';
 import { 
   LineChart, Line, AreaChart, Area, 
@@ -50,7 +51,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 type AgentRole = 'MASTER' | 'WRITER' | 'DESIGNER' | 'MARKETER' | 'ANALYST' | 'SECURITY' | 'MUSICIAN' | 'EDITOR';
 
-type SubPageId = 'artist' | 'writer' | 'music' | 'video' | 'marketing' | 'projects' | 'account';
+type SubPageId = 'artist' | 'writer' | 'music' | 'video' | 'marketing' | 'thumbnail' | 'cta' | 'growth' | 'projects' | 'account';
 type GlobalPageId = 'home' | 'studio' | 'diagnostic' | 'deployment' | 'code' | 'memory' | 'database' | 'settings';
 
 interface Agent {
@@ -322,6 +323,9 @@ const ToolPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
     { id: 'music', label: 'Music', icon: Radio },
     { id: 'video', label: 'Video', icon: Video },
     { id: 'marketing', label: 'Marketing', icon: Megaphone },
+    { id: 'thumbnail', label: 'Thumbnail', icon: Wand2 },
+    { id: 'cta', label: 'CTA Engine', icon: MousePointer2 },
+    { id: 'growth', label: 'Growth', icon: TrendingUp },
     { id: 'projects', label: 'Projects', icon: Layers },
     { id: 'account', label: 'Account', icon: User },
   ];
@@ -351,6 +355,21 @@ const ToolPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
       { name: 'Campaign Strategy', icon: TrendingUp, action: () => console.log('Strategy Mode'), subItems: ['Goal Setting', 'Target Audience', 'Budgeting'] },
       { name: 'Content Plan', icon: Calendar, action: () => console.log('Content Plan Ready'), subItems: ['Editorial Calendar', 'Copywriting', 'Visual Assets'] },
       { name: 'Distribution', icon: Globe, action: () => console.log('Distribution Active'), subItems: ['Social Scheduler', 'Email Automation', 'Ad Manager'] },
+    ],
+    thumbnail: [
+      { name: 'Prompt Lab', icon: Wand2, action: () => console.log('Prompt Lab'), subItems: ['Split Before/After', 'Face + Result', 'Tutorial Style', 'Growth Chart'] },
+      { name: 'Brand Identity', icon: Palette, action: () => console.log('Brand'), subItems: ['Color Palette', 'Font Pack', 'Logo Overlay', 'Template Library'] },
+      { name: 'Batch Generator', icon: Layers, action: () => console.log('Batch'), subItems: ['YouTube 16:9', 'TikTok 9:16', 'Shorts Square', 'Export PNG/WebP'] },
+    ],
+    cta: [
+      { name: 'Overlay Builder', icon: Film, action: () => console.log('Overlays'), subItems: ['Lower Third', 'Corner Button', 'Mid-Screen', 'End Screen'] },
+      { name: 'Caption Engine', icon: Hash, action: () => console.log('Caption'), subItems: ['YT Title + Tags', 'TikTok Caption', 'Hashtag Pack', 'Pin Comment'] },
+      { name: 'FFmpeg Injector', icon: Rocket, action: () => console.log('FFmpeg'), subItems: ['Watermark', 'Arrow Overlay', 'Subscribe Hint', 'Batch Render'] },
+    ],
+    growth: [
+      { name: 'Analytics Hub', icon: BarChart3, action: () => console.log('Analytics'), subItems: ['CTR Tracker', 'Watch Time', 'Retention %', 'Session Time'] },
+      { name: 'Publish Pipeline', icon: Rss, action: () => console.log('Publish'), subItems: ['YT Data API', 'TikTok Upload', 'Schedule Queue', 'A/B Variants'] },
+      { name: 'Monetize Stack', icon: DollarSign, action: () => console.log('Monetize'), subItems: ['Patreon Link', 'Ko-fi', 'Discord', 'Beacons Bio'] },
     ],
     projects: [
       { name: 'Project Health', icon: Activity, action: () => console.log('Health Check'), subItems: ['Timeline Status', 'Resource Usage', 'Risk Analysis'] },
@@ -1174,6 +1193,498 @@ const MarketingStudio = ({ content }: { content?: string }) => {
   );
 };
 
+// ─────────────────────────────────────────────────
+// THUMBNAIL FORGE STUDIO
+// AI-driven batch thumbnail generator: YT 16:9 · TK 9:16
+// Tech: Canvas API · Sharp.wasm · Stable Diffusion · Batch CLI
+// Agents: ThumbnailAgent/DesignBot · BrandAgent/StyleTool
+// ─────────────────────────────────────────────────
+const ThumbnailStudio = ({ content }: { content?: string }) => {
+  const [platform, setPlatform] = useState<'youtube' | 'tiktok'>('youtube');
+  const [prompt, setPrompt] = useState('');
+  const [brandColor, setBrandColor] = useState('#f59e0b');
+  const [titleText, setTitleText] = useState('FIXED IN 5 MINUTES');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const agentTools = [
+    { name: 'ThumbnailAgent', tool: 'DesignBot', Icon: Wand2, color: '#f59e0b' },
+    { name: 'BrandAgent', tool: 'StyleTool', Icon: Palette, color: '#8b5cf6' },
+  ];
+  const TEMPLATES = [
+    { label: 'Split Before/After', desc: 'Dark left + bright right + bold text' },
+    { label: 'Face + Result', desc: 'Shocked expression + outcome visual' },
+    { label: 'Tutorial Style', desc: 'Step number + tool screenshot' },
+    { label: 'Growth Chart', desc: 'Up-trending graph + big number' },
+  ];
+  const TECH = ['Canvas API', 'Sharp.wasm', 'Stable Diffusion', 'Batch CLI'];
+  const BRAND_COLORS = ['#f59e0b', '#ef4444', '#3b82f6', '#22c55e', '#8b5cf6', '#ffffff'];
+
+  return (
+    <div className="flex flex-col h-full bg-[#0f0f1e] rounded-2xl overflow-hidden text-white">
+      {/* Header */}
+      <div className="flex items-center gap-2 px-4 py-2.5 bg-[#13131f] border-b border-white/6">
+        <div className="flex gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-red-500/60" />
+          <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
+          <div className="w-2 h-2 rounded-full bg-green-500/60" />
+        </div>
+        <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest ml-2">Thumbnail Forge</span>
+        <div className="ml-auto flex gap-1 bg-white/5 rounded-lg p-0.5">
+          {(['youtube', 'tiktok'] as const).map(p => (
+            <button key={p} onClick={() => setPlatform(p)}
+              className={cn('px-3 py-1 rounded text-[8px] font-bold uppercase transition-all',
+                platform === p ? 'bg-white/15 text-white' : 'text-white/30 hover:text-white/60')}>
+              {p === 'youtube' ? 'YT 16:9' : 'TK 9:16'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left: controls */}
+        <div className="w-48 border-r border-white/5 p-3 flex flex-col gap-3 bg-[#13131f]/50 shrink-0 overflow-y-auto">
+          <div>
+            <span className="text-[8px] text-white/30 uppercase tracking-wide block mb-1.5">Scene Prompt</span>
+            <textarea value={prompt} onChange={e => setPrompt(e.target.value)}
+              placeholder="Describe thumbnail scene..."
+              className="w-full h-16 bg-white/5 border border-white/8 rounded-lg p-2 text-[8px] text-white/70 resize-none focus:outline-none focus:border-white/20 placeholder-white/20" />
+          </div>
+          <div>
+            <span className="text-[8px] text-white/30 uppercase tracking-wide block mb-1.5">Overlay Text (1–3 words)</span>
+            <input value={titleText} onChange={e => setTitleText(e.target.value)}
+              className="w-full bg-white/5 border border-white/8 rounded-lg px-2 py-1.5 text-[8px] text-white/70 focus:outline-none focus:border-white/20" />
+          </div>
+          <div>
+            <span className="text-[8px] text-white/30 uppercase tracking-wide block mb-1.5">Brand Color</span>
+            <div className="flex gap-1.5 flex-wrap">
+              {BRAND_COLORS.map(c => (
+                <button key={c} onClick={() => setBrandColor(c)}
+                  className={cn('w-5 h-5 rounded-full border-2 transition-all', brandColor === c ? 'border-white scale-110' : 'border-transparent')}
+                  style={{ background: c }} />
+              ))}
+            </div>
+          </div>
+          <div>
+            <span className="text-[8px] text-white/30 uppercase tracking-wide block mb-1.5">Templates</span>
+            {TEMPLATES.map(t => (
+              <button key={t.label} className="w-full text-left p-2 rounded-lg hover:bg-white/5 transition-colors mb-1 border border-transparent hover:border-white/8">
+                <div className="text-[8px] font-semibold text-white/70">{t.label}</div>
+                <div className="text-[7px] text-white/30">{t.desc}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Center: live preview */}
+        <div className="flex-1 flex flex-col items-center justify-center p-4 gap-4">
+          <div className="relative rounded-xl overflow-hidden border border-white/10 shadow-2xl flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800"
+            style={{
+              aspectRatio: platform === 'youtube' ? '16/9' : '9/16',
+              maxHeight: '220px',
+              width: platform === 'youtube' ? '100%' : '123px'
+            }}>
+            {/* Split design */}
+            <div className="absolute inset-0 flex">
+              <div className="flex-1 bg-black/50 flex items-center justify-center">
+                <span className="text-[9px] text-white/25 font-bold">BEFORE</span>
+              </div>
+              <div className="flex-1 bg-gradient-to-br from-amber-500/25 to-orange-500/25 flex items-center justify-center">
+                <span className="text-[9px] text-white/60 font-bold">AFTER ✓</span>
+              </div>
+            </div>
+            {/* Bold overlay text */}
+            <div className="absolute bottom-3 left-0 right-0 flex justify-center px-2">
+              <div className="px-3 py-1 rounded font-black text-[11px] shadow-lg text-center max-w-full truncate"
+                style={{ background: brandColor, color: '#000' }}>
+                {titleText}
+              </div>
+            </div>
+            <div className="absolute top-2 right-2 text-[6px] text-white/25 bg-black/50 px-1.5 py-0.5 rounded font-mono">
+              {platform === 'youtube' ? '1280×720' : '1080×1920'}
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <button onClick={() => setIsGenerating(v => !v)}
+              className="flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 rounded-xl font-bold text-[9px] text-black uppercase tracking-widest transition-all shadow-lg">
+              <Wand2 size={12} />
+              {isGenerating ? 'Generating...' : 'AI Generate'}
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2.5 bg-white/5 hover:bg-white/10 rounded-xl font-bold text-[9px] text-white/60 uppercase tracking-widest transition-all border border-white/8">
+              <Layers size={12} />Batch ×10
+            </button>
+          </div>
+
+          <div className="flex gap-2 flex-wrap justify-center">
+            {TECH.map(t => <span key={t} className="text-[7px] text-white/20 bg-white/5 px-2 py-0.5 rounded font-mono">{t}</span>)}
+          </div>
+        </div>
+
+        {/* Right: agent tools */}
+        <div className="w-36 border-l border-white/5 p-3 flex flex-col gap-3 bg-[#13131f]/60 shrink-0">
+          <span className="text-[9px] font-bold text-white/40 uppercase tracking-wide">Agent Tools:</span>
+          {agentTools.map(t => (
+            <div key={t.name} className="flex items-start gap-2">
+              <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: `${t.color}22`, border: `1px solid ${t.color}44` }}>
+                <t.Icon size={12} style={{ color: t.color }} />
+              </div>
+              <div>
+                <div className="text-[8px] font-bold text-white/80">{t.name}</div>
+                <div className="text-[7px] text-white/40">{t.tool}</div>
+              </div>
+            </div>
+          ))}
+          <div className="mt-auto flex flex-col gap-1.5">
+            {[{ l: 'Export PNG', i: Download }, { l: 'Copy Prompt', i: Copy }, { l: 'Share', i: Share2 }].map(a => (
+              <button key={a.l} className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[7px] text-white/40 transition-colors">
+                <a.i size={9} />{a.l}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────
+// CTA + CAPTION ENGINE STUDIO
+// Timeline-based overlay injector + caption/hashtag generator
+// Tech: FFmpeg.wasm · MoviePy · Python Batch CLI · BatchInject
+// Agents: CTAAgent/OverlayTool · CaptionAgent/HashtagTool
+// ─────────────────────────────────────────────────
+const CTAStudio = ({ content }: { content?: string }) => {
+  const [platform, setPlatform] = useState<'youtube' | 'tiktok'>('youtube');
+  const [topic, setTopic] = useState('');
+  const [generatedCaption, setGeneratedCaption] = useState('');
+
+  const SEGMENTS = [
+    { time: '0–3s', label: 'Hook', color: '#ef4444', desc: 'Shocking result or "before" visual that grabs attention immediately' },
+    { time: '3–10s', label: 'Problem', color: '#f59e0b', desc: '"If you\'re like me, you keep struggling with X" statement' },
+    { time: '10–25s', label: 'Value Beats', color: '#3b82f6', desc: '3–5 actionable steps or reveals — the core payload' },
+    { time: '25–30s', label: 'CTA', color: '#22c55e', desc: '"Follow", "Patreon in bio", "Watch Part 2" + subscribe hint' },
+  ];
+
+  const OVERLAYS = [
+    { id: 'lowerthird', label: 'Lower Third Card', sample: '"Click subscribe if you\'re new here"', color: '#3b82f6' },
+    { id: 'corner', label: 'Corner Button', sample: '"Watch Part 2 →"', color: '#8b5cf6' },
+    { id: 'midscreen', label: 'Mid-Screen Call-Out', sample: '"Watch to the end for the trick"', color: '#f59e0b' },
+    { id: 'endscreen', label: 'End Screen Pack', sample: 'Subscribe + Next Video + Patreon card', color: '#22c55e' },
+  ];
+
+  const ytHashtags = ['#tutorial', '#howto', '#learnprogramming', '#devlife', '#aicode', '#100daysofcode'];
+  const ttHashtags = ['#learnontiktok', '#tiktoktech', '#patreon', '#aicode', '#fyp', '#programming'];
+
+  const agentTools = [
+    { name: 'CTAAgent', tool: 'OverlayTool', Icon: MousePointer2, color: '#3b82f6' },
+    { name: 'CaptionAgent', tool: 'HashtagTool', Icon: Hash, color: '#22c55e' },
+  ];
+
+  const TECH = ['FFmpeg.wasm', 'MoviePy', 'Python CLI', 'BatchInject'];
+
+  const handleGenerate = () => {
+    const t = topic.trim() || 'Your video';
+    const tags = platform === 'tiktok' ? ttHashtags : ytHashtags;
+    const cta = platform === 'tiktok'
+      ? `✅ ${t} — results inside!\nFollow → More tutorials like this.\nPatreon in bio for full source code.\n\n${tags.join(' ')}`
+      : `${t} — complete breakdown!\n\n🔔 Subscribe for weekly tutorials.\n📌 Patreon link in description for source code.\n\n${tags.join(' ')}`;
+    setGeneratedCaption(cta);
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-[#0d0d18] rounded-2xl overflow-hidden text-white">
+      {/* Header */}
+      <div className="flex items-center gap-2 px-4 py-2.5 bg-[#13131e] border-b border-white/6">
+        <div className="flex gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-red-500/60" />
+          <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
+          <div className="w-2 h-2 rounded-full bg-green-500/60" />
+        </div>
+        <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest ml-2">CTA + Caption Engine</span>
+        <div className="ml-auto flex gap-1 bg-white/5 rounded-lg p-0.5">
+          {(['youtube', 'tiktok'] as const).map(p => (
+            <button key={p} onClick={() => { setPlatform(p); setGeneratedCaption(''); }}
+              className={cn('px-3 py-1 rounded text-[8px] font-bold uppercase transition-all',
+                platform === p ? 'bg-white/15 text-white' : 'text-white/30 hover:text-white/60')}>
+              {p === 'youtube' ? 'YouTube' : 'TikTok'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Center body */}
+        <div className="flex-1 flex flex-col gap-3 p-3 overflow-y-auto">
+          {/* Timeline segments */}
+          <div>
+            <div className="text-[8px] text-white/30 uppercase tracking-wide mb-2">Video Timeline Structure</div>
+            <div className="flex gap-2">
+              {SEGMENTS.map(s => (
+                <div key={s.label} className="flex-1 rounded-lg p-2 border"
+                  style={{ borderColor: `${s.color}44`, background: `${s.color}0d` }}>
+                  <div className="text-[7px] font-mono font-bold" style={{ color: s.color }}>{s.time}</div>
+                  <div className="text-[9px] font-bold text-white/80 mt-0.5">{s.label}</div>
+                  <div className="text-[7px] text-white/30 mt-1 leading-tight">{s.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Overlay picker */}
+          <div>
+            <div className="text-[8px] text-white/30 uppercase tracking-wide mb-2">Overlay / Annotation Types</div>
+            <div className="grid grid-cols-2 gap-2">
+              {OVERLAYS.map(o => (
+                <div key={o.id} className="flex items-start gap-2 p-2.5 rounded-lg bg-white/4 border border-white/6 hover:border-white/15 cursor-pointer transition-colors">
+                  <div className="w-2 h-2 rounded-full shrink-0 mt-1" style={{ background: o.color }} />
+                  <div>
+                    <div className="text-[8px] font-semibold text-white/70">{o.label}</div>
+                    <div className="text-[7px] text-white/30 italic mt-0.5">{o.sample}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Caption generator */}
+          <div>
+            <div className="text-[8px] text-white/30 uppercase tracking-wide mb-2">Auto Caption + Hashtag Generator</div>
+            <div className="flex gap-2">
+              <input value={topic} onChange={e => setTopic(e.target.value)}
+                placeholder={platform === 'youtube' ? 'Video title / topic...' : 'TikTok hook topic...'}
+                className="flex-1 bg-white/5 border border-white/8 rounded-lg px-3 py-1.5 text-[8px] text-white/70 focus:outline-none focus:border-white/20 placeholder-white/20" />
+              <button onClick={handleGenerate}
+                className="px-3 py-1.5 bg-green-500/80 hover:bg-green-500 rounded-lg text-[8px] font-bold text-white transition-all">
+                Generate
+              </button>
+            </div>
+            {generatedCaption && (
+              <div className="mt-2 p-3 bg-white/5 rounded-lg border border-white/8">
+                <div className="text-[8px] text-white/70 whitespace-pre-line leading-relaxed">{generatedCaption}</div>
+                <div className="flex gap-1.5 flex-wrap mt-2">
+                  {(platform === 'tiktok' ? ttHashtags : ytHashtags).map(h => (
+                    <span key={h} className="text-[7px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">{h}</span>
+                  ))}
+                </div>
+                <button onClick={() => navigator.clipboard?.writeText(generatedCaption)}
+                  className="flex items-center gap-1 mt-2 text-[7px] text-white/30 hover:text-white/60 transition-colors">
+                  <Copy size={9} />Copy to clipboard
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Auto-inject info */}
+          <div className="p-2.5 rounded-lg bg-[#1a1a2e] border border-white/5 text-[7px] text-white/30 leading-relaxed">
+            <span className="text-white/50 font-semibold">FFmpeg batch-injector:</span> Scans your script → auto-inserts overlay annotations at timestamps 0s, 3s, 10s, 25s. Renders as template layer over every video in queue.
+          </div>
+
+          {/* Tech footer */}
+          <div className="flex gap-2 flex-wrap mt-auto pt-2 border-t border-white/5">
+            {TECH.map(t => <span key={t} className="text-[7px] text-white/20 bg-white/5 px-2 py-0.5 rounded font-mono">{t}</span>)}
+          </div>
+        </div>
+
+        {/* Right: agents */}
+        <div className="w-36 border-l border-white/5 p-3 flex flex-col gap-3 bg-[#13131e]/60 shrink-0">
+          <span className="text-[9px] font-bold text-white/40 uppercase tracking-wide">Agent Tools:</span>
+          {agentTools.map(t => (
+            <div key={t.name} className="flex items-start gap-2">
+              <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: `${t.color}22`, border: `1px solid ${t.color}44` }}>
+                <t.Icon size={12} style={{ color: t.color }} />
+              </div>
+              <div>
+                <div className="text-[8px] font-bold text-white/80">{t.name}</div>
+                <div className="text-[7px] text-white/40">{t.tool}</div>
+              </div>
+            </div>
+          ))}
+          <div className="mt-2 flex flex-col gap-1">
+            <div className="text-[7px] text-white/20 uppercase tracking-wide mb-1">Auto-inject at:</div>
+            {SEGMENTS.map(s => (
+              <div key={s.label} className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: s.color }} />
+                <span className="text-[7px] text-white/30">{s.time} — {s.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────
+// GROWTH COMMAND CENTER STUDIO
+// Multi-platform analytics, publishing pipeline, monetization
+// Tech: YouTube Data API · TikTok API · Beacons.ai · Linktree · Stripe
+// Agents: GrowthAgent/AnalyticsTool · PublishAgent/UploadBot
+// ─────────────────────────────────────────────────
+const GrowthStudio = ({ content }: { content?: string }) => {
+  const YT_METRICS = [
+    { label: 'CTR', value: 6.8, unit: '%', max: 15, color: '#ef4444' },
+    { label: 'Watch Time', value: 4.2, unit: 'min', max: 10, color: '#f59e0b' },
+    { label: 'Retention', value: 68, unit: '%', max: 100, color: '#3b82f6' },
+    { label: 'Session Time', value: 22, unit: 'min', max: 60, color: '#8b5cf6' },
+  ];
+  const TT_METRICS = [
+    { label: 'Views', value: 12400, unit: '', max: 50000, color: '#f97316' },
+    { label: 'Shares', value: 840, unit: '', max: 5000, color: '#ec4899' },
+    { label: 'Comments', value: 216, unit: '', max: 1000, color: '#22c55e' },
+    { label: 'FYP Reach', value: 78, unit: '%', max: 100, color: '#06b6d4' },
+  ];
+  const PIPELINE = ['Data', 'Script', 'Render', 'Thumbnail', 'CTA Inject', 'Upload', 'Analytics'];
+  const TACTICS = [
+    { tactic: 'Post 1×/Day same niche cluster', platform: 'TikTok', Icon: Flame, color: '#f97316' },
+    { tactic: 'Trending audio + original visuals', platform: 'TikTok', Icon: Music, color: '#ec4899' },
+    { tactic: 'Duet/Stitch top creators in niche', platform: 'TikTok', Icon: Users, color: '#8b5cf6' },
+    { tactic: 'Playlist binge series (7-day challenge)', platform: 'YouTube', Icon: List, color: '#ef4444' },
+    { tactic: 'Companion Shorts per long video', platform: 'YouTube', Icon: Smartphone, color: '#f59e0b' },
+    { tactic: 'Pin comment with Patreon link', platform: 'YouTube', Icon: MessageCircle, color: '#3b82f6' },
+  ];
+  const agentTools = [
+    { name: 'GrowthAgent', tool: 'AnalyticsTool', Icon: TrendingUp, color: '#22c55e' },
+    { name: 'PublishAgent', tool: 'UploadBot', Icon: Send, color: '#3b82f6' },
+  ];
+  const MONETIZE = ['Patreon', 'Ko-fi', 'Stripe', 'Discord'];
+  const TECH = ['YT Data API', 'TikTok API', 'Beacons.ai', 'Linktree', 'Stripe'];
+
+  return (
+    <div className="flex flex-col h-full bg-[#0d1020] rounded-2xl overflow-hidden text-white">
+      {/* Header */}
+      <div className="flex items-center gap-2 px-4 py-2.5 bg-[#131520] border-b border-white/6">
+        <div className="flex gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-red-500/60" />
+          <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
+          <div className="w-2 h-2 rounded-full bg-green-500/60" />
+        </div>
+        <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest ml-2">Growth Command Center</span>
+        <div className="ml-auto flex items-center gap-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+          <span className="text-[7px] text-white/30 font-mono">Live · Last updated 2m ago</span>
+        </div>
+      </div>
+
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 flex flex-col gap-3 p-3 overflow-y-auto">
+          {/* Platform metrics side by side */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* YouTube panel */}
+            <div className="bg-[#1a1a2e] rounded-xl p-3 border border-white/5">
+              <div className="flex items-center gap-1.5 mb-2.5">
+                <div className="w-4 h-3 bg-red-600 rounded-sm flex items-center justify-center">
+                  <div className="w-0 h-0 border-t-[3px] border-t-transparent border-b-[3px] border-b-transparent border-l-[5px] border-white ml-0.5" />
+                </div>
+                <span className="text-[8px] font-bold text-white/60 uppercase tracking-wide">YouTube</span>
+                <span className="ml-auto text-[6px] text-white/20 font-mono">Last 28 days</span>
+              </div>
+              {YT_METRICS.map(m => (
+                <div key={m.label} className="mb-1.5">
+                  <div className="flex justify-between text-[7px] mb-0.5">
+                    <span className="text-white/40">{m.label}</span>
+                    <span className="font-bold" style={{ color: m.color }}>{m.value.toLocaleString()}{m.unit}</span>
+                  </div>
+                  <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-700" style={{ width: `${(m.value / m.max) * 100}%`, background: m.color }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* TikTok panel */}
+            <div className="bg-[#1a1a2e] rounded-xl p-3 border border-white/5">
+              <div className="flex items-center gap-1.5 mb-2.5">
+                <div className="w-3 h-3 bg-gradient-to-br from-cyan-400 to-pink-500 rounded-sm" />
+                <span className="text-[8px] font-bold text-white/60 uppercase tracking-wide">TikTok</span>
+                <span className="ml-auto text-[6px] text-white/20 font-mono">Last 7 days</span>
+              </div>
+              {TT_METRICS.map(m => (
+                <div key={m.label} className="mb-1.5">
+                  <div className="flex justify-between text-[7px] mb-0.5">
+                    <span className="text-white/40">{m.label}</span>
+                    <span className="font-bold" style={{ color: m.color }}>{m.value.toLocaleString()}{m.unit}</span>
+                  </div>
+                  <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-700" style={{ width: `${(m.value / m.max) * 100}%`, background: m.color }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Publishing pipeline */}
+          <div className="bg-[#1a1a2e] rounded-xl p-3 border border-white/5">
+            <div className="text-[8px] text-white/30 uppercase tracking-wide mb-2">Publishing Pipeline Status</div>
+            <div className="flex items-center gap-1 overflow-x-auto pb-1">
+              {PIPELINE.map((step, i) => (
+                <React.Fragment key={step}>
+                  <div className={cn('flex flex-col items-center gap-1 shrink-0', i >= 4 ? 'opacity-40' : '')}>
+                    <div className={cn('w-8 h-8 rounded-full flex items-center justify-center text-[7px] font-bold border',
+                      i < 4 ? 'bg-green-500/20 border-green-500/40 text-green-400' : 'bg-white/5 border-white/10 text-white/30')}>
+                      {i < 4 ? '✓' : i + 1}
+                    </div>
+                    <div className="text-[6px] text-white/30 text-center whitespace-nowrap">{step}</div>
+                  </div>
+                  {i < PIPELINE.length - 1 && (
+                    <div className={cn('h-px w-4 shrink-0', i < 3 ? 'bg-green-500/40' : 'bg-white/10')} />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+
+          {/* Growth tactics */}
+          <div className="bg-[#1a1a2e] rounded-xl p-3 border border-white/5">
+            <div className="text-[8px] text-white/30 uppercase tracking-wide mb-2">Repeatable Growth Loop Tactics</div>
+            <div className="grid grid-cols-2 gap-2">
+              {TACTICS.map(t => (
+                <div key={t.tactic} className="flex items-start gap-2 p-2 rounded-lg bg-white/3 border border-white/5">
+                  <t.Icon size={10} style={{ color: t.color }} className="shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-[7px] text-white/60 leading-tight">{t.tactic}</div>
+                    <div className="text-[6px] mt-0.5 font-mono font-bold" style={{ color: t.color }}>{t.platform}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Tech footer */}
+          <div className="flex gap-2 flex-wrap pt-1 border-t border-white/5 mt-auto">
+            {TECH.map(t => <span key={t} className="text-[7px] text-white/20 bg-white/5 px-2 py-0.5 rounded font-mono">{t}</span>)}
+          </div>
+        </div>
+
+        {/* Right: agents + monetize */}
+        <div className="w-36 border-l border-white/5 p-3 flex flex-col gap-3 bg-[#131520]/60 shrink-0">
+          <span className="text-[9px] font-bold text-white/40 uppercase tracking-wide">Agent Tools:</span>
+          {agentTools.map(t => (
+            <div key={t.name} className="flex items-start gap-2">
+              <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: `${t.color}22`, border: `1px solid ${t.color}44` }}>
+                <t.Icon size={12} style={{ color: t.color }} />
+              </div>
+              <div>
+                <div className="text-[8px] font-bold text-white/80">{t.name}</div>
+                <div className="text-[7px] text-white/40">{t.tool}</div>
+              </div>
+            </div>
+          ))}
+          <div className="mt-2 flex flex-col gap-1.5">
+            <div className="text-[7px] text-white/20 uppercase tracking-wide">Monetize Stack</div>
+            {MONETIZE.map(m => (
+              <div key={m} className="flex items-center gap-1.5 text-[7px] text-white/40 hover:text-white/70 cursor-pointer transition-colors">
+                <LinkIcon size={7} className="text-green-400" />{m}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const WorkspaceRouter = () => {
   const { activeSubPage, studioContent } = useStudio();
 
@@ -1202,6 +1713,12 @@ const WorkspaceRouter = () => {
       return <VideoStudio content={studioContent.video} />;
     case 'marketing':
       return <MarketingStudio content={studioContent.marketing} />;
+    case 'thumbnail':
+      return <ThumbnailStudio content={studioContent.thumbnail} />;
+    case 'cta':
+      return <CTAStudio content={studioContent.cta} />;
+    case 'growth':
+      return <GrowthStudio content={studioContent.growth} />;
     default:
       return (
         <div className="flex flex-col items-center justify-center h-full text-black/20 space-y-4">
@@ -1241,6 +1758,21 @@ const LeftPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
       { name: 'Campaign Assets', icon: Megaphone, subItems: ['Logo_Final.png', 'Banner_Ad_01.jpg', 'Social_Post_v2.png'] },
       { name: 'Channel Presets', icon: Globe, subItems: ['Instagram Feed', 'Twitter Thread', 'Email Newsletter', 'LinkedIn Post'] },
       { name: 'Audience Segments', icon: User, subItems: ['Tech Enthusiasts', 'Creative Professionals', 'Early Adopters'] },
+    ],
+    thumbnail: [
+      { name: 'Brand Templates', icon: ImageIcon, subItems: ['Split Before/After', 'Face + Outcome', 'Tutorial #', 'Growth Chart'] },
+      { name: 'Color Palettes', icon: Palette, subItems: ['Electric Yellow', 'Neon Red', 'Ocean Blue', 'Dark Mode'] },
+      { name: 'Font Pack', icon: Type, subItems: ['Impact Bold', 'Oswald Black', 'Montserrat Heavy', 'Custom Upload'] },
+    ],
+    cta: [
+      { name: 'Overlay Presets', icon: Film, subItems: ['Lower Third v1', 'Arrow Hint', 'Subscribe Card', 'End Screen'] },
+      { name: 'Caption Library', icon: Hash, subItems: ['YT Hooks Pack', 'TikTok Captions', 'Hashtag Sets', 'CTA Phrases'] },
+      { name: 'Timing Templates', icon: Clock, subItems: ['0-3s Hook', '3-10s Problem', '10-25s Value', '25s+ CTA'] },
+    ],
+    growth: [
+      { name: 'Analytics Reports', icon: BarChart3, subItems: ['Last 7 Days', 'Last 30 Days', 'Channel Report', 'TikTok Report'] },
+      { name: 'Monetize Links', icon: DollarSign, subItems: ['Patreon Setup', 'Beacons Bio', 'Linktree', 'Stripe Checkout'] },
+      { name: 'Content Calendar', icon: Calendar, subItems: ['Week 1 Plan', 'Week 2 Plan', 'Duet Targets', 'Playlist Series'] },
     ],
     projects: [
       { name: 'Active Files', icon: FileText, subItems: ['Draft_01.doc', 'Scene_05.mp4', 'Master_Track.wav'] },
@@ -1959,6 +2491,9 @@ export default function AgentLeeCreatorsStudio() {
     music: '',
     video: '',
     marketing: '',
+    thumbnail: '',
+    cta: '',
+    growth: '',
     projects: '',
     account: ''
   });
