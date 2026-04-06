@@ -1660,7 +1660,7 @@ export default function App() {
         <OrbitControls 
           enablePan={false} 
           enableZoom={true} 
-          minDistance={12} 
+          minDistance={3} 
           maxDistance={38}
           autoRotate={!selectedAgent && !isMerged}
           autoRotateSpeed={isMobile ? 0.1 : 0.25}
