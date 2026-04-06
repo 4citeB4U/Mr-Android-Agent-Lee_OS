@@ -1678,42 +1678,31 @@ export default function App() {
       <AnimatePresence>
         {!selectedAgent && (
           <>
-            {/* Top banner */}
+            {/* Top banner — page name + Come to Core only */}
             <motion.div 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="absolute top-0 left-0 w-full p-5 z-20 pointer-events-none flex justify-between items-start"
+              className="absolute top-0 left-0 w-full px-4 py-3 z-20 pointer-events-none flex items-center justify-between"
             >
-              {/* Left: agent count */}
-              <div className="pointer-events-auto">
-                <AgentCountHUD />
-              </div>
+              {/* Page name */}
+              <p className="text-[#00f2ff] text-[9px] tracking-[0.35em] font-black uppercase select-none">
+                Diagnostic Center
+              </p>
 
-              {/* Center: title */}
-              <div className="flex flex-col items-center flex-1 pt-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <Activity size={11} className="text-[#00f2ff] animate-pulse" />
-                  <p className="text-[#00f2ff] text-[9px] tracking-[0.45em] font-black uppercase">Diagnostic Center · {AGENTS.length} Agents Online</p>
-                </div>
-                <div className="h-[1px] w-40 bg-gradient-to-r from-transparent via-[#00f2ff]/30 to-transparent" />
-              </div>
-              
-              {/* Right: merge toggle */}
-              <div className="pointer-events-auto">
-                <button
-                  onClick={() => setIsMerged(!isMerged)}
-                  className="px-4 py-2 rounded-full text-[9px] font-mono uppercase tracking-widest transition-all active:scale-95"
-                  style={{
-                    border: '1px solid rgba(0,242,255,0.3)',
-                    background: isMerged ? 'rgba(0,242,255,0.15)' : 'rgba(0,242,255,0.05)',
-                    color: '#00f2ff',
-                    boxShadow: isMerged ? '0 0 20px rgba(0,242,255,0.2)' : 'none',
-                  }}
-                >
-                  {isMerged ? '⬡ Expand Grid' : '⬡ Come to Core'}
-                </button>
-              </div>
+              {/* Come to Core / Expand Grid */}
+              <button
+                onClick={() => setIsMerged(!isMerged)}
+                className="pointer-events-auto px-4 py-1.5 rounded-full text-[9px] font-mono uppercase tracking-widest transition-all active:scale-95"
+                style={{
+                  border: '1px solid rgba(0,242,255,0.3)',
+                  background: isMerged ? 'rgba(0,242,255,0.15)' : 'rgba(0,242,255,0.05)',
+                  color: '#00f2ff',
+                  boxShadow: isMerged ? '0 0 20px rgba(0,242,255,0.2)' : 'none',
+                }}
+              >
+                {isMerged ? '⬡ Expand Grid' : '⬡ Come to Core'}
+              </button>
             </motion.div>
 
           </>
