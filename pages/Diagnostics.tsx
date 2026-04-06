@@ -1064,46 +1064,47 @@ function AgentLeeDiagnostics({ agent: initialAgent, onClose }: AgentLeeDiagnosti
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[800] flex flex-col items-center justify-center bg-[#020408]/95 backdrop-blur-xl p-4"
+        className="fixed inset-0 z-[800] bg-[#020408]/95 backdrop-blur-xl overflow-y-auto"
         onClick={onClose}
       >
+        <div className="min-h-full flex items-start md:items-center justify-center p-3 md:p-4 py-6 md:py-8">
         <motion.div
           initial={{ scale: 0.9, y: 40 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 40 }}
-          className="relative w-full max-w-7xl bg-[#0a0b0e] border-2 rounded-[3.5rem] overflow-hidden shadow-[0_0_150px_rgba(0,0,0,0.9)] flex flex-col z-[810] h-[95vh] max-h-[1000px] mx-4"
+          className="relative w-full max-w-7xl bg-[#0a0b0e] border-2 rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden shadow-[0_0_150px_rgba(0,0,0,0.9)] flex flex-col"
           style={{ borderColor: agent.color }}
           onClick={(e) => e.stopPropagation()}
         >
           <button 
             onClick={onClose}
-            className="absolute top-8 right-8 p-4 rounded-full bg-black/60 text-white/80 hover:text-white hover:bg-black transition-all border border-white/10 z-50 shadow-2xl"
+            className="absolute top-4 right-4 md:top-8 md:right-8 p-3 md:p-4 rounded-full bg-black/60 text-white/80 hover:text-white hover:bg-black transition-all border border-white/10 z-50 shadow-2xl"
           >
-            <X size={28} />
+            <X size={22} />
           </button>
 
-          <div className="flex flex-col md:flex-row h-full overflow-hidden">
-            <div className="w-full md:w-[400px] shrink-0 border-r border-white/5 bg-black/40 p-10 flex flex-col items-center gap-10 overflow-y-auto scrollbar-hide">
-              <div className="relative w-full aspect-square">
+          <div className="flex flex-col md:flex-row md:h-[90vh] md:max-h-[1000px] md:overflow-hidden">
+            <div className="w-full md:w-[400px] md:shrink-0 border-b md:border-b-0 md:border-r border-white/5 bg-black/40 p-8 md:p-10 flex flex-col items-center gap-8 md:gap-10 md:overflow-y-auto scrollbar-hide">
+              <div className="relative w-full max-w-[210px] md:max-w-none aspect-square mx-auto">
                 <div 
-                  className="w-full h-full rounded-[4rem] border-4 flex items-center justify-center bg-black overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)] relative"
+                  className="w-full h-full rounded-[3rem] md:rounded-[4rem] border-4 flex items-center justify-center bg-black overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)] relative"
                   style={{ borderColor: agent.color }}
                 >
                   <img 
                     src={agent.imageUrl} 
                     alt={agent.title} 
-                    className="w-full h-full object-contain p-8"
+                    className="w-full h-full object-contain p-6 md:p-8"
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                 </div>
-                <div className="absolute -bottom-4 -right-4 bg-black border-2 border-white/20 p-4 rounded-3xl shadow-2xl">
-                  <agent.icon size={32} style={{ color: agent.color }} />
+                <div className="absolute -bottom-3 -right-3 md:-bottom-4 md:-right-4 bg-black border-2 border-white/20 p-3 md:p-4 rounded-2xl md:rounded-3xl shadow-2xl">
+                  <agent.icon size={24} style={{ color: agent.color }} />
                 </div>
               </div>
 
               <div className="text-center w-full">
-                <h2 className="text-white font-black text-5xl tracking-tighter uppercase leading-none mb-3 break-words">{agent.title}</h2>
+                <h2 className="text-white font-black text-3xl md:text-5xl tracking-tighter uppercase leading-none mb-3 break-words">{agent.title}</h2>
                 <p className="text-sm font-mono tracking-[0.6em] font-bold opacity-50 uppercase" style={{ color: agent.color }}>
                   {agent.subtitle}
                 </p>
@@ -1170,7 +1171,7 @@ function AgentLeeDiagnostics({ agent: initialAgent, onClose }: AgentLeeDiagnosti
               </div>
             </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto p-12 scrollbar-hide">
+            <div className="flex-1 md:min-h-0 md:overflow-y-auto p-8 md:p-12 scrollbar-hide">
               <AnimatePresence mode="wait">
                 {showDiag && (
                   <motion.div
@@ -1318,6 +1319,7 @@ function AgentLeeDiagnostics({ agent: initialAgent, onClose }: AgentLeeDiagnosti
             </div>
           </div>
         </motion.div>
+        </div>
       </motion.div>
     </AnimatePresence>
   );
@@ -1589,7 +1591,7 @@ function GoverningBodyHUD({ onAgentClick }: { onAgentClick: (agent: AgentData) =
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 40 }}
-      className="fixed bottom-6 right-6 z-30 w-72 pointer-events-auto"
+      className="fixed bottom-[88px] md:bottom-6 right-4 md:right-6 z-30 w-64 md:w-72 pointer-events-auto"
     >
       <div 
         className="rounded-3xl border overflow-hidden"

@@ -214,7 +214,7 @@ export const Layout: React.FC<LayoutProps> = ({
       </main>
 
       {/*  FOOTER  Mac Million Mic only  */}
-      <footer className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-3 pointer-events-none">
+      <footer className="fixed bottom-0 left-0 right-0 z-[1001] flex items-center justify-center py-3 pointer-events-none">
         <button
           onClick={handleMicClick}
           aria-label={isListening ? 'Stop listening' : 'Start voice input'}
