@@ -53,13 +53,19 @@ async def lifespan(app: FastAPI):
     logger.info("Agent Lee Voice Core shutting down.")
 
 
+
 # ── App ───────────────────────────────────────────────────────────────────────
+from fastapi import APIRouter
+
 app = FastAPI(
     title="Agent Lee Voice Core",
     version="1.0.0",
     description="Production real-time voice AI server.",
     lifespan=lifespan,
 )
+
+# API versioning
+api_v1 = APIRouter(prefix="/api/v1")
 
 app.add_middleware(
     CORSMiddleware,
@@ -75,9 +81,9 @@ if os.path.isdir(_CLIENT_DIST):
     app.mount("/app", StaticFiles(directory=_CLIENT_DIST, html=True), name="client")
 
 
-# ── REST endpoints ────────────────────────────────────────────────────────────
 
-@app.get("/")
+# ── REST endpoints (versioned) ────────────────────────────────────────────────
+@api_v1.get("/health")
 async def health() -> JSONResponse:
     return JSONResponse({
         "status": "ok",
@@ -87,8 +93,7 @@ async def health() -> JSONResponse:
         "gemini_available": settings.is_gemini_available,
     })
 
-
-@app.get("/status")
+@api_v1.get("/status")
 async def status() -> JSONResponse:
     return JSONResponse({
         "status": "ok",
@@ -97,6 +102,16 @@ async def status() -> JSONResponse:
         "whisper_model": settings.whisper_model,
         "tts_sample_rate": settings.tts_sample_rate,
     })
+
+# Feature flag endpoint
+import os
+@api_v1.get("/feature-flags")
+async def feature_flags() -> JSONResponse:
+    # Example: set FEATURE_X=true in env to enable
+    flags = {k: v for k, v in os.environ.items() if k.startswith("FEATURE_")}
+    return JSONResponse(flags)
+
+app.include_router(api_v1)
 
 
 # ── WebSocket ─────────────────────────────────────────────────────────────────

@@ -24,7 +24,7 @@
 
 @layer base {
   body {
-    @apply bg-[#020408] text-white antialiased;
+    @apply bg-black text-white antialiased;
   }
 }
 

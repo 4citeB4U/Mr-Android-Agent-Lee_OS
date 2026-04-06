@@ -19,13 +19,49 @@ LICENSE: MIT
 <img width="1200" height="475" alt="Agent Lee — The Future of AI" src="./public/images/agent-lee-banner.png" />
 </div>
 
+
 # Agent Lee — Agentic Operating System
+
+> **This system is fully partnered and live-connected with [LeeWay-Edge-RTC](https://github.com/4citeB4U/LeeWay-Edge-RTC)** — Agent Lee's real-time voice, emotion, and RTC backbone. Both systems are designed to work together, with Agent Lee orchestrating intelligence, UI, and agent workflows, while LeeWay-Edge-RTC provides always-on, low-latency voice and presence. 
+
+**Investors and developers:** You can inspect the RTC/voice backbone repo here: [https://github.com/4citeB4U/LeeWay-Edge-RTC](https://github.com/4citeB4U/LeeWay-Edge-RTC)
+
+**How they connect:**
+- Set the `VITE_VOICE_WS_URL` (or `VITE_VOICE_AGENT_URL`) in your `.env` to the LeeWay-Edge-RTC WebSocket endpoint.
+- Agent Lee and all 20+ agents can route voice, emotion, and RTC tasks to the RTC backbone in real time.
+- All system diagrams, architecture, and UI are designed for seamless cross-app operation.
+
+**See the [LeeWay-Edge-RTC repo](https://github.com/4citeB4U/LeeWay-Edge-RTC) for full RTC, TTS, and agent fleet details.**
+
 
 > **Designed & Developed by LeeWay Innovations** · Created by **Leonard Lee** · April 2026
 
 > **Collaboration & Licensing:** 414-303-8580
 
 Agent Lee Agentic Operating System is a VM-first, voice-first, multi-agent operating platform that turns a browser tab into a sovereign digital command centre. It hosts **20 named agents** across five functional layers, a local-first realtime voice pipeline, a governance enforcement corps, and an MCP tool network — all running on an edge device with no cloud dependency for core function.
+
+---
+
+
+---
+
+## Partnership Architecture
+
+```
+┌─────────────────────────────────────┐     ┌──────────────────────────────────────────┐
+│     agent-lee-voxel-os   (THIS REPO)│     │     LeeWay-Edge-RTC   (PARTNER REPO)     │
+│                                     │     │                                          │
+│  Agent Lee's mind, memory,          │────▶│  Agent Lee's real-time voice, emotion,   │
+│  20 agents, UI, LLM, governance,    │ wss │  WebRTC transport, guardian core,        │
+│  Firebase, Gemini, llama.cpp        │     │  8 RTC agents, two-lane architecture     │
+└─────────────────────────────────────┘     └──────────────────────────────────────────┘
+         BRAIN & IDENTITY                              VOICE & PRESENCE
+```
+
+| Repo | Purpose | Connect via |
+|------|---------|-------------|
+| **agent-lee-voxel-os** | Agent Lee's brain — identity, 20 agents, LLM, memory, UI | `VITE_VOICE_WS_URL` → LeeWay-Edge-RTC |
+| **LeeWay-Edge-RTC** | Agent Lee's voice presence — real-time audio, emotion, WebRTC SFU | `wss://your-sfu-host/ws` |
 
 ---
 
@@ -78,6 +114,8 @@ This system combines three things in one repository:
 
 ## 2. Full-Stack Technology
 
+**This system is designed to be always-on, hands-free, and contextually aware, with Agent Lee and his agents able to operate across both the OS and RTC/voice backbone.**
+
 | Layer | Technology |
 |---|---|
 | **Frontend** | React 19, TypeScript 5.8, Vite 6, Tailwind CSS v4 |
@@ -100,9 +138,20 @@ This system combines three things in one repository:
 <br/><em>Platform overview — full stack from voice input to cloud output</em>
 </div>
 
+<div align="center">
+<img width="800" alt="LeeWay Edge RTC" src="https://raw.githubusercontent.com/4citeB4U/LeeWay-Edge-RTC/main/docs/images/banner.png" />
+<br/><em>Partner app: LeeWay-Edge-RTC — Agent Lee's live voice & RTC backbone</em>
+</div>
+
 ---
 
-## 3. How the System Works
+
+---
+
+## 3. How the System Works (Cross-App)
+
+**Agent Lee and his agents can route tasks, voice, and emotion to the LeeWay-Edge-RTC backbone in real time.**
+
 
 Every user interaction follows this flow:
 
@@ -159,6 +208,8 @@ User speaks / types
 ```
 
 **Key design principles:**
+- **Two-app architecture:** Agent Lee's mind, memory, and agent workflows (this repo) are always connected to the LeeWay-Edge-RTC backbone for live voice, emotion, and RTC.
+- **Cross-app agent support:** All 20+ agents can operate across both apps, with seamless event routing and awareness.
 - **Many agents exist. Few execute. One system runs.** (Brain Sentinel enforces this via budget modes)
 - **No raw API key on the client.** Gemini calls go through Firebase Functions.
 - **Write approval required.** Any Z1/Z2 write requires a Shield-gated Write Intent Block + user "yes".
@@ -191,7 +242,20 @@ Agent Lee's identity is not hidden in a prompt. It is versioned source code:
 | `core/agent_lee_prompt_assembler.ts` | Assembles all modules into a system prompt for Gemini |
 | `core/agent_lee_system_awareness.ts` | Self-awareness: what the system knows about itself |
 
-This is what separates Agent Lee from a chatbot — his identity is durable, auditable, and versioned.
+
+---
+
+## For Investors & Inspectors
+
+- **This repo:** Agent Lee's mind, memory, UI, and agent workflows
+- **Partner repo:** [LeeWay-Edge-RTC (voice/RTC backbone)](https://github.com/4citeB4U/LeeWay-Edge-RTC)
+- **How to inspect:**
+  - Review both repos for full architecture
+  - See system diagrams and docs in each repo
+  - Confirm `.env` is set to connect the two systems (`VITE_VOICE_WS_URL`)
+  - All code, docs, and diagrams are up to date for investor and developer review
+
+---
 
 <div align="center">
 <img width="1200" alt="Agent Lee App Layout" src="./docs/systemimages/agent-lee-app-layout.svg" />

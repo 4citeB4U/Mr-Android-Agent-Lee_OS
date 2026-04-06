@@ -141,12 +141,13 @@ export const Layout: React.FC<LayoutProps> = ({
     else if (!isListening && onStartVoice) onStartVoice();
   };
 
+
   return (
-    <div className="fixed inset-0 flex flex-col bg-[#020408] text-white font-sans overflow-hidden">
+    <div className="fixed inset-0 flex flex-col bg-black text-white font-sans overflow-hidden">
 
       {/* Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[#020408]" />
+        <div className="absolute inset-0 bg-black" />
         <AnimatePresence>
           {backgroundImage && (
             <motion.div

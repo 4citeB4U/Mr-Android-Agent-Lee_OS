@@ -16,7 +16,7 @@ LICENSE: MIT
 */
 
 import { eventBus } from '../EventBus';
-import { memoryLakeClient } from './memoryLakeClient';
+import { palliumClient } from './memoryLakeClient';
 import { getProvider } from './providers';
 import type {
   LaunchJob, LaunchRecord, DeployableBundle,
@@ -45,7 +45,7 @@ async function appendTrace(
     source,
     created_at: Date.now(),
   };
-  await memoryLakeClient.events.append(evt);
+  await palliumClient.events.append(evt);
 }
 
 async function updateStep(
@@ -69,7 +69,7 @@ async function updateStep(
     ),
     updated_at: Date.now(),
   };
-  await memoryLakeClient.jobs.update(updated);
+  await palliumClient.jobs.update(updated);
   eventBus.emit('launchpad:job_updated', { launchId: job.launch_id, jobId: job.id });
   return updated;
 }
@@ -171,17 +171,17 @@ export async function startLaunchJob(params: {
     updated_at: Date.now(),
   };
 
-  await memoryLakeClient.jobs.create(job);
+  await palliumClient.jobs.create(job);
   eventBus.emit('launchpad:job_started', { launchId, jobId: job.id });
   await appendTrace(traceId, 'job.started', { launchId, jobId: job.id, mode });
 
   // Load entities
-  const launch = await memoryLakeClient.launches.get(launchId);
-  const bundle = await memoryLakeClient.bundles.get(bundleId);
+  const launch = await palliumClient.launches.get(launchId);
+  const bundle = await palliumClient.bundles.get(bundleId);
 
   if (!launch || !bundle) {
     job = { ...job, status: 'failed', updated_at: Date.now() };
-    await memoryLakeClient.jobs.update(job);
+    await palliumClient.jobs.update(job);
     eventBus.emit('launchpad:job_finished', { launchId, jobId: job.id, status: 'failed' });
     return job;
   }
@@ -193,7 +193,7 @@ export async function startLaunchJob(params: {
   if (!validation.ok) {
     job = await updateStep(job, 'validate', 'failed', validation.detail);
     job = { ...job, status: 'failed', updated_at: Date.now() };
-    await memoryLakeClient.jobs.update(job);
+    await palliumClient.jobs.update(job);
     await appendTrace(traceId, 'step.validate.failed', { detail: validation.detail }, 'error');
     eventBus.emit('launchpad:job_finished', { launchId, jobId: job.id, status: 'failed' });
     return job;
@@ -213,7 +213,7 @@ export async function startLaunchJob(params: {
     } catch (e: any) {
       job = await updateStep(job, 'build', 'failed', e?.message);
       job = { ...job, status: 'failed', updated_at: Date.now() };
-      await memoryLakeClient.jobs.update(job);
+      await palliumClient.jobs.update(job);
       eventBus.emit('launchpad:job_finished', { launchId, jobId: job.id, status: 'failed' });
       return job;
     }
@@ -239,7 +239,7 @@ export async function startLaunchJob(params: {
     } catch (e: any) {
       job = await updateStep(job, 'publish', 'failed', e?.message);
       job = { ...job, status: 'failed', updated_at: Date.now() };
-      await memoryLakeClient.jobs.update(job);
+      await palliumClient.jobs.update(job);
       eventBus.emit('launchpad:job_finished', { launchId, jobId: job.id, status: 'failed' });
       return job;
     }
@@ -259,7 +259,7 @@ export async function startLaunchJob(params: {
 
   // ── Finalize ──────────────────────────────────────────────────
   job = { ...job, status: 'succeeded', updated_at: Date.now() };
-  await memoryLakeClient.jobs.update(job);
+  await palliumClient.jobs.update(job);
 
   // Update the launch record with results
   const updatedLaunch: LaunchRecord = {
@@ -269,7 +269,7 @@ export async function startLaunchJob(params: {
     last_job_id: job.id,
     updated_at: Date.now(),
   };
-  await memoryLakeClient.launches.upsert(updatedLaunch);
+  await palliumClient.launches.upsert(updatedLaunch);
   await appendTrace(traceId, 'job.finished', { status: 'succeeded', links: publishedLinks });
   eventBus.emit('launchpad:job_finished', { launchId, jobId: job.id, status: 'succeeded' });
 

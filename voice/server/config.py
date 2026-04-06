@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
     log_level: str = "INFO"
-    cors_origins: str = "*"
+    cors_origins: str = "https://4citeb4u.github.io"
 
     # ── Modes ─────────────────────────────────────────────────────────────────
     offline_mode: bool = False

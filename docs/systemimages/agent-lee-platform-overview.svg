@@ -35,6 +35,15 @@
   <circle cx="1380" cy="140" r="180" fill="#20174A" opacity="0.45"/>
   <circle cx="260" cy="760" r="220" fill="#032C33" opacity="0.4"/>
   <text x="90" y="100" class="title">AGENT LEE PLATFORM OVERVIEW</text>
+  <text x="90" y="180" class="subtitle" fill="#00F0FF">Partnered & live-connected with LeeWay-Edge-RTC (voice/RTC backbone)</text>
+  <text x="90" y="210" class="small" fill="#A7F7FF">See: https://github.com/4citeB4U/LeeWay-Edge-RTC</text>
+  <line x1="970" y1="320" x2="1400" y2="320" stroke="#00F0FF" stroke-width="4" marker-end="url(#arrowhead)"/>
+  <text x="1100" y="310" class="small" fill="#00F0FF">Live RTC/Voice Link</text>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#00F0FF" />
+    </marker>
+  </defs>
   <text x="90" y="140" class="subtitle">A VM-first digital operator with a memory core, specialist agent team, and MCP constellation.</text>
 
   <rect x="630" y="210" width="340" height="140" rx="24" fill="#101D31" stroke="url(#cyan)" stroke-width="3" filter="url(#glowCyan)"/>

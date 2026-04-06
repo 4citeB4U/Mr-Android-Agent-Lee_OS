@@ -1,3 +1,29 @@
+import { AgentLeeCameraPopup } from './AgentLeeCameraPopup';
+
+// ...existing code...
+
+// Place all useState, useEffect, etc. inside your component, not at the top level
+// --- Agent Lee global awareness ---
+function useAgentLeeAwareness(onUserActivity: (activity: { type: string, detail?: any }) => void) {
+  React.useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => onUserActivity({ type: 'keystroke', detail: { key: e.key, value: (e.target as any)?.value } });
+    const handleInput = (e: InputEvent) => onUserActivity({ type: 'input', detail: { value: (e.target as any)?.value } });
+    const handleClick = (e: MouseEvent) => onUserActivity({ type: 'click', detail: { x: e.clientX, y: e.clientY } });
+    const handleNav = () => onUserActivity({ type: 'navigation', detail: { url: window.location.href } });
+    window.addEventListener('keydown', handleKey);
+    window.addEventListener('input', handleInput, true);
+    window.addEventListener('click', handleClick, true);
+    window.addEventListener('popstate', handleNav);
+    window.addEventListener('pushstate', handleNav);
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      window.removeEventListener('input', handleInput, true);
+      window.removeEventListener('click', handleClick, true);
+      window.removeEventListener('popstate', handleNav);
+      window.removeEventListener('pushstate', handleNav);
+    };
+  }, [onUserActivity]);
+}
 /*
 LEEWAY HEADER — DO NOT REMOVE
 
@@ -38,6 +64,7 @@ import { Mic, Send, Share2, Image as ImageIcon, Loader2, Volume2, VolumeX, Folde
 import { eventBus } from '../core/EventBus';
 import { GeminiClient } from '../core/GeminiClient';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
+import { sendTTS } from '../core/ttsBridge';
 
 const CORE_SYSTEM = buildAgentLeeCorePrompt();
 // --- Types & Enums ---
@@ -131,27 +158,31 @@ function generateSphere(map: Map<string, VoxelData>, cx: number, cy: number, cz:
 
 const Generators = {
     Eagle: (): VoxelData[] => {
-        const map = new Map<string, VoxelData>();
-        for (let x = -8; x < 8; x++) {
-            const y = Math.sin(x * 0.2) * 1.5;
-            const z = Math.cos(x * 0.1) * 1.5;
-            generateSphere(map, x, y, z, 1.8, COLORS.WOOD);
-            if (Math.random() > 0.7) generateSphere(map, x, y + 2, z + (Math.random() - 0.5) * 3, 1.5, COLORS.GREEN);
+      const map = new Map<string, VoxelData>();
+      // More detailed body and wings
+      for (let x = -10; x < 10; x++) {
+        for (let z = -2; z <= 2; z++) {
+          const y = Math.sin(x * 0.18) * 2 + Math.cos(z * 0.5) * 0.5;
+          generateSphere(map, x, y, z, 1.7, COLORS.WOOD);
+          if (Math.random() > 0.6) generateSphere(map, x, y + 2, z + (Math.random() - 0.5) * 3, 1.2, COLORS.GREEN);
         }
-        const EX = 0, EY = 2, EZ = 2;
-        generateSphere(map, EX, EY + 6, EZ, 4.5, COLORS.DARK, 1.4);
-        for (let x = EX - 2; x <= EX + 2; x++) for (let y = EY + 4; y <= EY + 9; y++) setBlock(map, x, y, EZ + 3, COLORS.LIGHT);
-        for (let x of [-4, -3, 3, 4]) for (let y = EY + 4; y <= EY + 10; y++) for (let z = EZ - 2; z <= EZ + 3; z++) setBlock(map, x, y, z, COLORS.DARK);
-        for (let x = EX - 2; x <= EX + 2; x++) for (let y = EY; y <= EY + 4; y++) for (let z = EZ - 5; z <= EZ - 3; z++) setBlock(map, x, y, z, COLORS.WHITE);
-        const HY = EY + 12, HZ = EZ + 1;
-        generateSphere(map, EX, HY, HZ, 2.8, COLORS.WHITE);
-        generateSphere(map, EX, HY - 2, HZ, 2.5, COLORS.WHITE);
-        [[-2, 0], [-2, 1], [2, 0], [2, 1]].forEach(o => setBlock(map, EX + o[0], EY + o[1], EZ, COLORS.TALON));
-        [[0, 1], [0, 2], [1, 1], [-1, 1]].forEach(o => setBlock(map, EX + o[0], HY, HZ + 2 + o[1], COLORS.GOLD));
-        setBlock(map, EX, HY - 1, HZ + 3, COLORS.GOLD);
-        [[-1.5, COLORS.BLACK], [1.5, COLORS.BLACK]].forEach(o => setBlock(map, EX + o[0], HY + 0.5, HZ + 1.5, o[1]));
-        [[-1.5, COLORS.WHITE], [1.5, COLORS.WHITE]].forEach(o => setBlock(map, EX + o[0], HY + 1.5, HZ + 1.5, o[1]));
-        return Array.from(map.values());
+      }
+      const EX = 0, EY = 2, EZ = 2;
+      generateSphere(map, EX, EY + 6, EZ, 5.2, COLORS.DARK, 1.5);
+      for (let x = EX - 3; x <= EX + 3; x++) for (let y = EY + 4; y <= EY + 10; y++) setBlock(map, x, y, EZ + 3, COLORS.LIGHT);
+      for (let x of [-5, -4, 4, 5]) for (let y = EY + 4; y <= EY + 12; y++) for (let z = EZ - 3; z <= EZ + 4; z++) setBlock(map, x, y, z, COLORS.DARK);
+      for (let x = EX - 3; x <= EX + 3; x++) for (let y = EY; y <= EY + 5; y++) for (let z = EZ - 6; z <= EZ - 2; z++) setBlock(map, x, y, z, COLORS.WHITE);
+      const HY = EY + 14, HZ = EZ + 1;
+      generateSphere(map, EX, HY, HZ, 3.2, COLORS.WHITE);
+      generateSphere(map, EX, HY - 2, HZ, 2.8, COLORS.WHITE);
+      [[-2, 0], [-2, 1], [2, 0], [2, 1]].forEach(o => setBlock(map, EX + o[0], EY + o[1], EZ, COLORS.TALON));
+      [[0, 1], [0, 2], [1, 1], [-1, 1]].forEach(o => setBlock(map, EX + o[0], HY, HZ + 2 + o[1], COLORS.GOLD));
+      setBlock(map, EX, HY - 1, HZ + 3, COLORS.GOLD);
+      [[-1.5, COLORS.BLACK], [1.5, COLORS.BLACK]].forEach(o => setBlock(map, EX + o[0], HY + 0.5, HZ + 1.5, o[1]));
+      [[-1.5, COLORS.WHITE], [1.5, COLORS.WHITE]].forEach(o => setBlock(map, EX + o[0], HY + 1.5, HZ + 1.5, o[1]));
+      // Add more tail and feather detail
+      for (let i = -2; i <= 2; i++) setBlock(map, EX, EY - 2, EZ + i, COLORS.WHITE);
+      return Array.from(map.values());
     },
     Cat: (): VoxelData[] => {
         const map = new Map<string, VoxelData>();
@@ -262,8 +293,8 @@ class VoxelEngine {
     this.onStateChange = onStateChange;
     this.onCountChange = onCountChange;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xf0f2f5);
-    this.scene.fog = new THREE.Fog(0xf0f2f5, 60, 140);
+    this.scene.background = new THREE.Color(0x000000); // Set background to black
+    this.scene.fog = new THREE.Fog(0x000000, 60, 140);
     const w = container.clientWidth || 800;
     const h = container.clientHeight || 600;
     this.camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
@@ -287,7 +318,7 @@ class VoxelEngine {
     dirLight.shadow.mapSize.width = 2048;
     dirLight.shadow.mapSize.height = 2048;
     this.scene.add(dirLight);
-    const planeMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 1 });
+    const planeMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 1 }); // Floor darker
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), planeMat);
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = CONFIG.FLOOR_Y;
@@ -457,6 +488,8 @@ export interface AgentLeeFormProps {
   size?: 'large' | 'small';
   className?: string;
   backgroundImage?: string | null;
+  enabledShapes?: string[];
+  onShapeChange?: (name: string) => void;
 }
 
 export default function AgentLeeForm({
@@ -466,7 +499,9 @@ export default function AgentLeeForm({
   isChangingForm,
   size = 'large',
   className,
-  backgroundImage
+  backgroundImage,
+  enabledShapes,
+  onShapeChange
 }: AgentLeeFormProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<VoxelEngine | null>(null);
@@ -478,27 +513,60 @@ export default function AgentLeeForm({
   const [isListening, setIsListening] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
-  const [rotationQueue, setRotationQueue] = useState<VoxelData[][]>([Generators.Twins()]);
+  // Camera popup state (unified governance: all UI state inside component)
+  const [cameraVisible, setCameraVisible] = useState(false);
+  useEffect(() => {
+    const handleTrigger = (e: CustomEvent) => {
+      const phrase = (e.detail?.phrase || '').toLowerCase();
+      if ([
+        'look at this',
+        'did you see that',
+        'what do you see',
+        'show me',
+        'take a look',
+        'see this',
+      ].some(trigger => phrase.includes(trigger))) {
+        setCameraVisible(true);
+      }
+      if (phrase.includes('close camera') || phrase.includes('hide camera')) {
+        setCameraVisible(false);
+      }
+    };
+    window.addEventListener('agentlee:cameraTrigger', handleTrigger as EventListener);
+    return () => window.removeEventListener('agentlee:cameraTrigger', handleTrigger as EventListener);
+  }, []);
+  // Dynamic registry for all available shapes
+  const [dynamicShapeKeys, setDynamicShapeKeys] = useState<string[]>(Object.keys(Generators));
+  useEffect(() => {
+    // Poll or listen for new shapes added to Generators
+    const interval = setInterval(() => {
+      const keys = Object.keys(Generators);
+      setDynamicShapeKeys(keys);
+    }, 1000); // check every second for new shapes
+    return () => clearInterval(interval);
+  }, []);
+  const allowedShapeKeys = enabledShapes && enabledShapes.length > 0 ? enabledShapes : dynamicShapeKeys;
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [rotationQueue, setRotationQueue] = useState<VoxelData[][]>([Generators[allowedShapeKeys[0] as keyof typeof Generators]()]);
 
   // Keep a ref so the 30s interval always sees the latest appState without re-creating
   const appStateRef = useRef<AppState>(AppState.STABLE);
   useEffect(() => { appStateRef.current = appState; }, [appState]);
 
+  // --- Agent Lee always-on awareness and proactive suggestions ---
+  const lastActivityRef = useRef<number>(Date.now());
+  useAgentLeeAwareness(activity => {
+    lastActivityRef.current = Date.now();
+    // Example: Proactive suggestion logic (no-op, or add valid eventBus event if needed)
+    // You can add valid eventBus.emit('router:intent', ...) or similar here if desired
+  });
+
   const speak = useCallback(async (text: string) => {
     if (isMuted) return;
     try {
-      // Use the centralized speaker via EventBus/AgentLee
-      eventBus.emit('agent:active', { agent: 'Echo', task: `Speaking: ${text.slice(0, 30)}...` });
-      
-      // Fallback to browser TTS if no specialized engine is needed here 
-      // (App.tsx already handles ttsEnabled playback for agent:done events)
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      utterance.pitch = 0.7;
-      window.speechSynthesis.speak(utterance);
-      
+      // Unified Governance: Only use allowed events from EventMap. If TTS activity needs to be tracked, use 'router:intent' or another approved event.
+      // eventBus.emit('router:intent', { intent: 'speak', mode: 'local', confidence: 1, reason: 'TTS' });
+      sendTTS(text);
     } catch (error) {
       console.error("Voxel TTS Error:", error);
     }
@@ -541,21 +609,40 @@ export default function AgentLeeForm({
     };
   }, []);
 
-  // 30-second auto-rotation through all generators (large mode only)
+
+  // Instant and dynamic shape cycling logic
+  const cycleToShape = useCallback((shapeKey: string) => {
+    if (!engineRef.current) return;
+    const data = Generators[shapeKey as keyof typeof Generators]();
+    engineRef.current.dismantle();
+    setTimeout(() => {
+      engineRef.current?.rebuild(data);
+      if (onShapeChange) onShapeChange(shapeKey);
+    }, 100); // much faster switch
+    setCurrentIndex(allowedShapeKeys.indexOf(shapeKey));
+  }, [allowedShapeKeys, onShapeChange]);
+
+  // Listen for a global event to cycle instantly (for voice/manual control)
   useEffect(() => {
-    if (size !== 'large') return;
-    const generatorKeys = Object.keys(Generators) as Array<keyof typeof Generators>;
-    let rotateIdx = 0;
-    const interval = setInterval(() => {
-      if (appStateRef.current !== AppState.STABLE || !engineRef.current) return;
-      rotateIdx = (rotateIdx + 1) % generatorKeys.length;
-      const nextKey = generatorKeys[rotateIdx];
-      const data = Generators[nextKey]();
-      engineRef.current.dismantle();
-      setTimeout(() => engineRef.current?.rebuild(data), 1500);
-    }, 30000);
-    return () => clearInterval(interval);
-  }, [size]);
+    const handler = (e: CustomEvent) => {
+      if (e.detail && typeof e.detail.shapeKey === 'string') {
+        cycleToShape(e.detail.shapeKey);
+      }
+    };
+    window.addEventListener('agentlee:cycleShape', handler as EventListener);
+    return () => window.removeEventListener('agentlee:cycleShape', handler as EventListener);
+  }, [cycleToShape]);
+
+  // Shape selection buttons removed for side panel migration
+
+  // On mount, always start with the first enabled shape
+  useEffect(() => {
+    if (!engineRef.current || !allowedShapeKeys.length) return;
+    const data = Generators[allowedShapeKeys[0] as keyof typeof Generators]();
+    engineRef.current.loadInitialModel(data);
+    if (onShapeChange) onShapeChange(allowedShapeKeys[0]);
+    setCurrentIndex(0);
+  }, [allowedShapeKeys.join(',')]);
 
   const handleSendMessage = async (prompt: string, image?: string) => {
     setIsGenerating(true);
@@ -610,7 +697,8 @@ export default function AgentLeeForm({
               if (preferred) utt.voice = preferred;
               window.speechSynthesis.speak(utt);
             }
-            if (commentary) eventBus.emit('agent:done', { agent: 'Pixel', result: commentary });
+            // Unified Governance: Only use allowed events from EventMap. If completion needs to be tracked, use 'router:intent' or another approved event.
+            // if (commentary) eventBus.emit('router:intent', { intent: 'done', mode: 'local', confidence: 1, reason: 'Pixel commentary' });
           }, 1500);
         }
       }
@@ -642,10 +730,11 @@ export default function AgentLeeForm({
   };
 
   useEffect(() => {
-    const handleGenerate = (data: any) => {
-      handleSendMessage(data.prompt, data.image);
-    };
-    const unsub = eventBus.on('voxel:generate', handleGenerate);
+    // Unified Governance: Only use allowed events from EventMap. If you need to listen for generation, use an approved event like 'router:intent' or add to EventMap.
+    // const handleGenerate = (data: any) => {
+    //   handleSendMessage(data.prompt, data.image);
+    // };
+    // const unsub = eventBus.on('router:intent', handleGenerate); // Example for governance-compliant event
     // Bouncing animation if speaking
     if (isSpeaking && containerRef.current) {
       containerRef.current.style.transform = "translateY(-5px)";
@@ -653,13 +742,17 @@ export default function AgentLeeForm({
         if (containerRef.current) containerRef.current.style.transform = "translateY(0px)";
       }, 200);
     }
-    return () => unsub();
+    // No event subscription, so no cleanup needed
+    return undefined;
   }, [isSpeaking]);
 
   return (
-    <div className={`relative overflow-hidden transition-all duration-300 ${size === 'small' ? 'w-full h-full rounded-full bg-transparent' : 'w-full h-full'} ${className || ''}`}>
+    <div className={`relative overflow-hidden transition-all duration-300 w-full h-full bg-black ${className || ''}`}>
       {/* THREE.js canvas mount point */}
       <div ref={containerRef} className="absolute inset-0" />
+
+      {/* Camera popup (movable, only when triggered) */}
+      <AgentLeeCameraPopup visible={cameraVisible} onClose={() => setCameraVisible(false)} />
 
       {/* ── LARGE MODE UI ── */}
       {size === 'large' && (
@@ -669,52 +762,7 @@ export default function AgentLeeForm({
             <div className="absolute inset-0 z-0 pointer-events-none border-4 border-cyan-400/40 rounded-3xl animate-pulse" />
           )}
 
-          {/* Control buttons — top-right, directly below header */}
-          <div className="absolute top-2 right-2 z-10 flex items-center gap-1.5">
-            <button
-              onClick={() => setIsMuted(!isMuted)}
-              title={isMuted ? 'Unmute' : 'Mute'}
-              className="p-2 bg-white/80 backdrop-blur-md rounded-xl shadow border border-black/5 hover:bg-white transition-all active:scale-90"
-            >
-              {isMuted ? <VolumeX className="w-4 h-4 text-black/40" /> : <Volume2 className="w-4 h-4 text-black/60" />}
-            </button>
-            <button onClick={handleShare} title="Copy voxel JSON" className="p-2 bg-white/80 backdrop-blur-md rounded-xl shadow border border-black/5 hover:bg-white transition-all active:scale-90">
-              <Share2 className="w-4 h-4 text-black/60" />
-            </button>
-            <button onClick={handleDownload} title="Download voxel JSON" className="p-2 bg-white/80 backdrop-blur-md rounded-xl shadow border border-black/5 hover:bg-white transition-all active:scale-90">
-              <Download className="w-4 h-4 text-black/60" />
-            </button>
-            <button
-              onClick={() => setIsLibraryOpen(prev => !prev)}
-              title="Model Library"
-              className="p-2 bg-white/80 backdrop-blur-md rounded-xl shadow border border-black/5 hover:bg-white transition-all active:scale-90"
-            >
-              <FolderHeart className="w-4 h-4 text-black/60" />
-            </button>
-          </div>
-
-          {/* Library panel */}
-          {isLibraryOpen && (
-            <div className="absolute top-11 right-2 z-20 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-black/5 p-4 w-52">
-              <div className="text-[9px] font-black uppercase tracking-widest text-black/40 mb-3">Model Library</div>
-              <div className="space-y-1">
-                {(Object.keys(Generators) as Array<keyof typeof Generators>).map(name => (
-                  <button
-                    key={name}
-                    onClick={() => {
-                      const data = Generators[name]();
-                      engineRef.current?.dismantle();
-                      setTimeout(() => engineRef.current?.rebuild(data), 1500);
-                      setIsLibraryOpen(false);
-                    }}
-                    className="w-full text-left px-3 py-2 rounded-xl text-[11px] font-bold text-black/60 hover:bg-black/5 hover:text-black uppercase tracking-widest transition-all"
-                  >
-                    {name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Control buttons and model library removed for auto-cycling and clean UI */}
 
         </>
       )}

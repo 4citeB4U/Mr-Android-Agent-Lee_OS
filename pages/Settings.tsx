@@ -1,3 +1,46 @@
+// Shape keys for Agent Lee morphing
+const SHAPE_KEYS = [
+  'Eagle',
+  'Cat',
+  'Rabbit',
+  'Twins',
+  'Block Eagle',
+  'Jetpack Cat',
+  'Pagoda',
+  'Cyberpunk City',
+  'Sakura Island',
+];
+/*
+LEEWAY HEADER — DO NOT REMOVE
+
+REGION: UI.PAGE.SETTINGS
+TAG: UI.PAGE.SETTINGS.CONFIGURATION
+
+COLOR_ONION_HEX:
+NEON=#64748B
+FLUO=#94A3B8
+PASTEL=#CBD5E1
+
+ICON_ASCII:
+family=lucide
+glyph=settings
+
+5WH:
+WHAT = Settings page — system configuration for Agent Lee Agentic Operating System
+WHY = Provides user-facing controls for persona, security, network, and advanced OS parameters
+WHO = Leeway Innovations / Agent Lee System Engineer
+WHERE = pages/Settings.tsx
+WHEN = 2026
+HOW = React component rendering a grid of setting category cards and live interaction controls
+
+AGENTS:
+ASSESS
+AUDIT
+
+LICENSE:
+MIT
+*/
+
 /*
 LEEWAY HEADER — DO NOT REMOVE
 
@@ -39,6 +82,22 @@ import { pushDiagnosticsReport } from '../core/diagnostics_bridge';
 import { GEMINI_FREE_TIER_PRIMARY, GEMINI_FREE_TIER_THINKING } from '../core/model_lane_policy';
 
 export const Settings: React.FC = () => {
+    // Shape selection state
+    const [enabledShapes, setEnabledShapes] = useState<string[]>(() => {
+      const stored = localStorage.getItem('enabledShapes');
+      if (stored) {
+        try {
+          const arr = JSON.parse(stored);
+          if (Array.isArray(arr) && arr.every(s => typeof s === 'string')) return arr;
+        } catch {}
+      }
+      return [...SHAPE_KEYS];
+    });
+
+    useEffect(() => {
+      localStorage.setItem('enabledShapes', JSON.stringify(enabledShapes));
+      window.dispatchEvent(new Event('enabledShapesChanged'));
+    }, [enabledShapes]);
   // State for settings
   const [offlineMode, setOfflineMode] = useState(false);
   const [voxelOpt, setVoxelOpt] = useState(false);
@@ -147,6 +206,30 @@ export const Settings: React.FC = () => {
 
   return (
     <div className="p-4 md:p-12 max-w-6xl mx-auto space-y-8 md:space-y-12 pb-40 text-slate-100">
+            {/* Agent Lee Shape Selection */}
+            <div className="mt-8 p-4 bg-black rounded-2xl border border-cyan-700/30 shadow-lg">
+              <div className="text-cyan-400 font-bold text-xs uppercase mb-2 tracking-widest">Agent Lee Shapes</div>
+              <div className="grid grid-cols-2 gap-2">
+                {SHAPE_KEYS.map(shape => (
+                  <label key={shape} className="flex items-center gap-2 text-cyan-200 text-sm font-medium">
+                    <input
+                      type="checkbox"
+                      checked={enabledShapes.includes(shape)}
+                      onChange={e => {
+                        if (e.target.checked) {
+                          setEnabledShapes(prev => [...prev, shape]);
+                        } else {
+                          setEnabledShapes(prev => prev.filter(s => s !== shape));
+                        }
+                      }}
+                      className="accent-cyan-400 w-4 h-4"
+                    />
+                    {shape}
+                  </label>
+                ))}
+              </div>
+              <div className="text-xs text-cyan-500 mt-2">Checked shapes will appear in Agent Lee's morph cycle.</div>
+            </div>
       
       {/* Header */}
       <div className="space-y-4">

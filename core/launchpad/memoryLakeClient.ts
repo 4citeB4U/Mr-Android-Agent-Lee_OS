@@ -77,7 +77,7 @@ function notify(topic: Topic) {
 
 // ── Public API ──────────────────────────────────────────────────
 
-export const memoryLakeClient = {
+export const palliumClient = {
 
   // ── Launches ──────────────────────────────────────────────────
 

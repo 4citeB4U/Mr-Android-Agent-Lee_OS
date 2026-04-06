@@ -5,7 +5,20 @@ OWNER: Lee Prime
 LAST_UPDATED: 2026-04-04
 -->
 
+
 # Leeway Runtime Universe — Architecture
+
+---
+
+## Partnership: LeeWay-Edge-RTC
+
+Agent Lee OS is fully partnered and live-connected with [LeeWay-Edge-RTC](https://github.com/4citeB4U/LeeWay-Edge-RTC) — Agent Lee's real-time voice, emotion, and RTC backbone. All runtime layers and agent workflows are designed for seamless cross-app operation.
+
+**How to connect:**
+- Set the `VITE_VOICE_WS_URL` in your `.env` to the LeeWay-Edge-RTC WebSocket endpoint.
+- Voice, emotion, and RTC tasks are routed in real time to the RTC backbone.
+
+---
 
 ## Overview
 

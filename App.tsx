@@ -36,6 +36,39 @@ MIT
  * SPDX-License-Identifier: Apache-2.0
 */
 
+/*
+LEEWAY HEADER — DO NOT REMOVE
+
+REGION: UI.APP.SURFACE
+TAG: UI.APP.SURFACE.ROOT
+
+COLOR_ONION_HEX:
+NEON=#00FFFF
+FLUO=#00E5FF
+PASTEL=#B2EBF2
+
+ICON_ASCII:
+family=lucide
+glyph=layout-dashboard
+
+5WH:
+WHAT = Root application component for Agent Lee Agentic Operating System
+WHY = Central controller for navigation, state, agent routing, streaming responses, voice, and TTS
+WHO = Leeway Innovations / Agent Lee System Engineer
+WHERE = App.tsx (project root)
+WHEN = 2026
+HOW = React functional component wiring all pages, agents, conversation state, streaming, TTS, and watermark
+
+AGENTS:
+AZR
+GEMINI
+NOVA
+ECHO
+
+LICENSE:
+MIT
+*/
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layout, PageId } from './components/Layout';
@@ -46,9 +79,9 @@ import { Home } from './pages/Home';
 import Diagnostics from './pages/Diagnostics';
 import { Settings } from './pages/Settings';
 import AgentLeeLaunchPad from './pages/AgentLeeLaunchPad';
-import MemoryLake from './components/MemoryLake';
+import Pallium from './components/MemoryLake';
 import AgentLeeCodeStudio from './pages/AgentLeeCodeStudio';
-import { DatabaseHub } from './pages/DatabaseHub';
+import AgentLeeDBCenter from './pages/DatabaseHub';
 import PermissionsLoading from './components/AgentLeePermissions-Loading';
 import AgentLeeCreatorsStudio from './pages/AgentLeeCreatorsStudio';
 import LeeWayUniverse from './components/LeeWayUniverse';
@@ -78,21 +111,11 @@ interface SavedVoxel {
   date: string;
 }
 
-// TTS utility using browser speechSynthesis
+// TTS utility using LeeWay-Edge-RTC bridge
+import { sendTTS } from './core/ttsBridge';
 function speak(text: string, enabled: boolean) {
-  if (!enabled || !('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text.slice(0, 500)); // cap length
-  utterance.rate = 1.0;
-  utterance.pitch = 0.95;
-  utterance.volume = 1.0;
-  // Prefer a natural voice
-  const voices = window.speechSynthesis.getVoices();
-  const preferred = voices.find(v =>
-    /Google US English|Microsoft David|Samantha|Christopher/i.test(v.name)
-  );
-  if (preferred) utterance.voice = preferred;
-  window.speechSynthesis.speak(utterance);
+  if (!enabled) return;
+  sendTTS(text);
 }
 
 /** Parse TTL string like "5m", "30s", "1h" into milliseconds. */
@@ -202,13 +225,7 @@ const App: React.FC = () => {
     LeewayStandardsAgent.initialize();
     void LeewayStandardsAgent.boot();
 
-    // Greet
-    addMessage({
-      role: 'agent',
-      agent: 'AgentLee',
-      content: "Hey! I'm Agent Lee — your sovereign agentic OS. I'm fully loaded and ready to build, research, code, or just talk. What are we working on today?",
-      streaming: false,
-    });
+    // Removed initial Agent Lee greeting message per user request
 
     // Signal app fully loaded → play intro jingle
     audioOrchestrator.handleEvent('app:loaded');
@@ -737,8 +754,8 @@ const App: React.FC = () => {
       case 'settings':    return <Settings />;
       case 'deployment':  return <AgentLeeLaunchPad />;
       case 'memory':
-        return <MemoryLake />;
-      case 'database': return <DatabaseHub />;
+        return <Pallium />;
+      case 'database': return <AgentLeeDBCenter />;
       case 'code':     return <AgentLeeCodeStudio />;
       case 'creators': return <AgentLeeCreatorsStudio />;
       case 'universe': return <LeeWayUniverse />;

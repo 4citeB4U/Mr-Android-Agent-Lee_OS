@@ -245,7 +245,7 @@ const Desktop: React.FC<{ onOpenApp: (app: string) => void, installedPackages: s
     { id: 'vscode', name: 'LeeCode', icon: <Code size={24} />, color: 'text-blue-400' },
     { id: 'browser', name: 'Web Search', icon: <Globe size={24} />, color: 'text-orange-400' },
     { id: 'notepad', name: 'Notepad', icon: <FileText size={24} />, color: 'text-yellow-400' },
-    { id: 'memorylake', name: 'Memory Lake', icon: <Folder size={24} />, color: 'text-cyan-400' },
+    { id: 'pallium', name: 'Pallium', icon: <Folder size={24} />, color: 'text-cyan-400' },
     { id: 'database', name: 'Database', icon: <Database size={24} />, color: 'text-purple-400' },
     { id: 'diagnostics', name: 'Diagnostics', icon: <Activity size={24} />, color: 'text-green-400' },
     { id: 'terminal', name: 'Terminal', icon: <TerminalIcon size={24} />, color: 'text-zinc-400' },
@@ -424,7 +424,7 @@ const ErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   return <>{children}</>;
 };
 
-const MemoryLake: React.FC<{ user: FirebaseUser | null }> = ({ user }) => {
+const Pallium: React.FC<{ user: FirebaseUser | null }> = ({ user }) => {
   const [view, setView] = useState<'drives' | 'slots' | 'tabs' | 'database'>('drives');
   const [selectedDrive, setSelectedDrive] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
@@ -1212,7 +1212,7 @@ export const AgentLeeVM: React.FC<AgentLeeVMProps> = ({
   const [isMobile, setIsMobile] = useState(false);
   const [activeTab, setActiveTab] = useState<'explorer' | 'chat'>('explorer');
   const [vscodeTab, setVscodeTab] = useState<'editor' | 'preview'>('editor');
-  const [currentApp, setCurrentApp] = useState<'desktop' | 'vscode' | 'browser' | 'notepad' | 'memorylake' | 'diagnostics' | 'database' | 'terminal'>('desktop');
+  const [currentApp, setCurrentApp] = useState<'desktop' | 'vscode' | 'browser' | 'notepad' | 'pallium' | 'diagnostics' | 'database' | 'terminal'>('desktop');
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [installedPackages, setInstalledPackages] = useState<string[]>([]);
   const [showKeyboard, setShowKeyboard] = useState(false);
@@ -1312,13 +1312,55 @@ export const AgentLeeVM: React.FC<AgentLeeVMProps> = ({
     setTimeout(() => setIsSaving(false), 800);
   };
 
+  // Minimized Agent Lee morphing state
+  const [enabledShapes, setEnabledShapes] = useState<string[]>(() => {
+    const stored = localStorage.getItem('enabledShapes');
+    if (stored) {
+      try {
+        const arr = JSON.parse(stored);
+        if (Array.isArray(arr) && arr.every(s => typeof s === 'string')) return arr;
+      } catch {}
+    }
+    return [
+      'Eagle',
+      'Cat',
+      'Rabbit',
+      'Twins',
+      'Block Eagle',
+      'Jetpack Cat',
+      'Pagoda',
+      'Cyberpunk City',
+      'Sakura Island',
+    ];
+  });
+  useEffect(() => {
+    const handler = () => {
+      const stored = localStorage.getItem('enabledShapes');
+      if (stored) {
+        try {
+          const arr = JSON.parse(stored);
+          if (Array.isArray(arr) && arr.every(s => typeof s === 'string')) setEnabledShapes(arr);
+        } catch {}
+      }
+    };
+    window.addEventListener('enabledShapesChanged', handler);
+    return () => window.removeEventListener('enabledShapesChanged', handler);
+  }, []);
+
   if (isMinimized) {
     return (
       <motion.button
         onClick={() => setIsMinimized(false)}
-        className="fixed bottom-24 right-8 w-14 h-14 bg-zinc-900 rounded-full flex items-center justify-center shadow-2xl z-50 border-2 border-yellow-500/50"
+        className="fixed bottom-24 right-8 w-14 h-14 bg-black rounded-full flex items-center justify-center shadow-2xl z-50 border-2 border-yellow-500/50"
       >
-        <div className="relative">
+        {/* Minimized Agent Lee morphing avatar */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <AgentLee
+            size="small"
+            enabledShapes={enabledShapes}
+          />
+        </div>
+        <div className="relative z-10">
           <Cpu className="text-white" size={20} />
           <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
         </div>
@@ -1413,7 +1455,7 @@ export const AgentLeeVM: React.FC<AgentLeeVMProps> = ({
             </button>
             <div className="w-px h-4 bg-zinc-400 mx-1 shadow-[1px_0_0_white]" />
             <div className="flex gap-1">
-              {['vscode', 'browser', 'notepad', 'memorylake', 'database', 'diagnostics', 'terminal'].map(app => (
+              {['vscode', 'browser', 'notepad', 'pallium', 'database', 'diagnostics', 'terminal'].map(app => (
                 <button
                   key={app}
                   onClick={() => setCurrentApp(app as any)}
@@ -1422,7 +1464,7 @@ export const AgentLeeVM: React.FC<AgentLeeVMProps> = ({
                     currentApp === app ? "bg-zinc-300 shadow-inner" : "bg-[#c0c0c0]"
                   )}
                 >
-                  {app === 'memorylake' ? 'LAKE' : app === 'diagnostics' ? 'DIAG' : app === 'database' ? 'DB' : app === 'terminal' ? 'TERM' : app.toUpperCase()}
+                  {app === 'pallium' ? 'PALLIUM' : app === 'diagnostics' ? 'DIAG' : app === 'database' ? 'DB' : app === 'terminal' ? 'TERM' : app.toUpperCase()}
                 </button>
               ))}
             </div>
@@ -1442,9 +1484,9 @@ export const AgentLeeVM: React.FC<AgentLeeVMProps> = ({
 
           {currentApp === 'browser' && <Browser messages={messages} externalInput={lastTypedKey} />}
 
-          {currentApp === 'memorylake' && (
+          {currentApp === 'pallium' && (
             <ErrorBoundary>
-              <MemoryLake user={user} />
+              <Pallium user={user} />
             </ErrorBoundary>
           )}
 
@@ -1508,6 +1550,27 @@ export const AgentLeeVM: React.FC<AgentLeeVMProps> = ({
                       <>
                         <div className="h-7 flex items-center justify-between px-2 text-[8px] font-bold text-zinc-500 uppercase tracking-widest bg-[#2d2d2d]">
                           <span>Explorer</span>
+                        </div>
+                        {/* SHAPE SELECTION PANEL */}
+                        <div className="flex flex-col gap-2 p-2 border-b border-white/10">
+                          <div className="text-cyan-400 font-bold text-[9px] uppercase tracking-widest mb-1">Agent Lee Forms</div>
+                          <div className="flex flex-wrap gap-1">
+                            {enabledShapes.map((shape, idx) => (
+                              <button
+                                key={shape}
+                                onClick={() => {
+                                  window.dispatchEvent(new CustomEvent('agentlee:cycleShape', { detail: { shapeKey: shape } }));
+                                }}
+                                className={cn(
+                                  "px-2 py-1 rounded text-[10px] font-bold border border-cyan-500/30 bg-cyan-900/20 hover:bg-cyan-500/20 transition-all",
+                                  // Optionally highlight current shape if tracked
+                                  // currentShape === shape ? "bg-cyan-500 text-black" : "text-cyan-300"
+                                )}
+                              >
+                                {shape}
+                              </button>
+                            ))}
+                          </div>
                         </div>
                         <div className="flex-grow overflow-y-auto">
                           <FileTreeItem 

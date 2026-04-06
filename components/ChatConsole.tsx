@@ -254,14 +254,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
               ref={scrollRef}
               className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[200px] max-h-[400px] custom-scrollbar"
             >
-              {messages.length === 0 && (
-                <div className="flex flex-col items-center justify-center h-32 gap-3 text-slate-600">
-                  <Bot size={32} className="opacity-30" />
-                  <p className="text-xs font-medium text-center">
-                    Say hello to Agent Lee — your sovereign AI assistant.
-                  </p>
-                </div>
-              )}
+              {/* Removed default welcome message and bot icon per user request */}
               {messages.map(msg => (
                 <MessageBubble key={msg.id} msg={msg} />
               ))}

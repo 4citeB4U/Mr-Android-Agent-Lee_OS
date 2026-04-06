@@ -1,4 +1,17 @@
+
 # Agent Lee Persona System Directory
+
+---
+
+## Partnership: LeeWay-Edge-RTC
+
+Agent Lee's persona, voice, and emotional presence are live-connected to the [LeeWay-Edge-RTC](https://github.com/4citeB4U/LeeWay-Edge-RTC) backbone. All persona and voice modules are designed to operate seamlessly across both the OS and RTC/voice system.
+
+**How to connect:**
+- Set the `VITE_VOICE_WS_URL` in your `.env` to the LeeWay-Edge-RTC WebSocket endpoint.
+- Persona, voice, and emotion are routed in real time to the RTC backbone for live output.
+
+---
 
 This folder is the structured persona system for Agent Lee OS.
 

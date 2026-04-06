@@ -1,0 +1,43 @@
+Profession,Company,Type,Contact_Path,Website,Use_Case,Notes
+App Founders,Goji Labs,Studio,Partner form,gojilabs.com,MVP build,Startup focused
+App Founders,Designli,Studio,Founder outreach,designli.co,Non-tech founders,Structured process
+App Founders,Technext,Studio,Sales page,technext.it,Lean startups,Fast scope
+App Founders,Mercury Development,Studio,Contact form,mercurydev.com,Scale engineering,Larger projects
+App Founders,Wildnet Edge,Studio,Partner page,wildnetedge.com,AI MVPs,AI focus
+App Founders,Simform,Studio,Sales inquiry,simform.com,Product engineering,Broad software
+Writers,Amazon KDP,Platform,Account signup,kdp.amazon.com,Self-publishing,Amazon reach
+Writers,Draft2Digital,Platform,Publisher signup,draft2digital.com,Wide distribution,Multi-retailer
+Writers,IngramSpark,Platform,Account signup,ingramspark.com,Print distribution,Global print
+Writers,Reedsy,Service,Freelancer marketplace,reedsy.com,Editing/publishing,Talent marketplace
+Writers,WGAW,Guild,Member login,wga.org,Industry access,Job openings
+Writers,Launch My Book,Service,Contact form,launchmybook.com,Author services,Promotion
+Artists,ArtStation,Portfolio,Portfolio signup,artstation.com,Discovery,Industry standard
+Artists,Artsy,Marketplace,Artist application,artsy.net,Collectors,Gallery access
+Artists,Society6,Print-on-demand,Artist signup,society6.com,Merch sales,Print POD
+Artists,Fourthwall,Storefront,Creator signup,fourthwall.com,Branded store,Creator commerce
+Artists,Singulart,Marketplace,Artist submission,singulart.com,Contemporary art,Global sales
+Artists,Artcryption,Showcase,Portfolio upload,artcryption.com,Platform discovery,Artist showcase
+Influencers,CreatorIQ,Platform,Brand signup,creatoriq.com,Campaigns,Enterprise
+Influencers,Collabstr,Marketplace,Creator profile,collabstr.com,Direct deals,Direct marketplace
+Influencers,Shopify Collabs,Affiliate,Merchant signup,shopify.com/collabs,Affiliate sales,Shopify integrated
+Influencers,Patreon,Membership,Creator signup,patreon.com,Recurring revenue,Fan support
+Influencers,Mighty Networks,Community,Community creator,mightynetworks.com,Paid communities,Community focus
+Influencers,Uscreen,Video,Video creator,uscreen.tv,Video subscriptions,Video monetization
+Marketers,Shopify,Ecommerce,Store signup,shopify.com,Storefronts,Core commerce
+Marketers,Shopify Collabs,Affiliate,Collabs signup,shopify.com/collabs,Creator sales,Affiliate tracking
+Marketers,HubSpot,CRM,CRM signup,hubspot.com,Sales pipelines,Full CRM
+Marketers,Mailchimp,Email,Account signup,mailchimp.com,Email nurturing,Email automation
+Marketers,Creator.co,Partnerships,Brand signup,creator.co,Campaign management,Partnerships
+Marketers,Upfluence,Influencer,Brand signup,upfluence.com,Influencer discovery,Influencer platform
+Investors,a16z,VC,Partner outreach,a16z.com,Software/creator,Creator focus
+Investors,Acrew Capital,VC,Founder intro,acrew.com,Creator economy,Women founders
+Investors,SignalFire,VC,Warm intro,signalfire.com,Founder networks,Networks
+Investors,Alchemy,Creator fund,Creator application,alchemy.com,Upfront capital,Future earnings
+Investors,Spotter,Revenue financing,Revenue application,spotter.com,Revenue based,Music/creators
+Investors,Breeze,Creator capital,Creator signup,breeze.com,Creator funding,Revenue financing
+Entertainment,Casting Networks,Casting,Actor signup,castingnetworks.com,Auditions,Union/non-union
+Entertainment,Actors Access,Casting,Profile signup,actorsaccess.com,Submissions,Standard platform
+Entertainment,Casting Calls America,Casting,Casting signup,castingcallamerica.com,Production work,Regional
+Entertainment,WGAW,Guild,Member jobs,wga.org,Industry jobs,WGA jobs
+Entertainment,LinkedIn Jobs,Job board,Job alerts,linkedin.com/jobs,Actor roles,Broad search
+Entertainment,Film Commissions,Local production,Project listings,filmcommission.org,Local shoots,State film offices

@@ -14,6 +14,15 @@
   </defs>
   <rect width="1600" height="1000" rx="36" fill="url(#bg)"/>
   <text x="80" y="94" class="title">AGENT LEE ORGAN MAP</text>
+  <text x="80" y="170" class="subtitle" fill="#00F0FF">Live RTC/Voice Link: LeeWay-Edge-RTC</text>
+  <text x="80" y="200" class="small" fill="#A7F7FF">Partner: https://github.com/4citeB4U/LeeWay-Edge-RTC</text>
+  <line x1="800" y1="850" x2="1500" y2="850" stroke="#00F0FF" stroke-width="4" marker-end="url(#arrowhead)"/>
+  <text x="1100" y="840" class="small" fill="#00F0FF">RTC/Voice Backbone</text>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#00F0FF" />
+    </marker>
+  </defs>
   <text x="80" y="132" class="subtitle">A canon plate mapping functional organs to real architectural systems.</text>
 
   <rect x="585" y="390" width="430" height="180" rx="30" fill="#19182D" stroke="#8E76FF" stroke-width="3"/>

@@ -27,9 +27,55 @@ import type {
 
 // ── Config ────────────────────────────────────────────────────────────────────
 const WS_URL = (() => {
+  // Prefer explicit env override for RTC endpoint
+  const envUrl = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_VOICE_WS_URL)
+    ? import.meta.env.VITE_VOICE_WS_URL
+    : undefined;
+  if (envUrl) return envUrl;
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
   return `${proto}://${location.host}/ws`;
 })();
+
+// Robust auto-reconnect and endpoint adaptation
+function createAdaptiveSocket(url: string) {
+  let currentUrl = url;
+  let socket: AgentLeeSocket | null = null;
+  let reconnectAttempts = 0;
+  let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function connect() {
+    if (socket) socket.disconnect();
+    socket = new AgentLeeSocket(currentUrl);
+    socket.connect();
+    socket.on('state', (e) => {
+      if (e.state === 'disconnected' || e.state === 'error') {
+        scheduleReconnect();
+      }
+    });
+    socket.on('error', () => scheduleReconnect());
+    // Optionally, listen for server-suggested endpoint changes
+    socket.on('redirect', (e: any) => {
+      if (e.url && e.url !== currentUrl) {
+        currentUrl = e.url;
+        scheduleReconnect(true);
+      }
+    });
+  }
+
+  function scheduleReconnect(immediate = false) {
+    if (reconnectTimer) clearTimeout(reconnectTimer);
+    reconnectAttempts++;
+    const delay = immediate ? 0 : Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
+    reconnectTimer = setTimeout(connect, delay);
+  }
+
+  connect();
+  return {
+    getSocket: () => socket,
+    reconnect: () => scheduleReconnect(true),
+  };
+}
+
 
 // Local energy-based barge-in threshold (0-1)
 const BARGE_IN_ENERGY_THRESHOLD = 0.01;
@@ -39,9 +85,11 @@ let micActive = false;
 let captureInst: AudioCapture | null = null;
 let energySmoother = 0;
 
+
 // ── Initialise ────────────────────────────────────────────────────────────────
 const ui = new AgentUI();
-const socket = new AgentLeeSocket(WS_URL);
+const adaptive = createAdaptiveSocket(WS_URL);
+const socket = adaptive.getSocket();
 const playback = new AudioPlayback(22050);
 
 // ── Socket events ─────────────────────────────────────────────────────────────

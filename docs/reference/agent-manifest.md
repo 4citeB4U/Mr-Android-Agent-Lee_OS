@@ -9,12 +9,24 @@ LAST_UPDATED: 2026-04-04
 
 > Compact reference. Full details: [`docs/reference/full-stack-manifest.md`](full-stack-manifest.md)
 
-## Agent Families (9 Bloodlines · 20 Named Agents)
+
+## Agent Families (9 Bloodlines · 20 Named Agents, April 2026)
+
 
 ### LEE — Sovereign Architect
 | Agent | File | Role | Workflow |
 |---|---|---|---|
 | **Lee Prime** (Agent Lee) | `agents/AgentLee.ts` | Governor / Orchestrator | G1–G7 lead |
+
+### VOICE PIPELINE — Realtime Voice Agents
+| Agent | File | Role | Workflow |
+|---|---|---|---|
+| **Echo** | `agents/Echo.ts` | Voice + Emotion | Voice lead |
+| **StreamingSTTAgent** | `agents/StreamingSTTAgent.ts` | Speech-to-text | Voice |
+| **StreamingTTSAgent** | `agents/StreamingTTSAgent.ts` | Text-to-speech | Voice |
+| **VisionAgent** | `agents/VisionAgent.ts` | Visual context | Voice |
+| **LiveConductorAgent** | `agents/LiveConductorAgent.ts` | Pipeline orchestrator | Voice |
+| **Pixel** | `agents/Pixel.ts` | Visual Intelligence | Voice, UI |
 
 ### FORGE — Engineering
 | Agent | File | Role | Workflow |
@@ -38,6 +50,7 @@ LAST_UPDATED: 2026-04-04
 | Guard | *(WorldRegistry)* | Contract compliance monitor | Passive |
 | **Librarian Aegis** | `agents/LibrarianAegis.ts` | Docs taxonomy enforcement | G8 helper |
 | **Marshal Verify** | `agents/MarshalVerify.ts` | Verification Corps Governor | **G8 lead** |
+| **LeewayStandardsAgent** | `agents/LeewayStandardsAgent.ts` | Header/tag/secret policy enforcement | G8 helper |
 | **Leeway Standards Agent** | `agents/LeewayStandardsAgent.ts` | Header/tag/secret policy | G8 helper |
 | **SafetyRedactionAgent** | `agents/SafetyRedactionAgent.ts` | PII + injection redaction | Voice pipeline |
 
