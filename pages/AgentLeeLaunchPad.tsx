@@ -1,4 +1,4 @@
-/*
+﻿/*
 LEEWAY HEADER — DO NOT REMOVE
 
 REGION: UI.PAGE.DEPLOYMENT
@@ -316,7 +316,7 @@ const CommandCenter = ({ isOpen, onClose, onStartBuild }: { isOpen: boolean, onC
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="fixed bottom-6 right-6 w-[480px] max-w-[calc(100vw-48px)] h-[680px] max-h-[calc(100vh-100px)] bg-white border border-slate-200 rounded-3xl shadow-2xl z-[150] flex flex-col overflow-hidden"
+          className="fixed bottom-6 right-6 w-[480px] max-w-[calc(100vw-48px)] h-[680px] max-h-[calc(100vh-100px)] bg-[#0a0f1a] border border-white/[0.08] rounded-3xl shadow-2xl z-[150] flex flex-col overflow-hidden"
         >
           <div className="p-5 bg-slate-900 text-white flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -345,7 +345,7 @@ const CommandCenter = ({ isOpen, onClose, onStartBuild }: { isOpen: boolean, onC
             </div>
           </div>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar bg-slate-50/50">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar bg-white/[0.03]">
             {messages.map((msg, i) => {
               const agent = AGENTS.CORE.find(a => a.id === msg.agent);
               return (
@@ -362,7 +362,7 @@ const CommandCenter = ({ isOpen, onClose, onStartBuild }: { isOpen: boolean, onC
                     "px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm",
                     msg.role === 'user' 
                       ? "bg-slate-900 text-white rounded-tr-none" 
-                      : "bg-white border border-slate-200 text-slate-700 rounded-tl-none"
+                      : "bg-white/[0.06] border border-white/[0.08] text-slate-200 rounded-tl-none"
                   )}>
                     {msg.content}
                   </div>
@@ -387,13 +387,13 @@ const CommandCenter = ({ isOpen, onClose, onStartBuild }: { isOpen: boolean, onC
             )}
           </div>
 
-          <div className="p-4 bg-white border-t border-slate-100">
+          <div className="p-4 bg-[#08101e] border-t border-white/[0.06]">
             <div className="flex gap-2 mb-3 overflow-x-auto no-scrollbar pb-1">
               {quickActions.map(action => (
                 <button 
                   key={action.label}
                   onClick={() => handleSend(action.msg)}
-                  className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-full text-[10px] font-bold text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-all whitespace-nowrap"
+                  className="px-3 py-1.5 bg-white/[0.05] border border-white/[0.08] rounded-full text-[10px] font-bold text-slate-400 hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 transition-all whitespace-nowrap"
                 >
                   {action.label}
                 </button>
@@ -406,7 +406,7 @@ const CommandCenter = ({ isOpen, onClose, onStartBuild }: { isOpen: boolean, onC
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Issue command to Lee Prime..."
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all pr-14"
+                className="w-full bg-white/[0.06] border border-white/[0.1] text-white placeholder:text-white/30 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all pr-14"
               />
               <button 
                 onClick={() => handleSend()}
@@ -425,22 +425,22 @@ const CommandCenter = ({ isOpen, onClose, onStartBuild }: { isOpen: boolean, onC
 
 const PipelineStrip = () => {
   return (
-    <div className="flex items-center justify-between px-6 py-3 bg-slate-50 border-b border-slate-200 overflow-x-auto no-scrollbar">
+    <div className="flex items-center justify-between px-6 py-3 bg-white/[0.02] border-b border-white/[0.06] overflow-x-auto no-scrollbar">
       {PIPELINE_STEPS.map((step, i) => (
         <div key={step.id} className="flex items-center gap-2 shrink-0">
           <div className={cn(
             "w-2.5 h-2.5 rounded-full",
             i < 3 ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.3)]" : 
-            i === 3 ? "bg-blue-500 animate-pulse" : "bg-slate-200"
+            i === 3 ? "bg-blue-500 animate-pulse" : "bg-white/[0.2]"
           )} />
           <span className={cn(
             "text-[10px] font-bold uppercase tracking-wider",
-            i <= 3 ? "text-slate-900" : "text-slate-400"
+            i <= 3 ? "text-white" : "text-white/40"
           )}>
             {step.label}
           </span>
           {i < PIPELINE_STEPS.length - 1 && (
-            <div className="w-6 h-[1px] bg-slate-200 mx-2" />
+            <div className="w-6 h-[1px] bg-white/[0.1] mx-2" />
           )}
         </div>
       ))}
@@ -449,11 +449,11 @@ const PipelineStrip = () => {
 };
 
 const Card = ({ children, className, title, badge }: { children: React.ReactNode, className?: string, title?: string, badge?: string, key?: any }) => (
-  <div className={cn("bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4", className)}>
+  <div className={cn("bg-white/[0.04] border border-white/[0.08] rounded-xl p-5 space-y-4", className)}>
     {(title || badge) && (
       <div className="flex items-center justify-between mb-1">
         {title && <span className="text-xs font-bold uppercase tracking-widest text-slate-400">{title}</span>}
-        {badge && <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 border border-slate-200 rounded uppercase text-slate-600">{badge}</span>}
+        {badge && <span className="text-[10px] font-bold px-2 py-0.5 bg-white/[0.06] border border-white/[0.08] rounded uppercase text-slate-300">{badge}</span>}
       </div>
     )}
     {children}
@@ -464,8 +464,8 @@ const Button = ({ children, className, variant = 'primary', icon: Icon, onClick,
   const variants = {
     primary: 'bg-emerald-600 text-white font-bold hover:bg-emerald-700 shadow-sm',
     secondary: 'bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-sm',
-    outline: 'bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-50',
-    ghost: 'bg-transparent text-slate-500 font-bold hover:text-slate-900 hover:bg-slate-100',
+    outline: 'bg-white/[0.05] border border-white/20 text-slate-200 font-bold hover:bg-white/[0.1]',
+    ghost: 'bg-transparent text-slate-400 font-bold hover:text-white hover:bg-white/[0.08]',
   };
   return (
     <button 
@@ -492,19 +492,19 @@ const LaunchesView = ({ isBuilding, buildProgress, startBuild }: { isBuilding: b
     <div className="grid grid-cols-3 gap-3">
       <button
         onClick={() => eventBus.emit('navigate:page', { page: 'code' })}
-        className="flex items-center justify-center gap-2 p-3 bg-indigo-50 border border-indigo-100 rounded-2xl text-indigo-700 text-[10px] font-bold uppercase tracking-wider hover:bg-indigo-100 hover:shadow-md transition-all"
+        className="flex items-center justify-center gap-2 p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl text-indigo-400 text-[10px] font-bold uppercase tracking-wider hover:bg-indigo-500/20 hover:shadow-md transition-all"
       >
         <Code size={14} /> Code Studio
       </button>
       <button
         onClick={() => eventBus.emit('navigate:page', { page: 'creators' })}
-        className="flex items-center justify-center gap-2 p-3 bg-rose-50 border border-rose-100 rounded-2xl text-rose-700 text-[10px] font-bold uppercase tracking-wider hover:bg-rose-100 hover:shadow-md transition-all"
+        className="flex items-center justify-center gap-2 p-3 bg-rose-500/10 border border-rose-500/30 rounded-2xl text-rose-400 text-[10px] font-bold uppercase tracking-wider hover:bg-rose-500/20 hover:shadow-md transition-all"
       >
         <Palette size={14} /> Creator Studio
       </button>
       <button
         onClick={() => eventBus.emit('navigate:page', { page: 'vm' })}
-        className="flex items-center justify-center gap-2 p-3 bg-slate-50 border border-slate-200 rounded-2xl text-slate-700 text-[10px] font-bold uppercase tracking-wider hover:bg-slate-100 hover:shadow-md transition-all"
+        className="flex items-center justify-center gap-2 p-3 bg-white/[0.05] border border-white/[0.1] rounded-2xl text-slate-300 text-[10px] font-bold uppercase tracking-wider hover:bg-white/[0.08] hover:shadow-md transition-all"
       >
         <Server size={14} /> VM
       </button>
@@ -518,7 +518,7 @@ const LaunchesView = ({ isBuilding, buildProgress, startBuild }: { isBuilding: b
       <Card title="Marketing Site" badge="Draft">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Alpha Landing</h3>
+            <h3 className="text-sm font-bold text-white">Alpha Landing</h3>
             <p className="text-xs text-slate-500 font-mono mt-1">Readiness: 40%</p>
           </div>
           <Button variant="outline" className="px-4 py-2">Open</Button>
@@ -533,10 +533,10 @@ const LaunchesView = ({ isBuilding, buildProgress, startBuild }: { isBuilding: b
       </div>
       <Card title="Digital Product" badge={isBuilding ? "Building" : "Packaging"}>
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-bold text-slate-900">Summer Drop</h3>
+          <h3 className="text-sm font-bold text-white">Summer Drop</h3>
           <span className="text-xs font-bold text-blue-600">{isBuilding ? `${buildProgress}%` : '75%'}</span>
         </div>
-        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-white/[0.08] rounded-full overflow-hidden">
           <div 
             className={cn(
               "h-full bg-blue-600 shadow-sm transition-all duration-300",
@@ -567,10 +567,10 @@ const LaunchesView = ({ isBuilding, buildProgress, startBuild }: { isBuilding: b
       </div>
       <Card title="Full-stack App" badge="Healthy">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-900">Nexus Prime</h3>
+          <h3 className="text-sm font-bold text-white">Nexus Prime</h3>
           <CheckCircle2 size={18} className="text-emerald-500" />
         </div>
-        <div className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-xs font-mono text-slate-500 truncate">
+        <div className="p-3 bg-white/[0.04] border border-white/[0.06] rounded-lg text-xs font-mono text-slate-400 truncate">
           https://nexus.prime.io
         </div>
         <div className="flex gap-3">
@@ -586,11 +586,11 @@ const CodeView = ({ onPush, onPull }: { onPush: () => void, onPull: () => void }
   <div className="space-y-8">
     <div className="flex items-center justify-between px-1">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+        <div className="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center">
           <Code size={20} />
         </div>
         <div>
-          <h2 className="text-xl font-black text-slate-900">Code Studio</h2>
+          <h2 className="text-xl font-black text-white">Code Studio</h2>
           <p className="text-xs text-slate-500">Manage source and VM synchronization</p>
         </div>
       </div>
@@ -601,13 +601,13 @@ const CodeView = ({ onPush, onPull }: { onPush: () => void, onPull: () => void }
     </div>
 
     {/* Transfer Banner */}
-    <div className="flex items-center gap-3 p-4 bg-indigo-50 border border-indigo-100 rounded-2xl">
-      <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 shrink-0">
+    <div className="flex items-center gap-3 p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl">
+      <div className="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center text-indigo-400 shrink-0">
         <ArrowLeftRight size={16} />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-xs font-bold text-indigo-900">Direct Studio Transfer</div>
-        <div className="text-[10px] text-indigo-600">Open your project in the full IDE or Creator Studio</div>
+        <div className="text-xs font-bold text-indigo-200">Direct Studio Transfer</div>
+        <div className="text-[10px] text-indigo-400">Open your project in the full IDE or Creator Studio</div>
       </div>
       <div className="flex gap-2 shrink-0">
         <button
@@ -629,23 +629,23 @@ const CodeView = ({ onPush, onPull }: { onPush: () => void, onPull: () => void }
       <div className="lg:col-span-2 space-y-6">
         <Card title="Source Control">
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+            <div className="flex items-center justify-between p-4 bg-white/[0.04] border border-white/[0.08] rounded-xl cursor-pointer hover:bg-white/[0.07] transition-colors">
               <div className="flex items-center gap-4">
                 <FileCode size={20} className="text-blue-500" />
                 <div>
-                  <span className="text-sm font-bold text-slate-900 block">Main Workspace</span>
+                  <span className="text-sm font-bold text-white block">Main Workspace</span>
                   <span className="text-[10px] text-slate-400 font-mono">/src/agent-lee-core</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Synced</span>
+                <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/20 px-2 py-0.5 rounded">Synced</span>
                 <ChevronDown size={18} className="text-slate-400" />
               </div>
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer opacity-60 hover:bg-slate-100 transition-colors">
+            <div className="flex items-center justify-between p-4 bg-white/[0.04] border border-white/[0.08] rounded-xl cursor-pointer opacity-60 hover:bg-white/[0.07] transition-colors">
               <div className="flex items-center gap-4">
                 <Layers size={20} className="text-slate-500" />
-                <span className="text-sm font-bold text-slate-900">Import GitHub Repo</span>
+                <span className="text-sm font-bold text-white">Import GitHub Repo</span>
               </div>
               <Link2 size={18} className="text-slate-400" />
             </div>
@@ -662,10 +662,10 @@ const CodeView = ({ onPush, onPull }: { onPush: () => void, onPull: () => void }
               { name: 'package.json', size: '1.1kb', type: 'file' },
               { name: 'dist/', size: '--', type: 'dir' },
             ].map((f, i) => (
-              <div key={i} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded group cursor-pointer">
+              <div key={i} className="flex items-center gap-3 p-2 hover:bg-white/[0.04] rounded group cursor-pointer">
                 {f.type === 'dir' ? <Database size={14} className="text-amber-500" /> : <FileText size={14} className="text-blue-400" />}
-                <span className="flex-1 text-slate-700">{f.name}</span>
-                <span className="text-slate-300 group-hover:text-slate-500 transition-colors">{f.size}</span>
+                <span className="flex-1 text-slate-300">{f.name}</span>
+                <span className="text-white/20 group-hover:text-white/50 transition-colors">{f.size}</span>
               </div>
             ))}
           </div>
@@ -677,14 +677,14 @@ const CodeView = ({ onPush, onPull }: { onPush: () => void, onPull: () => void }
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold text-slate-400 uppercase">Environment</span>
-              <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Development</span>
+              <span className="text-[10px] font-bold text-indigo-400 bg-indigo-500/20 px-2 py-0.5 rounded">Development</span>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-[10px] font-bold text-slate-500">
                 <span>CPU Usage</span>
                 <span>12%</span>
               </div>
-              <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden">
                 <div className="h-full bg-indigo-500 w-[12%]" />
               </div>
             </div>
@@ -693,7 +693,7 @@ const CodeView = ({ onPush, onPull }: { onPush: () => void, onPull: () => void }
                 <span>Memory</span>
                 <span>1.2GB / 4GB</span>
               </div>
-              <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden">
                 <div className="h-full bg-blue-500 w-[30%]" />
               </div>
             </div>
@@ -706,7 +706,7 @@ const CodeView = ({ onPush, onPull }: { onPush: () => void, onPull: () => void }
             {['Static', 'Next.js', 'Node API', 'Full-stack'].map(p => (
               <button key={p} className={cn(
                 "px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all",
-                p === 'Full-stack' ? "bg-emerald-600 text-white border-emerald-500 shadow-sm" : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
+                p === 'Full-stack' ? "bg-emerald-600 text-white border-emerald-500 shadow-sm" : "bg-white/[0.04] text-slate-400 border-white/[0.1] hover:border-white/20"
               )}>
                 {p}
               </button>
@@ -722,11 +722,11 @@ const CreatorView = ({ onGenerate, onPush }: { onGenerate: () => void, onPush: (
   <div className="space-y-8">
     <div className="flex items-center justify-between px-1">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center">
+        <div className="w-10 h-10 bg-rose-500/10 text-rose-400 rounded-xl flex items-center justify-center">
           <Palette size={20} />
         </div>
         <div>
-          <h2 className="text-xl font-black text-slate-900">Creator Studio</h2>
+          <h2 className="text-xl font-black text-white">Creator Studio</h2>
           <p className="text-xs text-slate-500">Asset generation and media pipeline</p>
         </div>
       </div>
@@ -734,13 +734,13 @@ const CreatorView = ({ onGenerate, onPush }: { onGenerate: () => void, onPush: (
     </div>
 
     {/* Transfer Banner */}
-    <div className="flex items-center gap-3 p-4 bg-rose-50 border border-rose-100 rounded-2xl">
-      <div className="w-8 h-8 bg-rose-100 rounded-lg flex items-center justify-center text-rose-600 shrink-0">
+    <div className="flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl">
+      <div className="w-8 h-8 bg-rose-500/20 rounded-lg flex items-center justify-center text-rose-400 shrink-0">
         <ArrowLeftRight size={16} />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-xs font-bold text-rose-900">Direct Studio Transfer</div>
-        <div className="text-[10px] text-rose-600">Move your creative project to the full Creator Studio or Code IDE</div>
+        <div className="text-xs font-bold text-rose-200">Direct Studio Transfer</div>
+        <div className="text-[10px] text-rose-400">Move your creative project to the full Creator Studio or Code IDE</div>
       </div>
       <div className="flex gap-2 shrink-0">
         <button
@@ -767,11 +767,11 @@ const CreatorView = ({ onGenerate, onPush }: { onGenerate: () => void, onPush: (
             { label: 'Thumbnail Set', ok: false, size: '--' },
             { label: 'Press Kit', ok: false, size: '--' },
           ].map(item => (
-            <div key={item.label} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
+            <div key={item.label} className="flex items-center justify-between p-3 bg-white/[0.04] rounded-xl border border-white/[0.06]">
               <div className="flex items-center gap-3">
                 {item.ok ? <CheckCircle2 size={18} className="text-emerald-500" /> : <Circle size={18} className="text-slate-200" />}
                 <div>
-                  <span className="text-sm font-bold text-slate-700 block">{item.label}</span>
+                  <span className="text-sm font-bold text-slate-300 block">{item.label}</span>
                   <span className="text-[10px] text-slate-400 font-mono">{item.size}</span>
                 </div>
               </div>
@@ -800,14 +800,14 @@ const CreatorView = ({ onGenerate, onPush }: { onGenerate: () => void, onPush: (
             ].map((p, i) => (
               <div key={i} className="space-y-1.5">
                 <div className="flex justify-between text-[10px] font-bold">
-                  <span className={cn(p.status === 'idle' ? "text-slate-400" : "text-slate-700")}>{p.name}</span>
+                  <span className={cn(p.status === 'idle' ? "text-slate-400" : "text-slate-300")}>{p.name}</span>
                   <span className="text-slate-400">{p.progress}%</span>
                 </div>
-                <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-1 w-full bg-white/[0.08] rounded-full overflow-hidden">
                   <div 
                     className={cn(
                       "h-full transition-all duration-500",
-                      p.status === 'done' ? "bg-emerald-500" : p.status === 'running' ? "bg-rose-500 animate-pulse" : "bg-slate-200"
+                      p.status === 'done' ? "bg-emerald-500" : p.status === 'running' ? "bg-rose-500 animate-pulse" : "bg-white/[0.2]"
                     )} 
                     style={{ width: `${p.progress}%` }} 
                   />
@@ -827,28 +827,28 @@ const PublishView = () => (
       <Card title="Web" badge="Connected">
         <div className="flex flex-col items-center gap-3 py-3">
           <Globe size={32} className="text-blue-500" />
-          <span className="text-sm font-bold text-slate-900">Vercel</span>
+          <span className="text-sm font-bold text-white">Vercel</span>
           <Button variant="outline" className="w-full py-2 text-[10px]">Publish</Button>
         </div>
       </Card>
       <Card title="Store" badge="Ready">
         <div className="flex flex-col items-center gap-3 py-3">
           <Shield size={32} className="text-emerald-500" />
-          <span className="text-sm font-bold text-slate-900">Stripe</span>
+          <span className="text-sm font-bold text-white">Stripe</span>
           <Button variant="outline" className="w-full py-2 text-[10px]">Connect</Button>
         </div>
       </Card>
       <Card title="Social" badge="Idle">
         <div className="flex flex-col items-center gap-3 py-3">
           <Send size={32} className="text-indigo-500" />
-          <span className="text-sm font-bold text-slate-900">X / Twitter</span>
+          <span className="text-sm font-bold text-white">X / Twitter</span>
           <Button variant="outline" className="w-full py-2 text-[10px]">Schedule</Button>
         </div>
       </Card>
       <Card title="SEO" badge="Active">
         <div className="flex flex-col items-center gap-3 py-3">
           <Search size={32} className="text-amber-500" />
-          <span className="text-sm font-bold text-slate-900">Sitemap</span>
+          <span className="text-sm font-bold text-white">Sitemap</span>
           <Button variant="outline" className="w-full py-2 text-[10px]">Update</Button>
         </div>
       </Card>
@@ -868,20 +868,20 @@ const MonitorView = () => (
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-sm font-bold text-slate-900">HTTP 200 OK</span>
+            <span className="text-sm font-bold text-white">HTTP 200 OK</span>
           </div>
           <span className="text-xs font-mono text-slate-400">42ms</span>
         </div>
         <div className="grid grid-cols-3 gap-3">
-          <div className="text-center p-3 bg-slate-50 rounded-xl border border-slate-100">
+          <div className="text-center p-3 bg-white/[0.04] rounded-xl border border-white/[0.06]">
             <div className="text-[9px] text-slate-400 uppercase font-bold mb-1">Perf</div>
             <div className="text-lg font-black text-emerald-600">98</div>
           </div>
-          <div className="text-center p-3 bg-slate-50 rounded-xl border border-slate-100">
+          <div className="text-center p-3 bg-white/[0.04] rounded-xl border border-white/[0.06]">
             <div className="text-[9px] text-slate-400 uppercase font-bold mb-1">SEO</div>
             <div className="text-lg font-black text-blue-600">92</div>
           </div>
-          <div className="text-center p-3 bg-slate-50 rounded-xl border border-slate-100">
+          <div className="text-center p-3 bg-white/[0.04] rounded-xl border border-white/[0.06]">
             <div className="text-[9px] text-slate-400 uppercase font-bold mb-1">SSL</div>
             <div className="text-lg font-black text-emerald-600">A+</div>
           </div>
@@ -903,12 +903,12 @@ const MonitorView = () => (
                 "w-4 h-4 rounded-full border-2",
                 step.status === 'done' ? "bg-emerald-500 border-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.3)]" :
                 step.status === 'running' ? "bg-blue-500 border-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.3)]" :
-                "bg-transparent border-slate-200"
+                "bg-transparent border-white/[0.2]"
               )} />
-              {i < 3 && <div className="w-[1px] h-8 bg-slate-100" />}
+              {i < 3 && <div className="w-[1px] h-8 bg-white/[0.08]" />}
             </div>
             <div className="flex-1 flex justify-between items-start">
-              <span className={cn("text-sm font-bold", step.status === 'idle' ? "text-slate-300" : "text-slate-900")}>{step.label}</span>
+              <span className={cn("text-sm font-bold", step.status === 'idle' ? "text-slate-300" : "text-white")}>{step.label}</span>
               <span className="text-[10px] font-mono text-slate-400">{step.time}</span>
             </div>
           </div>
@@ -923,21 +923,21 @@ const ConnectionsView = () => (
     <section className="space-y-4">
       <span className="text-xs font-bold uppercase tracking-widest text-slate-400 px-1">Web & Hosting</span>
       <div className="grid grid-cols-1 gap-3">
-        <div className="flex items-center justify-between p-5 bg-white border border-slate-200 rounded-xl shadow-sm">
+        <div className="flex items-center justify-between p-5 bg-white/[0.04] border border-white/[0.08] rounded-xl">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">V</div>
             <div>
-              <div className="text-sm font-bold text-slate-900">Vercel</div>
+              <div className="text-sm font-bold text-white">Vercel</div>
               <div className="text-[10px] text-emerald-600 font-mono uppercase font-bold">Connected</div>
             </div>
           </div>
           <Button variant="outline" className="px-4 py-2">Test</Button>
         </div>
-        <div className="flex items-center justify-between p-5 bg-white border border-slate-200 rounded-xl shadow-sm opacity-60">
+        <div className="flex items-center justify-between p-5 bg-white/[0.04] border border-white/[0.08] rounded-xl opacity-60">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 border border-slate-200 font-bold">G</div>
+            <div className="w-10 h-10 bg-white/[0.06] rounded-lg flex items-center justify-center text-slate-400 border border-white/[0.1] font-bold">G</div>
             <div>
-              <div className="text-sm font-bold text-slate-900">GitHub</div>
+              <div className="text-sm font-bold text-white">GitHub</div>
               <div className="text-[10px] text-slate-400 font-mono uppercase font-bold">Not Linked</div>
             </div>
           </div>
@@ -949,11 +949,11 @@ const ConnectionsView = () => (
     <section className="space-y-4">
       <span className="text-xs font-bold uppercase tracking-widest text-slate-400 px-1">Social & Distribution</span>
       <div className="grid grid-cols-1 gap-3">
-        <div className="flex items-center justify-between p-5 bg-white border border-slate-200 rounded-xl shadow-sm">
+        <div className="flex items-center justify-between p-5 bg-white/[0.04] border border-white/[0.08] rounded-xl">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">X</div>
             <div>
-              <div className="text-sm font-bold text-slate-900">X / Twitter</div>
+              <div className="text-sm font-bold text-white">X / Twitter</div>
               <div className="text-[10px] text-emerald-600 font-mono uppercase font-bold">Connected</div>
             </div>
           </div>
@@ -1063,7 +1063,7 @@ const EcosystemView = () => {
   return (
     <div className="space-y-10 pb-20">
       <div className="px-1">
-        <h2 className="text-2xl font-black text-slate-900">Launch Ecosystem</h2>
+        <h2 className="text-2xl font-black text-white">Launch Ecosystem</h2>
         <p className="text-sm text-slate-500 mt-2 leading-relaxed">
           Connect your accounts to enable Agent Lee to automate your launch process. 
           Once linked, the agent can handle publishing, distribution, and marketing on your behalf.
@@ -1073,7 +1073,7 @@ const EcosystemView = () => {
       {categories.map((cat, i) => (
         <section key={i} className="space-y-4">
           <div className="flex items-center gap-3 px-1">
-            <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500">
+            <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center text-slate-400">
               <cat.icon size={18} />
             </div>
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">{cat.title}</span>
@@ -1081,17 +1081,17 @@ const EcosystemView = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {cat.links.map(link => (
-              <div key={link.id} className="group relative bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all">
+              <div key={link.id} className="group relative bg-white/[0.04] border border-white/[0.08] rounded-2xl p-4 hover:border-emerald-500 hover:shadow-md transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className={cn(
                       "w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors",
-                      connected[link.id] ? "bg-emerald-50 text-emerald-600" : "bg-slate-50 text-slate-400"
+                      connected[link.id] ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-400"
                     )}>
                       {link.name.charAt(0)}
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-900">{link.name}</h4>
+                      <h4 className="text-sm font-bold text-white">{link.name}</h4>
                       <a 
                         href={link.url} 
                         target="_blank" 
@@ -1142,20 +1142,20 @@ const DirectoryView = () => {
   return (
     <div className="space-y-8 pb-20">
       <div className="px-1">
-        <h2 className="text-2xl font-black text-slate-900">Master Directory</h2>
+        <h2 className="text-2xl font-black text-white">Master Directory</h2>
         <p className="text-sm text-slate-500 mt-2 leading-relaxed">
           A production-ready CRM foundation for every user journey stage. 
           Find the right partners, platforms, and funding for your profession.
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-0 z-30 bg-white/80 backdrop-blur-md py-4 -mx-1 px-1">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-0 z-30 bg-[#020408]/80 backdrop-blur-md py-4 -mx-1 px-1">
         <div className="relative w-full md:w-96">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text" 
             placeholder="Search company, category, or profession..." 
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm"
+            className="w-full pl-10 pr-4 py-2.5 bg-white/[0.06] border border-white/[0.1] text-white placeholder:text-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -1169,7 +1169,7 @@ const DirectoryView = () => {
                 "px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap border",
                 filter === p 
                   ? "bg-emerald-600 text-white border-emerald-500 shadow-sm" 
-                  : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
+                  : "bg-white/[0.04] text-slate-400 border-white/[0.1] hover:border-white/20"
               )}
             >
               {p}
@@ -1180,7 +1180,7 @@ const DirectoryView = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredData.length > 0 ? filteredData.map((item, i) => (
-          <Card key={i} className="hover:border-emerald-500 hover:shadow-md transition-all group border-slate-200">
+          <Card key={i} className="hover:border-emerald-500 hover:shadow-md transition-all group border-white/[0.08]">
             <div className="flex justify-between items-start mb-4">
               <div>
                 <div className="flex items-center gap-2">
@@ -1188,14 +1188,14 @@ const DirectoryView = () => {
                   <div className="w-1 h-1 rounded-full bg-slate-300" />
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.category}</span>
                 </div>
-                <h3 className="text-lg font-black text-slate-900 mt-1 group-hover:text-emerald-700 transition-colors">{item.company}</h3>
+                <h3 className="text-lg font-black text-white mt-1 group-hover:text-emerald-700 transition-colors">{item.company}</h3>
               </div>
               <span className={cn(
                 "px-2 py-1 text-[9px] font-bold rounded uppercase border",
-                item.stage === 'Early' ? "bg-blue-50 text-blue-600 border-blue-100" :
-                item.stage === 'Launch' ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
-                item.stage === 'Scale' ? "bg-purple-50 text-purple-600 border-purple-100" :
-                "bg-slate-50 text-slate-500 border-slate-200"
+                item.stage === 'Early' ? "bg-blue-500/10 text-blue-400 border-blue-500/30" :
+                item.stage === 'Launch' ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" :
+                item.stage === 'Scale' ? "bg-purple-500/10 text-purple-400 border-purple-500/30" :
+                "bg-white/[0.04] text-slate-400 border-white/[0.08]"
               )}>
                 {item.stage}
               </span>
@@ -1204,7 +1204,7 @@ const DirectoryView = () => {
             <div className="grid grid-cols-2 gap-4 text-[11px] mb-4">
               <div>
                 <div className="text-slate-400 uppercase font-bold text-[9px] mb-1 tracking-tighter">Subcategory</div>
-                <div className="text-slate-700 font-bold">{item.subcategory}</div>
+                <div className="text-slate-300 font-bold">{item.subcategory}</div>
               </div>
               <div>
                 <div className="text-slate-400 uppercase font-bold text-[9px] mb-1 tracking-tighter">Contact Route</div>
@@ -1212,7 +1212,7 @@ const DirectoryView = () => {
               </div>
             </div>
 
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-2.5">
+            <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.06] space-y-2.5">
               <div className="flex items-start gap-2.5">
                 <Target size={14} className="text-slate-400 mt-0.5 shrink-0" />
                 <div>
@@ -1224,12 +1224,12 @@ const DirectoryView = () => {
                 <FileText size={14} className="text-slate-400 mt-0.5 shrink-0" />
                 <div>
                   <div className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Asset Needed</div>
-                  <span className="text-[10px] text-slate-700 font-bold">{item.assetNeeded}</span>
+                  <span className="text-[10px] text-slate-300 font-bold">{item.assetNeeded}</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div className="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between">
               <div className="flex items-center gap-2 text-emerald-600 font-black text-[10px] uppercase tracking-tighter">
                 <Zap size={14} className="fill-emerald-600" />
                 {item.expectedOutcome}
@@ -1246,11 +1246,11 @@ const DirectoryView = () => {
           </Card>
         )) : (
           <div className="col-span-full py-20 text-center space-y-4">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-300">
+            <div className="w-16 h-16 bg-white/[0.06] rounded-full flex items-center justify-center mx-auto text-slate-400">
               <Search size={32} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900">No contacts found</h3>
+              <h3 className="text-lg font-bold text-white">No contacts found</h3>
               <p className="text-sm text-slate-500">Try adjusting your search or filters.</p>
             </div>
             <Button variant="outline" onClick={() => { setSearch(''); setFilter('All'); }}>Clear All Filters</Button>
@@ -1274,11 +1274,11 @@ const VMView = () => {
     <div className="space-y-8 pb-20">
       <div className="px-1">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-white/[0.1] text-white rounded-xl flex items-center justify-center">
             <Server size={20} />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-slate-900">Sovereign VM</h2>
+            <h2 className="text-2xl font-black text-white">Sovereign VM</h2>
             <p className="text-sm text-slate-500">Agent Lee's private execution environment</p>
           </div>
         </div>
@@ -1316,25 +1316,25 @@ const VMView = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Card title="Push Data" className="border-indigo-100 bg-indigo-50/30">
+            <Card title="Push Data" className="border-indigo-500/30 bg-indigo-500/[0.06]">
               <div className="flex flex-col items-center text-center py-4 space-y-4">
-                <div className="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-indigo-600">
+                <div className="w-12 h-12 bg-white/[0.08] rounded-2xl flex items-center justify-center text-indigo-400">
                   <Upload size={24} />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">Push to VM</h4>
+                  <h4 className="text-sm font-bold text-white">Push to VM</h4>
                   <p className="text-[10px] text-slate-500 mt-1">Sync local studio data to Agent Lee's environment</p>
                 </div>
                 <Button variant="primary" className="w-full bg-indigo-600 hover:bg-indigo-700">Initiate Push</Button>
               </div>
             </Card>
-            <Card title="Pull Data" className="border-emerald-100 bg-emerald-50/30">
+            <Card title="Pull Data" className="border-emerald-500/30 bg-emerald-500/[0.06]">
               <div className="flex flex-col items-center text-center py-4 space-y-4">
-                <div className="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-emerald-600">
+                <div className="w-12 h-12 bg-white/[0.08] rounded-2xl flex items-center justify-center text-emerald-400">
                   <Download size={24} />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">Pull from VM</h4>
+                  <h4 className="text-sm font-bold text-white">Pull from VM</h4>
                   <p className="text-[10px] text-slate-500 mt-1">Retrieve artifacts and logs from the sovereign VM</p>
                 </div>
                 <Button variant="primary" className="w-full bg-emerald-600 hover:bg-emerald-700">Initiate Pull</Button>
@@ -1349,30 +1349,30 @@ const VMView = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Cpu size={20} className="text-indigo-500" />
-                  <span className="text-xs font-bold text-slate-700">CPU Cores</span>
+                  <span className="text-xs font-bold text-slate-300">CPU Cores</span>
                 </div>
                 <span className="text-xs font-mono font-bold">8 vCPU</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <HardDrive size={20} className="text-blue-500" />
-                  <span className="text-xs font-bold text-slate-700">Storage</span>
+                  <span className="text-xs font-bold text-slate-300">Storage</span>
                 </div>
                 <span className="text-xs font-mono font-bold">128GB SSD</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Network size={20} className="text-teal-500" />
-                  <span className="text-xs font-bold text-slate-700">Network</span>
+                  <span className="text-xs font-bold text-slate-300">Network</span>
                 </div>
                 <span className="text-xs font-mono font-bold">10 Gbps</span>
               </div>
-              <div className="pt-4 border-t border-slate-100">
+              <div className="pt-4 border-t border-white/[0.08]">
                 <div className="flex justify-between text-[10px] font-bold text-slate-400 mb-2">
                   <span>Uptime</span>
                   <span>14d 2h 12m</span>
                 </div>
-                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden">
                   <div className="h-full bg-emerald-500 w-full" />
                 </div>
               </div>
@@ -1387,8 +1387,8 @@ const VMView = () => {
                 { name: 'nexus-conductor', cpu: '1.2%', mem: '310MB' },
                 { name: 'sage-archiver', cpu: '0.1%', mem: '890MB' },
               ].map((p, i) => (
-                <div key={i} className="flex items-center justify-between p-2 bg-slate-50 rounded-lg border border-slate-100">
-                  <span className="text-[10px] font-mono font-bold text-slate-700">{p.name}</span>
+                <div key={i} className="flex items-center justify-between p-2 bg-white/[0.04] rounded-lg border border-white/[0.06]">
+                  <span className="text-[10px] font-mono font-bold text-slate-300">{p.name}</span>
                   <div className="flex gap-3 text-[9px] font-mono text-slate-400">
                     <span>{p.cpu}</span>
                     <span>{p.mem}</span>
@@ -1398,7 +1398,7 @@ const VMView = () => {
             </div>
           </Card>
 
-          <Button variant="outline" className="w-full py-4 border-rose-200 text-rose-600 hover:bg-rose-50" icon={RefreshCw}>Restart VM</Button>
+          <Button variant="outline" className="w-full py-4 border-rose-500/30 text-rose-400 hover:bg-rose-500/10" icon={RefreshCw}>Restart VM</Button>
         </div>
       </div>
     </div>
@@ -1503,17 +1503,17 @@ export default function AgentLeeLaunchPad() {
               key={agent.id} 
               className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-xl transition-all",
-                isActive ? "bg-white shadow-sm border border-slate-100" : "opacity-40 grayscale"
+                isActive ? "bg-white/[0.06] shadow-sm border border-white/[0.08]" : "opacity-40 grayscale"
               )}
             >
               <div className={cn(
                 "w-8 h-8 rounded-lg flex items-center justify-center",
-                isActive ? `${agent.bg} ${agent.text}` : "bg-slate-100 text-slate-400"
+                isActive ? `${agent.bg} ${agent.text}` : "bg-white/[0.06] text-slate-400"
               )}>
                 <agent.icon size={16} />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-[11px] font-bold text-slate-900 truncate">{agent.name}</div>
+                <div className="text-[11px] font-bold text-white truncate">{agent.name}</div>
                 <div className="text-[9px] text-slate-400 uppercase tracking-tighter truncate">{agent.role}</div>
               </div>
               {isActive && (
@@ -1561,20 +1561,20 @@ export default function AgentLeeLaunchPad() {
     <div className="space-y-4">
       <div className="flex items-center justify-between px-2">
         <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Intelligence Feed</span>
-        <button className="p-1 hover:bg-slate-100 rounded text-slate-400"><Filter size={12} /></button>
+        <button className="p-1 hover:bg-white/[0.08] rounded text-slate-400"><Filter size={12} /></button>
       </div>
       <div className="space-y-3">
         {reports.map(report => (
-          <div key={report.id} className="p-3 bg-white border border-slate-100 rounded-xl shadow-sm space-y-2">
+          <div key={report.id} className="p-3 bg-white/[0.04] border border-white/[0.06] rounded-xl space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-slate-50 rounded flex items-center justify-center text-slate-400">
+                <div className="w-5 h-5 bg-white/[0.06] rounded flex items-center justify-center text-slate-400">
                   {AGENTS.GOVERNANCE.find(a => a.name === report.agent)?.icon ? 
                     React.createElement(AGENTS.GOVERNANCE.find(a => a.name === report.agent)!.icon, { size: 12 }) : 
                     <Bot size={12} />
                   }
                 </div>
-                <span className="text-[10px] font-bold text-slate-900">{report.agent}</span>
+                <span className="text-[10px] font-bold text-white">{report.agent}</span>
               </div>
               <span className="text-[9px] font-mono text-slate-400">{report.time}</span>
             </div>
@@ -1607,13 +1607,13 @@ export default function AgentLeeLaunchPad() {
           className={cn(
             "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group",
             activeTab === item.id 
-              ? "bg-emerald-50 text-emerald-700 shadow-sm border border-emerald-100" 
-              : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+              ? "bg-emerald-500/[0.12] text-emerald-400 shadow-sm border border-emerald-500/30" 
+              : "text-slate-400 hover:bg-white/[0.06] hover:text-white"
           )}
         >
           <item.icon size={18} className={cn(
             "transition-colors",
-            activeTab === item.id ? "text-emerald-600" : "text-slate-400 group-hover:text-slate-600"
+            activeTab === item.id ? "text-emerald-600" : "text-white/40 group-hover:text-white/70"
           )} />
           {item.label}
         </button>
@@ -1662,18 +1662,18 @@ export default function AgentLeeLaunchPad() {
   );
 
   return (
-    <div className="flex h-full bg-slate-50 text-slate-900 font-sans selection:bg-emerald-100 overflow-hidden">
+    <div className="flex h-full bg-[#020408] text-white font-sans selection:bg-emerald-100 overflow-hidden">
       
       {/* --- LANE 1: GOVERNANCE & AGENTS --- */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 w-72 bg-slate-50 border-r border-slate-200 z-[70] transition-transform duration-300 md:relative md:translate-x-0 md:w-20 lg:w-72 flex flex-col overflow-hidden",
+        "fixed inset-y-0 left-0 w-72 bg-[#08101e] border-r border-white/[0.06] z-[70] transition-transform duration-300 md:relative md:translate-x-0 md:w-20 lg:w-72 flex flex-col overflow-hidden",
         isLeftPanelOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="h-16 flex items-center px-6 border-b border-slate-200 bg-white">
+        <div className="h-16 flex items-center px-6 border-b border-white/[0.06] bg-[#08101e]">
           <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center shadow-lg shadow-slate-200">
             <Bot size={18} className="text-white" />
           </div>
-          <span className="ml-3 text-sm font-black uppercase tracking-tighter text-slate-900 md:hidden lg:block">Agent Lee OS</span>
+          <span className="ml-3 text-sm font-black uppercase tracking-tighter text-white md:hidden lg:block">Agent Lee OS</span>
           <button className="md:hidden ml-auto p-2 text-slate-400" onClick={() => setIsLeftPanelOpen(false)}>
             <X size={20} />
           </button>
@@ -1687,9 +1687,9 @@ export default function AgentLeeLaunchPad() {
           </div>
         </div>
 
-        <div className="p-4 border-t border-slate-200 bg-white space-y-2">
-          <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
-            <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center text-slate-600">
+        <div className="p-4 border-t border-white/[0.06] bg-[#08101e] space-y-2">
+          <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/[0.06] cursor-pointer transition-colors">
+            <div className="w-8 h-8 bg-white/[0.1] rounded-full flex items-center justify-center text-slate-300">
               <User size={16} />
             </div>
             <div className="md:hidden lg:block">
@@ -1701,35 +1701,35 @@ export default function AgentLeeLaunchPad() {
       </aside>
 
       {/* --- LANE 2: WORKSPACE --- */}
-      <div className="flex-1 flex flex-col min-w-0 bg-white">
+      <div className="flex-1 flex flex-col min-w-0 bg-[#020408]">
         
         {/* --- TOP BAR --- */}
-        <header className="flex-none border-b border-slate-200 bg-white z-40">
+        <header className="flex-none border-b border-white/[0.06] bg-[#020408]/95 backdrop-blur-md z-40">
           <div className="h-16 flex items-center justify-between px-6">
             <div className="flex items-center gap-4">
               <button className="md:hidden p-2 -ml-2 text-slate-500" onClick={() => setIsLeftPanelOpen(true)}>
                 <Menu size={20} />
               </button>
-              <div className="flex items-center gap-3 px-4 py-2 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
+              <div className="flex items-center gap-3 px-4 py-2 bg-white/[0.06] rounded-xl border border-white/[0.1] cursor-pointer hover:bg-white/[0.1] transition-colors">
                 <div className={cn(
                   "w-2 h-2 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.3)]",
                   isBuilding ? "bg-blue-500 animate-pulse" : "bg-emerald-500"
                 )} />
-                <span className="text-sm font-bold text-slate-700 truncate max-w-[120px] md:max-w-[200px]">
+                <span className="text-sm font-bold text-white truncate max-w-[120px] md:max-w-[200px]">
                   {isBuilding ? `G6 Deployment: ${buildProgress}%` : activeLaunch}
                 </span>
                 <ChevronDown size={14} className="text-slate-400" />
               </div>
             </div>
 
-            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl">
+            <div className="flex items-center gap-1 p-1 bg-white/[0.06] rounded-xl">
               {['launches', 'code', 'creator', 'publish', 'directory', 'vm'].map(tab => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab as TabId)}
                   className={cn(
                     "px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all",
-                    activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-400 hover:text-slate-600"
+                    activeTab === tab ? "bg-white/[0.12] text-white shadow-sm" : "text-slate-400 hover:text-white"
                   )}
                 >
                   {tab}
@@ -1813,10 +1813,10 @@ export default function AgentLeeLaunchPad() {
 
       {/* --- LANE 3: INTELLIGENCE & REPORTS --- */}
       <aside className={cn(
-        "fixed inset-y-0 right-0 w-80 bg-slate-50 border-l border-slate-200 z-[70] transition-transform duration-300 lg:relative lg:translate-x-0 flex flex-col overflow-hidden",
+        "fixed inset-y-0 right-0 w-80 bg-[#08101e] border-l border-white/[0.06] z-[70] transition-transform duration-300 lg:relative lg:translate-x-0 flex flex-col overflow-hidden",
         isRightPanelOpen ? "translate-x-0" : "translate-x-full"
       )}>
-        <div className="h-16 flex items-center px-6 border-b border-slate-200 bg-white">
+        <div className="h-16 flex items-center px-6 border-b border-white/[0.06] bg-[#08101e]">
           <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Intelligence Center</span>
           <button className="lg:hidden ml-auto p-2 text-slate-400" onClick={() => setIsRightPanelOpen(false)}>
             <X size={20} />
@@ -1831,17 +1831,17 @@ export default function AgentLeeLaunchPad() {
               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Memory Lake</span>
               <span className="text-[10px] font-mono text-slate-300">Z2_READ</span>
             </div>
-            <Card className="bg-white p-4 space-y-3">
+            <Card className="bg-white/[0.04] p-4 space-y-3">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center">
                   <BookOpen size={16} />
                 </div>
                 <div>
-                  <div className="text-[11px] font-bold text-slate-900">Sage Memory</div>
+                  <div className="text-[11px] font-bold text-white">Sage Memory</div>
                   <div className="text-[9px] text-slate-400">Last snapshot: 12m ago</div>
                 </div>
               </div>
-              <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden">
                 <div className="h-full bg-amber-500 w-3/4" />
               </div>
               <button className="w-full py-2 text-[9px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">
@@ -1851,14 +1851,14 @@ export default function AgentLeeLaunchPad() {
           </div>
         </div>
 
-        <div className="p-6 border-t border-slate-200 bg-white">
+        <div className="p-6 border-t border-white/[0.06] bg-[#08101e]">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Shield Aegis</span>
             <ShieldCheck size={14} className="text-emerald-500" />
           </div>
-          <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-xl">
-            <div className="text-[10px] font-bold text-emerald-700 mb-1">Zone Enforcement Active</div>
-            <div className="text-[9px] text-emerald-600 leading-relaxed">All Z1_WRITE operations require explicit approval gates.</div>
+          <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+            <div className="text-[10px] font-bold text-emerald-400 mb-1">Zone Enforcement Active</div>
+            <div className="text-[9px] text-emerald-400 leading-relaxed">All Z1_WRITE operations require explicit approval gates.</div>
           </div>
         </div>
       </aside>
@@ -1866,13 +1866,13 @@ export default function AgentLeeLaunchPad() {
       {/* --- NEW LAUNCH TEMPLATE SHEET --- */}
       {showNewLaunch && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg bg-white border border-slate-200 rounded-2xl p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
+          <div className="w-full max-w-lg bg-[#0a0f1a] border border-white/[0.08] rounded-2xl p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-xl font-black text-slate-900">New Launch</h2>
+                <h2 className="text-xl font-black text-white">New Launch</h2>
                 <p className="text-sm text-slate-500 mt-1">Select a template to get started</p>
               </div>
-              <button onClick={() => setShowNewLaunch(false)} className="p-2 hover:bg-slate-100 rounded-full text-slate-400 transition-colors">
+              <button onClick={() => setShowNewLaunch(false)} className="p-2 hover:bg-white/[0.08] rounded-full text-slate-400 transition-colors">
                 <X size={24} />
               </button>
             </div>
@@ -1886,19 +1886,19 @@ export default function AgentLeeLaunchPad() {
                 { label: 'SEO Boost', icon: Search, color: 'text-amber-500', bg: 'bg-amber-50' },
                 { label: 'Music Drop', icon: Palette, color: 'text-purple-500', bg: 'bg-purple-50' },
               ].map(t => (
-                <button key={t.label} className="flex flex-col items-start gap-4 p-5 bg-white border border-slate-200 rounded-2xl hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-50 transition-all group text-left">
+                <button key={t.label} className="flex flex-col items-start gap-4 p-5 bg-white/[0.04] border border-white/[0.08] rounded-2xl hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/10 transition-all group text-left">
                   <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors", t.bg)}>
                     <t.icon size={24} className={t.color} />
                   </div>
                   <div>
-                    <span className="text-sm font-bold text-slate-900 block">{t.label}</span>
+                    <span className="text-sm font-bold text-white block">{t.label}</span>
                     <span className="text-[10px] text-slate-400 mt-1 block">Ready to deploy</span>
                   </div>
                 </button>
               ))}
             </div>
             
-            <div className="mt-8 pt-8 border-t border-slate-100 flex gap-3">
+            <div className="mt-8 pt-8 border-t border-white/[0.06] flex gap-3">
               <Button variant="outline" className="flex-1" onClick={() => setShowNewLaunch(false)}>Cancel</Button>
               <Button variant="primary" className="flex-1" onClick={() => setShowNewLaunch(false)}>Continue</Button>
             </div>

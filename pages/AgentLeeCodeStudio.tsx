@@ -597,7 +597,7 @@ const EditorStage = () => {
         <div className={cn("flex-1 transition-all duration-300", editor.isMarkdownPreview && isMarkdown ? "w-1/2" : "w-full")}>
           <Editor height="100%" theme={settings.theme === 'dark' ? 'vs-dark' : 'light'} path={activeFile.path} defaultLanguage={activeFile.name.endsWith('.tsx') ? 'typescript' : activeFile.name.endsWith('.md') ? 'markdown' : 'css'} value={activeFile.content} onChange={(value) => updateFileContent(activeFile.id, value || '')} options={{ minimap: { enabled: false }, fontSize: settings.fontSize, fontFamily: "'JetBrains Mono', monospace", automaticLayout: true, padding: { top: 10 }, scrollBeyondLastLine: false, lineNumbers: 'on', wordWrap: settings.wordWrap ? 'on' : 'off' }} />
         </div>
-        {editor.isMarkdownPreview && isMarkdown && <div className="w-1/2 bg-white text-black overflow-y-auto p-8 prose prose-sm max-w-none border-l border-border"><ReactMarkdown>{activeFile.content || ''}</ReactMarkdown></div>}
+        {editor.isMarkdownPreview && isMarkdown && <div className="w-1/2 bg-[#1e1e1e] text-slate-100 overflow-y-auto p-8 prose prose-sm prose-invert max-w-none border-l border-white/[0.08]"><ReactMarkdown>{activeFile.content || ''}</ReactMarkdown></div>}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
+﻿import React, { useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Bot, User, Terminal, Send, Zap, Upload, Mic, ArrowRight, 
@@ -256,7 +256,7 @@ const generateImage = async (prompt: string) => {
 
 const GlassCard = ({ children, className, neonColor = 'blue', ...props }: { children: React.ReactNode, className?: string, neonColor?: string, [key: string]: any }) => (
   <div {...props} className={cn(
-    "bg-white/80 backdrop-blur-xl border border-black/5 rounded-[32px] relative overflow-hidden group transition-all duration-500 soft-shadow",
+    "bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-[32px] relative overflow-hidden group transition-all duration-500",
     className
   )}>
     <div className={cn(
@@ -273,7 +273,7 @@ const TaskBoard = () => {
   return (
     <div className="space-y-3 p-4">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-black/40">Active Task Queue</h3>
+        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Active Task Queue</h3>
         <span className="text-[8px] font-mono text-accent-blue">{tasks.length} JOBS</span>
       </div>
       {tasks.length === 0 ? (
@@ -283,11 +283,11 @@ const TaskBoard = () => {
         </div>
       ) : (
         tasks.map((task) => (
-          <div key={task.id} className="p-4 bg-black/[0.02] border border-black/5 rounded-2xl flex items-center justify-between group hover:bg-black/[0.04] transition-all">
+          <div key={task.id} className="p-4 bg-white/[0.03] border border-white/[0.08] rounded-2xl flex items-center justify-between group hover:bg-white/[0.05] transition-all">
             <div className="flex items-center gap-4">
               <div className={cn(
                 "w-10 h-10 rounded-xl flex items-center justify-center border",
-                task.status === 'PROCESSING' ? "animate-pulse border-accent-blue/40 bg-accent-blue/10" : "border-black/10 bg-black/5"
+                task.status === 'PROCESSING' ? "animate-pulse border-accent-blue/40 bg-accent-blue/10" : "border-white/[0.1] bg-white/[0.06]"
               )}>
                 {task.type === 'STORY' && <BookOpen size={16} />}
                 {task.type === 'EMAIL' && <Mail size={16} />}
@@ -296,14 +296,14 @@ const TaskBoard = () => {
                 {task.type === 'GENERAL' && <Zap size={16} />}
               </div>
               <div>
-                <div className="text-[11px] font-bold text-black/80 uppercase tracking-tight">{task.title}</div>
-                <div className="text-[8px] font-mono text-black/20 uppercase">{task.agentId} NODE // {task.status}</div>
+                <div className="text-[11px] font-bold text-white/80 uppercase tracking-tight">{task.title}</div>
+                <div className="text-[8px] font-mono text-white/20 uppercase">{task.agentId} NODE // {task.status}</div>
               </div>
             </div>
             <div className={cn(
               "text-[9px] font-black uppercase tracking-widest",
               task.status === 'COMPLETED' ? "text-accent-green" : 
-              task.status === 'PROCESSING' ? "text-accent-blue" : "text-black/20"
+              task.status === 'PROCESSING' ? "text-accent-blue" : "text-white/20"
             )}>
               {task.status}
             </div>
@@ -386,16 +386,16 @@ const ToolPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
   return (
     <div className={cn("flex flex-col h-full transition-all duration-500 overflow-hidden", isCollapsed ? "w-0" : "w-80")}>
       {/* Header / Collapse Toggle */}
-      <div className="p-6 flex items-center justify-between border-b border-black/5">
+      <div className="p-6 flex items-center justify-between border-b border-white/[0.06]">
         {!isCollapsed && (
           <div className="flex items-center gap-2">
             <LayoutIcon size={14} className="text-accent-blue" />
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-black/60">Studio Controls</h3>
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Studio Controls</h3>
           </div>
         )}
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)} 
-          className="p-2 hover:bg-black/5 rounded-xl transition-colors mx-auto"
+          className="p-2 hover:bg-white/[0.06] rounded-xl transition-colors mx-auto"
         >
           {isCollapsed ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
         </button>
@@ -404,7 +404,7 @@ const ToolPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
       <div className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-8">
         {/* Navigation Section */}
         <div className="space-y-3">
-          {!isCollapsed && <div className="text-[8px] font-black text-black/20 uppercase tracking-[0.2em] mb-2 px-2">Navigation</div>}
+          {!isCollapsed && <div className="text-[8px] font-black text-white/20 uppercase tracking-[0.2em] mb-2 px-2">Navigation</div>}
           <div className="grid grid-cols-1 gap-1">
             {navItems.map((item) => (
               <button
@@ -414,12 +414,12 @@ const ToolPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
                   "w-full flex items-center gap-4 p-3 rounded-2xl transition-all group",
                   activeSubPage === item.id 
                     ? "bg-accent-blue/10 text-accent-blue" 
-                    : "text-black/30 hover:bg-black/5 hover:text-black/60"
+                    : "text-white/30 hover:bg-white/[0.06] hover:text-white/60"
                 )}
               >
                 <div className={cn(
                   "w-8 h-8 rounded-xl flex items-center justify-center transition-all",
-                  activeSubPage === item.id ? "bg-accent-blue text-white soft-shadow" : "bg-black/5"
+                  activeSubPage === item.id ? "bg-accent-blue text-white" : "bg-white/[0.06]"
                 )}>
                   <item.icon size={14} />
                 </div>
@@ -431,7 +431,7 @@ const ToolPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
 
         {/* Tools Section */}
         <div className="space-y-3">
-          {!isCollapsed && <div className="text-[8px] font-black text-black/20 uppercase tracking-[0.2em] mb-2 px-2">Studio Tools</div>}
+          {!isCollapsed && <div className="text-[8px] font-black text-white/20 uppercase tracking-[0.2em] mb-2 px-2">Studio Tools</div>}
           <div className="grid grid-cols-1 gap-2">
             {currentTools.map((tool) => (
               <div key={tool.name} className="space-y-1">
@@ -442,13 +442,13 @@ const ToolPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
                   }}
                   className={cn(
                     "w-full flex items-center justify-between p-3 rounded-2xl transition-all group",
-                    expandedTool === tool.name ? "bg-black/5 text-black" : "text-black/30 hover:bg-black/[0.02] hover:text-black/60"
+                    expandedTool === tool.name ? "bg-white/[0.06] text-white" : "text-white/30 hover:bg-white/[0.03] hover:text-white/60"
                   )}
                 >
                   <div className="flex items-center gap-4">
                     <div className={cn(
                       "w-8 h-8 rounded-xl flex items-center justify-center transition-all",
-                      expandedTool === tool.name ? "bg-accent-blue text-white soft-shadow" : "bg-black/5"
+                      expandedTool === tool.name ? "bg-accent-blue text-white" : "bg-white/[0.06]"
                     )}>
                       <tool.icon size={14} />
                     </div>
@@ -471,7 +471,7 @@ const ToolPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
                         <button
                           key={subItem}
                           onClick={() => console.log(`Tool Action: ${subItem}`)}
-                          className="w-full text-left py-2 px-3 text-[10px] font-bold text-black/40 hover:text-accent-blue transition-colors uppercase tracking-widest"
+                          className="w-full text-left py-2 px-3 text-[10px] font-bold text-white/40 hover:text-accent-blue transition-colors uppercase tracking-widest"
                         >
                           {subItem}
                         </button>
@@ -486,7 +486,7 @@ const ToolPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
 
         {/* Task Queue Section */}
         {!isCollapsed && (
-          <div className="pt-4 border-t border-black/5">
+          <div className="pt-4 border-t border-white/[0.06]">
             <TaskBoard />
           </div>
         )}
@@ -510,15 +510,15 @@ const AgentNotepad = () => {
   const entry = notepad[0];
 
   return (
-    <GlassCard neonColor="blue" className="p-8 soft-shadow bg-white/40 backdrop-blur-2xl">
+    <GlassCard neonColor="blue" className="p-8 backdrop-blur-2xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue">
             <Clipboard size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-black uppercase tracking-tight text-black/80">Agent Notepad</h3>
-            <p className="text-[9px] font-mono text-black/30 uppercase tracking-widest">Master Orchestration Plan</p>
+            <h3 className="text-lg font-black uppercase tracking-tight text-white/80">Agent Notepad</h3>
+            <p className="text-[9px] font-mono text-white/30 uppercase tracking-widest">Master Orchestration Plan</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -532,10 +532,10 @@ const AgentNotepad = () => {
       </div>
       
       <div className="relative">
-        <div className="w-full min-h-[200px] bg-black/[0.02] border border-black/5 rounded-3xl p-8 text-lg font-serif leading-relaxed text-black/70 whitespace-pre-wrap italic">
+        <div className="w-full min-h-[200px] bg-white/[0.03] border border-white/[0.08] rounded-3xl p-8 text-lg font-serif leading-relaxed text-white/70 whitespace-pre-wrap italic">
           {entry?.content || "Awaiting creative directives..."}
         </div>
-        <div className="absolute bottom-4 right-8 flex items-center gap-2 text-[8px] font-mono text-black/20 uppercase tracking-widest">
+        <div className="absolute bottom-4 right-8 flex items-center gap-2 text-[8px] font-mono text-white/20 uppercase tracking-widest">
           <Clock size={10} />
           Neural State: {isProcessing ? 'PROCESSING' : 'IDLE'}
         </div>
@@ -700,18 +700,18 @@ const WriterStudio = ({ content }: { content?: string }) => {
   const lyric = content || "Walking in the dark, feel the night ignite…\nYears gone like a backprint center of candles and the related lights,\nAs the fire hits the stems, online Phonics collision, feel the ignites.";
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-black/6 shadow-xl">
+    <div className="flex flex-col h-full bg-[#0f0f1e] rounded-2xl overflow-hidden border border-white/[0.08]">
       {/* ── Header ── */}
-      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-black/6 bg-white">
+      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-white/[0.06] bg-[#16162a]">
         <div className="flex gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
           <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
         </div>
-        <div className="flex gap-3 ml-2 text-[10px] text-black/40 font-medium">
+        <div className="flex gap-3 ml-2 text-[10px] text-white/40 font-medium">
           <span>≡</span><span>Edit</span><span>Find</span><span>DNx</span>
         </div>
-        <div className="ml-auto flex gap-2 text-black/30">
+        <div className="ml-auto flex gap-2 text-white/30">
           <Cloud size={12} /><Lock size={12} /><Monitor size={12} />
           <Save size={12} />
         </div>
@@ -719,7 +719,7 @@ const WriterStudio = ({ content }: { content?: string }) => {
 
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* ── Block Canvas ── */}
-        <div className="flex-1 relative overflow-hidden bg-gray-50/60 p-4">
+        <div className="flex-1 relative overflow-hidden bg-[#0a0a1a] p-4">
           {/* SVG edges */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
             {CONNECTIONS.map((c, i) => {
@@ -752,16 +752,16 @@ const WriterStudio = ({ content }: { content?: string }) => {
         </div>
 
         {/* ── Right: Agent Tools ── */}
-        <div className="w-44 border-l border-black/6 bg-white p-3 flex flex-col gap-3 shrink-0">
+        <div className="w-44 border-l border-white/[0.06] bg-[#13132a]/70 p-3 flex flex-col gap-3 shrink-0">
           <div className="space-y-2">
             {agentTools.map(t => (
-              <div key={t.name} className="flex items-start gap-2 p-2 rounded-lg bg-gray-50 border border-gray-100">
+              <div key={t.name} className="flex items-start gap-2 p-2 rounded-lg bg-white/[0.04] border border-white/[0.06]">
                 <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
                   style={{ background: t.color + '22', border: `1.5px solid ${t.color}55` }}>
                   <t.Icon size={11} style={{ color: t.color }} />
                 </div>
                 <div>
-                  <div className="text-[9px] font-bold text-slate-800">{t.name}</div>
+                  <div className="text-[9px] font-bold text-slate-200">{t.name}</div>
                   <div className="text-[7px] text-slate-400">{t.tool}</div>
                 </div>
               </div>
@@ -769,12 +769,12 @@ const WriterStudio = ({ content }: { content?: string }) => {
           </div>
           <div className="mt-auto space-y-2">
             <div className="text-[7px] text-slate-400 uppercase tracking-wide font-bold">WASM Engine</div>
-            <div className="px-2 py-1.5 bg-violet-50 border border-violet-100 rounded-lg">
-              <div className="text-[7px] font-bold text-violet-700">Transformers.js</div>
+            <div className="px-2 py-1.5 bg-violet-500/10 border border-violet-500/30 rounded-lg">
+              <div className="text-[7px] font-bold text-violet-300">Transformers.js</div>
               <div className="text-[6px] text-violet-400">On-device rhyme matching</div>
             </div>
-            <div className="px-2 py-1.5 bg-blue-50 border border-blue-100 rounded-lg">
-              <div className="text-[7px] font-bold text-blue-700">SQLite WASM</div>
+            <div className="px-2 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+              <div className="text-[7px] font-bold text-blue-300">SQLite WASM</div>
               <div className="text-[6px] text-blue-400">1M-word rhyme corpus</div>
             </div>
           </div>
@@ -782,12 +782,12 @@ const WriterStudio = ({ content }: { content?: string }) => {
       </div>
 
       {/* ── Bottom Action Bar ── */}
-      <div className="flex items-center gap-2 px-4 py-2 border-t border-black/6 bg-white">
+      <div className="flex items-center gap-2 px-4 py-2 border-t border-white/[0.06] bg-[#16162a]">
         {['Annotations', 'RPT', 'UpNext'].map(a => (
           <button key={a} className={cn('px-3 py-1 rounded-md text-[9px] font-bold border transition-all',
-            a === 'UpNext' ? 'bg-blue-500 text-white border-blue-500' : 'border-slate-200 text-slate-500 hover:bg-slate-50')}>{a}</button>
+            a === 'UpNext' ? 'bg-blue-500 text-white border-blue-500' : 'border-white/[0.1] text-slate-400 hover:bg-white/[0.06]')}>{a}</button>
         ))}
-        <div className="ml-auto flex gap-2 text-slate-300">
+        <div className="ml-auto flex gap-2 text-slate-500">
           <AlignLeft size={12} /><Save size={12} /><Share2 size={12} />
         </div>
       </div>
@@ -1699,7 +1699,7 @@ const WorkspaceRouter = () => {
       const url = content.split('[IMAGE_GENERATED] ')[1];
       return <img src={url} alt="Generated Art" className="w-full h-full object-cover rounded-3xl soft-shadow" referrerPolicy="no-referrer" />;
     }
-    return <div className="whitespace-pre-wrap font-serif text-xl leading-relaxed text-black/70">{content}</div>;
+    return <div className="whitespace-pre-wrap font-serif text-xl leading-relaxed text-white/70">{content}</div>;
   };
 
   switch (activeSubPage) {
@@ -1721,7 +1721,7 @@ const WorkspaceRouter = () => {
       return <GrowthStudio content={studioContent.growth} />;
     default:
       return (
-        <div className="flex flex-col items-center justify-center h-full text-black/20 space-y-4">
+        <div className="flex flex-col items-center justify-center h-full text-white/20 space-y-4">
           <Box size={64} strokeWidth={1} />
           <p className="text-[10px] font-black uppercase tracking-[0.5em]">Select a Studio to Begin</p>
         </div>
@@ -1791,16 +1791,16 @@ const LeftPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
   return (
     <div className={cn("flex flex-col h-full transition-all duration-500 overflow-hidden", isCollapsed ? "w-0" : "w-80")}>
       {/* Header / Collapse Toggle */}
-      <div className="p-6 flex items-center justify-between border-b border-black/5">
+      <div className="p-6 flex items-center justify-between border-b border-white/[0.06]">
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)} 
-          className="p-2 hover:bg-black/5 rounded-xl transition-colors mx-auto"
+          className="p-2 hover:bg-white/[0.06] rounded-xl transition-colors mx-auto"
         >
           {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
         {!isCollapsed && (
           <div className="flex items-center gap-2">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-black/60">Asset Library</h3>
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Asset Library</h3>
             <Database size={14} className="text-accent-purple" />
           </div>
         )}
@@ -1810,22 +1810,22 @@ const LeftPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
         {/* Active Projects Section */}
         {!isCollapsed && (
           <div className="space-y-3">
-            <div className="text-[8px] font-black text-black/20 uppercase tracking-[0.2em] mb-2 px-2">Active Projects</div>
+            <div className="text-[8px] font-black text-white/20 uppercase tracking-[0.2em] mb-2 px-2">Active Projects</div>
             <div className="grid grid-cols-1 gap-2">
               {projects.map((project) => (
                 <button
                   key={project.id}
                   onClick={() => console.log(`Switching to Project: ${project.name}`)}
-                  className="w-full flex items-center gap-4 p-3 rounded-2xl bg-black/[0.02] border border-black/5 hover:bg-black/[0.05] hover:border-accent-purple/30 transition-all group"
+                  className="w-full flex items-center gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.07] hover:bg-white/[0.06] hover:border-accent-purple/30 transition-all group"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center border border-black/5 group-hover:text-accent-purple transition-colors shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-white/[0.08] flex items-center justify-center border border-white/[0.08] group-hover:text-accent-purple transition-colors shrink-0">
                     <Database size={14} />
                   </div>
                   <div className="text-left">
-                    <div className="text-[10px] font-black uppercase tracking-widest text-black/60 group-hover:text-black/80 transition-colors">
+                    <div className="text-[10px] font-black uppercase tracking-widest text-white/60 group-hover:text-white/80 transition-colors">
                       {project.name}
                     </div>
-                    <div className="text-[7px] font-mono text-black/20 uppercase tracking-widest">
+                    <div className="text-[7px] font-mono text-white/20 uppercase tracking-widest">
                       {project.status}
                     </div>
                   </div>
@@ -1837,7 +1837,7 @@ const LeftPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
 
         {/* Asset Tools Section */}
         <div className="space-y-3">
-          {!isCollapsed && <div className="text-[8px] font-black text-black/20 uppercase tracking-[0.2em] mb-2 px-2">Components</div>}
+          {!isCollapsed && <div className="text-[8px] font-black text-white/20 uppercase tracking-[0.2em] mb-2 px-2">Components</div>}
           <div className="grid grid-cols-1 gap-2">
             {currentAssetTools.map((tool) => (
               <div key={tool.name} className="space-y-1">
@@ -1845,13 +1845,13 @@ const LeftPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
                   onClick={() => setExpandedTool(expandedTool === tool.name ? null : tool.name)}
                   className={cn(
                     "w-full flex items-center justify-between p-3 rounded-2xl transition-all group",
-                    expandedTool === tool.name ? "bg-black/5 text-black" : "text-black/30 hover:bg-black/[0.02] hover:text-black/60"
+                    expandedTool === tool.name ? "bg-white/[0.06] text-white" : "text-white/30 hover:bg-white/[0.03] hover:text-white/60"
                   )}
                 >
                   <div className="flex items-center gap-4">
                     <div className={cn(
                       "w-8 h-8 rounded-xl flex items-center justify-center transition-all",
-                      expandedTool === tool.name ? "bg-accent-purple text-white soft-shadow" : "bg-black/5"
+                      expandedTool === tool.name ? "bg-accent-purple text-white" : "bg-white/[0.06]"
                     )}>
                       <tool.icon size={14} />
                     </div>
@@ -1874,7 +1874,7 @@ const LeftPanel = ({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setI
                         <button
                           key={subItem}
                           onClick={() => console.log(`Selected: ${subItem}`)}
-                          className="w-full text-left py-2 px-3 text-[10px] font-bold text-black/40 hover:text-accent-purple transition-colors uppercase tracking-widest"
+                          className="w-full text-left py-2 px-3 text-[10px] font-bold text-white/40 hover:text-accent-purple transition-colors uppercase tracking-widest"
                         >
                           {subItem}
                         </button>
@@ -1907,7 +1907,7 @@ const GlobalPageRouter = () => {
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel: Assets & Components */}
         <aside className={cn(
-          "bg-white border-r border-black/5 flex flex-col shrink-0 transition-all duration-500 soft-shadow z-40 relative",
+          "bg-[#08101e] border-r border-white/[0.06] flex flex-col shrink-0 transition-all duration-500 z-40 relative",
           isLeftPanelCollapsed ? "w-0" : "w-80"
         )}>
           <LeftPanel isCollapsed={isLeftPanelCollapsed} setIsCollapsed={setIsLeftPanelCollapsed} />
@@ -1916,7 +1916,7 @@ const GlobalPageRouter = () => {
           {isLeftPanelCollapsed && (
             <button 
               onClick={() => setIsLeftPanelCollapsed(false)}
-              className="absolute left-full top-1/2 -translate-y-1/2 ml-4 p-3 bg-white border border-black/5 rounded-2xl soft-shadow text-accent-purple hover:scale-110 transition-all z-50"
+              className="absolute left-full top-1/2 -translate-y-1/2 ml-4 p-3 bg-[#08101e] border border-white/[0.08] rounded-2xl text-accent-purple hover:scale-110 transition-all z-50"
             >
               <ChevronRight size={20} />
             </button>
@@ -1924,17 +1924,17 @@ const GlobalPageRouter = () => {
         </aside>
 
         {/* Main Content Area: Workspace */}
-        <main className="flex-1 overflow-y-auto no-scrollbar relative bg-white/50">
+        <main className="flex-1 overflow-y-auto no-scrollbar relative bg-transparent">
           <div className="p-8 max-w-7xl mx-auto">
             <div className="mb-12 flex items-end justify-between">
               <div>
-                <h2 className="text-4xl font-black uppercase tracking-tighter text-black/80">{activeSubPage} Workspace</h2>
-                <p className="text-[10px] font-mono text-black/30 uppercase tracking-[0.3em] mt-2">Agent Lee // Creative Node Active</p>
+                <h2 className="text-4xl font-black uppercase tracking-tighter text-white/80">{activeSubPage} Workspace</h2>
+                <p className="text-[10px] font-mono text-white/30 uppercase tracking-[0.3em] mt-2">Agent Lee // Creative Node Active</p>
               </div>
               <div className="flex gap-4">
-                <div className="px-4 py-2 bg-white border border-black/5 rounded-2xl soft-shadow flex items-center gap-3">
+                <div className="px-4 py-2 bg-white/[0.05] border border-white/[0.08] rounded-2xl flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-accent-green animate-pulse" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-black/60">System Stable</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/60">System Stable</span>
                 </div>
               </div>
             </div>
@@ -1954,7 +1954,7 @@ const GlobalPageRouter = () => {
 
         {/* Right Panel: Navigation & Tools */}
         <aside className={cn(
-          "bg-white border-l border-black/5 flex flex-col shrink-0 transition-all duration-500 soft-shadow z-40 relative",
+          "bg-[#08101e] border-l border-white/[0.06] flex flex-col shrink-0 transition-all duration-500 z-40 relative",
           isToolPanelCollapsed ? "w-0" : "w-80"
         )}>
           <ToolPanel isCollapsed={isToolPanelCollapsed} setIsCollapsed={setIsToolPanelCollapsed} />
@@ -1963,7 +1963,7 @@ const GlobalPageRouter = () => {
           {isToolPanelCollapsed && (
             <button 
               onClick={() => setIsToolPanelCollapsed(false)}
-              className="absolute right-full top-1/2 -translate-y-1/2 mr-4 p-3 bg-white border border-black/5 rounded-2xl soft-shadow text-accent-blue hover:scale-110 transition-all z-50"
+              className="absolute right-full top-1/2 -translate-y-1/2 mr-4 p-3 bg-[#08101e] border border-white/[0.08] rounded-2xl text-accent-blue hover:scale-110 transition-all z-50"
             >
               <ChevronLeft size={20} />
             </button>
@@ -1991,11 +1991,11 @@ const GlobalPageRouter = () => {
                     <Activity size={16} className="animate-pulse" />
                     <span className="text-[10px] font-black uppercase tracking-[0.4em]">System Online // Node 01</span>
                   </div>
-                  <h2 className="text-6xl font-black uppercase tracking-tighter leading-none text-black/80">Mission Control</h2>
+                  <h2 className="text-6xl font-black uppercase tracking-tighter leading-none text-white/80">Mission Control</h2>
                 </div>
                 <div className="text-right">
-                  <div className="text-4xl font-black tracking-tighter text-black/80">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</div>
-                  <div className="text-[10px] text-black/30 uppercase tracking-widest mt-1">UTC // {new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).toUpperCase()}</div>
+                  <div className="text-4xl font-black tracking-tighter text-white/80">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</div>
+                  <div className="text-[10px] text-white/30 uppercase tracking-widest mt-1">UTC // {new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).toUpperCase()}</div>
                 </div>
               </div>
 
@@ -2005,11 +2005,11 @@ const GlobalPageRouter = () => {
                     <div className="p-4 bg-accent-blue/10 rounded-2xl text-accent-blue">
                       <Cpu size={32} />
                     </div>
-                    <div className="text-[10px] font-black uppercase tracking-widest text-black/20">Neural Load</div>
+                    <div className="text-[10px] font-black uppercase tracking-widest text-white/20">Neural Load</div>
                   </div>
                   <div>
-                    <div className="text-4xl font-black mb-2 text-black/80">84%</div>
-                    <div className="w-full h-1 bg-black/5 rounded-full overflow-hidden">
+                    <div className="text-4xl font-black mb-2 text-white/80">84%</div>
+                    <div className="w-full h-1 bg-white/[0.08] rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: '84%' }}
@@ -2017,7 +2017,7 @@ const GlobalPageRouter = () => {
                       />
                     </div>
                   </div>
-                  <p className="text-[10px] text-black/40 uppercase tracking-widest leading-relaxed">
+                  <p className="text-[10px] text-white/40 uppercase tracking-widest leading-relaxed">
                     Agent Lee is currently processing creative signals across 4 active nodes. Optimization required in 12m.
                   </p>
                 </GlassCard>
@@ -2027,18 +2027,18 @@ const GlobalPageRouter = () => {
                     <div className="p-4 bg-accent-purple/10 rounded-2xl text-accent-purple">
                       <Zap size={32} />
                     </div>
-                    <div className="text-[10px] font-black uppercase tracking-widest text-black/20">Active Tasks</div>
+                    <div className="text-[10px] font-black uppercase tracking-widest text-white/20">Active Tasks</div>
                   </div>
                   <div>
-                    <div className="text-4xl font-black mb-2 text-black/80">{tasks.length}</div>
+                    <div className="text-4xl font-black mb-2 text-white/80">{tasks.length}</div>
                     <div className="flex gap-1">
                       {Array.from({ length: 12 }).map((_, i) => (
-                        <div key={i} className={`h-1 flex-1 rounded-full ${i < tasks.length ? 'bg-accent-purple' : 'bg-black/5'}`} />
+                        <div key={i} className={`h-1 flex-1 rounded-full ${i < tasks.length ? 'bg-accent-purple' : 'bg-white/[0.08]'}`} />
                       ))}
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[10px] text-black/40 uppercase tracking-widest">Queue Status</span>
+                    <span className="text-[10px] text-white/40 uppercase tracking-widest">Queue Status</span>
                     <span className="text-[10px] text-accent-purple font-black uppercase tracking-widest">Stable</span>
                   </div>
                 </GlassCard>
@@ -2048,29 +2048,29 @@ const GlobalPageRouter = () => {
                     <div className="p-4 bg-accent-green/10 rounded-2xl text-accent-green">
                       <ShieldCheck size={32} />
                     </div>
-                    <div className="text-[10px] font-black uppercase tracking-widest text-black/20">System Governance</div>
+                    <div className="text-[10px] font-black uppercase tracking-widest text-white/20">System Governance</div>
                   </div>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-[10px] text-black/40 uppercase tracking-widest">Autonomous Mode</span>
-                      <span className={cn("text-[10px] font-black uppercase tracking-widest", isAutonomous ? "text-accent-green" : "text-black/20")}>
+                      <span className="text-[10px] text-white/40 uppercase tracking-widest">Autonomous Mode</span>
+                      <span className={cn("text-[10px] font-black uppercase tracking-widest", isAutonomous ? "text-accent-green" : "text-white/20")}>
                         {isAutonomous ? "Active" : "Disabled"}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[10px] text-black/40 uppercase tracking-widest">Hands-Free</span>
-                      <span className={cn("text-[10px] font-black uppercase tracking-widest", isHandsFree ? "text-accent-green" : "text-black/20")}>
+                      <span className="text-[10px] text-white/40 uppercase tracking-widest">Hands-Free</span>
+                      <span className={cn("text-[10px] font-black uppercase tracking-widest", isHandsFree ? "text-accent-green" : "text-white/20")}>
                         {isHandsFree ? "Active" : "Disabled"}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[10px] text-black/40 uppercase tracking-widest">Auto-Optimize</span>
-                      <span className={cn("text-[10px] font-black uppercase tracking-widest", isAutoOptimized ? "text-accent-green" : "text-black/20")}>
+                      <span className="text-[10px] text-white/40 uppercase tracking-widest">Auto-Optimize</span>
+                      <span className={cn("text-[10px] font-black uppercase tracking-widest", isAutoOptimized ? "text-accent-green" : "text-white/20")}>
                         {isAutoOptimized ? "Active" : "Disabled"}
                       </span>
                     </div>
                   </div>
-                  <p className="text-[10px] text-black/40 uppercase tracking-widest leading-relaxed">
+                  <p className="text-[10px] text-white/40 uppercase tracking-widest leading-relaxed">
                     System is currently operating in 100% hands-free mode. Agent Lee is managing all creative sub-nodes.
                   </p>
                 </GlassCard>
@@ -2078,7 +2078,7 @@ const GlobalPageRouter = () => {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <GlassCard className="p-8">
-                  <h3 className="text-xl font-black uppercase tracking-tighter mb-6 flex items-center gap-3 text-black/80">
+                  <h3 className="text-xl font-black uppercase tracking-tighter mb-6 flex items-center gap-3 text-white/80">
                     <TrendingUp size={20} className="text-accent-purple" />
                     Creative Velocity
                   </h3>
@@ -2093,7 +2093,7 @@ const GlobalPageRouter = () => {
                       />
                     ))}
                   </div>
-                  <div className="flex justify-between mt-4 text-[8px] text-black/20 uppercase tracking-[0.3em]">
+                  <div className="flex justify-between mt-4 text-[8px] text-white/20 uppercase tracking-[0.3em]">
                     <span>00:00</span>
                     <span>12:00</span>
                     <span>24:00</span>
@@ -2105,10 +2105,10 @@ const GlobalPageRouter = () => {
 
           {activeGlobalPage === 'diagnostic' && (
             <div className="space-y-8">
-              <h2 className="text-4xl font-black uppercase tracking-tighter text-black/80">System Diagnostic</h2>
+              <h2 className="text-4xl font-black uppercase tracking-tighter text-white/80">System Diagnostic</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <GlassCard neonColor="green" className="p-8">
-                  <div className="text-[10px] font-black uppercase tracking-widest mb-6 text-black/20">Neural Latency (ms)</div>
+                  <div className="text-[10px] font-black uppercase tracking-widest mb-6 text-white/20">Neural Latency (ms)</div>
                   <div className="h-48 flex items-end gap-1">
                     {Array.from({ length: 30 }).map((_, i) => (
                       <motion.div 
@@ -2120,7 +2120,7 @@ const GlobalPageRouter = () => {
                       />
                     ))}
                   </div>
-                  <div className="flex justify-between mt-4 text-[8px] font-mono text-black/40 uppercase tracking-widest">
+                  <div className="flex justify-between mt-4 text-[8px] font-mono text-white/40 uppercase tracking-widest">
                     <span>Avg: 124ms</span>
                     <span>Peak: 452ms</span>
                   </div>
@@ -2133,10 +2133,10 @@ const GlobalPageRouter = () => {
                     { name: 'Task Queue', status: tasks.length > 5 ? 'BUSY' : 'OPTIMAL', value: `${tasks.length} Active` },
                     { name: 'Agent Sync', status: 'SYNCED', value: `${AGENTS.length} Nodes` },
                   ].map(sys => (
-                    <div key={sys.name} className="p-4 bg-white border border-black/5 rounded-2xl flex items-center justify-between soft-shadow">
+                    <div key={sys.name} className="p-4 bg-white border border-white/[0.08] rounded-2xl flex items-center justify-between soft-shadow">
                       <div className="flex flex-col">
-                        <span className="text-[11px] font-black uppercase tracking-widest text-black/60">{sys.name}</span>
-                        <span className="text-[8px] font-mono text-black/20">{sys.value}</span>
+                        <span className="text-[11px] font-black uppercase tracking-widest text-white/60">{sys.name}</span>
+                        <span className="text-[8px] font-mono text-white/20">{sys.value}</span>
                       </div>
                       <span className={cn(
                         "text-[10px] font-black uppercase tracking-widest",
@@ -2152,8 +2152,8 @@ const GlobalPageRouter = () => {
           {activeGlobalPage === 'deployment' && (
             <div className="flex flex-col items-center justify-center py-32 text-center space-y-6">
               <Rocket size={64} className="text-accent-pink animate-bounce" />
-              <h2 className="text-4xl font-black uppercase tracking-tighter text-black/80">Ready for Deployment</h2>
-              <p className="text-black/40 max-w-md uppercase text-[10px] tracking-widest leading-relaxed">Your creative assets are staged and ready for edge distribution. Select a target node to begin.</p>
+              <h2 className="text-4xl font-black uppercase tracking-tighter text-white/80">Ready for Deployment</h2>
+              <p className="text-white/40 max-w-md uppercase text-[10px] tracking-widest leading-relaxed">Your creative assets are staged and ready for edge distribution. Select a target node to begin.</p>
               <button className="px-8 py-4 bg-accent-pink text-white font-black uppercase tracking-widest rounded-2xl hover:scale-105 transition-transform soft-shadow">Initialize Push</button>
             </div>
           )}
@@ -2162,21 +2162,21 @@ const GlobalPageRouter = () => {
             <div className="space-y-8">
               <div className="flex justify-between items-end">
                 <div>
-                  <h2 className="text-4xl font-black uppercase tracking-tighter text-black/80">Code Studio</h2>
-                  <p className="text-[10px] text-black/30 uppercase tracking-widest mt-1">Neural Scripting Environment</p>
+                  <h2 className="text-4xl font-black uppercase tracking-tighter text-white/80">Code Studio</h2>
+                  <p className="text-[10px] text-white/30 uppercase tracking-widest mt-1">Neural Scripting Environment</p>
                 </div>
                 <div className="flex gap-4">
-                  <button className="px-4 py-2 bg-white border border-black/5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black/5 transition-all soft-shadow">Export</button>
+                  <button className="px-4 py-2 bg-white border border-white/[0.08] rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/[0.06] transition-all soft-shadow">Export</button>
                   <button className="px-4 py-2 bg-accent-blue text-white rounded-xl text-[10px] font-black uppercase tracking-widest soft-shadow">Commit</button>
                 </div>
               </div>
               <GlassCard neonColor="blue" className="p-1 min-h-[500px] flex">
-                <div className="w-12 bg-black/[0.02] border-r border-black/5 flex flex-col items-center py-4 gap-4">
+                <div className="w-12 bg-white/[0.03] border-r border-white/[0.08] flex flex-col items-center py-4 gap-4">
                   <FileText size={18} className="text-accent-blue" />
-                  <Search size={18} className="text-black/20" />
-                  <Network size={18} className="text-black/20" />
+                  <Search size={18} className="text-white/20" />
+                  <Network size={18} className="text-white/20" />
                 </div>
-                <div className="flex-1 p-6 font-mono text-xs text-black/60 leading-relaxed overflow-y-auto no-scrollbar">
+                <div className="flex-1 p-6 font-mono text-xs text-white/60 leading-relaxed overflow-y-auto no-scrollbar">
                   <div className="flex gap-4">
                     <div className="text-black/10 text-right select-none">
                       {Array.from({ length: 30 }).map((_, i) => <div key={i}>{i + 1}</div>)}
@@ -2188,7 +2188,7 @@ const GlobalPageRouter = () => {
                       <br />
                       &nbsp;&nbsp;<span className="text-accent-purple">const</span> node = <span className="text-accent-purple">await</span> NeuralCore.<span className="text-accent-blue">connect</span>();
                       <br />
-                      &nbsp;&nbsp;<span className="text-black/40">// Initialize creative signal</span>
+                      &nbsp;&nbsp;<span className="text-white/40">// Initialize creative signal</span>
                       <br />
                       &nbsp;&nbsp;<span className="text-accent-purple">return</span> node.<span className="text-accent-blue">sync</span>();
                       <br />
@@ -2202,7 +2202,7 @@ const GlobalPageRouter = () => {
 
           {activeGlobalPage === 'memory' && (
             <div className="space-y-8">
-              <h2 className="text-4xl font-black uppercase tracking-tighter text-black/80">Memory Lake</h2>
+              <h2 className="text-4xl font-black uppercase tracking-tighter text-white/80">Memory Lake</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {Array.from({ length: 8 }).map((_, i) => (
                   <GlassCard key={i} neonColor="purple" className="p-6 aspect-square flex flex-col justify-between group cursor-pointer">
@@ -2210,11 +2210,11 @@ const GlobalPageRouter = () => {
                       <div className="p-2 bg-accent-purple/10 rounded-lg text-accent-purple">
                         <Database size={16} />
                       </div>
-                      <div className="text-[8px] font-mono text-black/20">FRAGMENT_{i}</div>
+                      <div className="text-[8px] font-mono text-white/20">FRAGMENT_{i}</div>
                     </div>
                     <div>
-                      <div className="text-[10px] font-black uppercase tracking-widest mb-1 text-black/80">Neural Pattern {i + 1}</div>
-                      <div className="text-[8px] text-black/40 uppercase tracking-widest">Stored 2h ago</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest mb-1 text-white/80">Neural Pattern {i + 1}</div>
+                      <div className="text-[8px] text-white/40 uppercase tracking-widest">Stored 2h ago</div>
                     </div>
                   </GlassCard>
                 ))}
@@ -2224,7 +2224,7 @@ const GlobalPageRouter = () => {
 
           {activeGlobalPage === 'database' && (
             <div className="space-y-8">
-              <h2 className="text-4xl font-black uppercase tracking-tighter text-black/80">Databases</h2>
+              <h2 className="text-4xl font-black uppercase tracking-tighter text-white/80">Databases</h2>
               <div className="space-y-4">
                 {[
                   { name: 'User_Index', size: '1.2 GB', load: '12%', color: 'blue' },
@@ -2237,17 +2237,17 @@ const GlobalPageRouter = () => {
                         <Database size={24} />
                       </div>
                       <div>
-                        <div className="text-sm font-black uppercase tracking-widest text-black/80">{db.name}</div>
-                        <div className="text-[10px] text-black/40 uppercase tracking-widest mt-1">{db.size} // Enterprise Node</div>
+                        <div className="text-sm font-black uppercase tracking-widest text-white/80">{db.name}</div>
+                        <div className="text-[10px] text-white/40 uppercase tracking-widest mt-1">{db.size} // Enterprise Node</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-8">
                       <div className="text-right">
-                        <div className="text-[10px] font-black uppercase tracking-widest text-black/20 mb-1">Load Factor</div>
-                        <div className="text-lg font-black text-black/80">{db.load}</div>
+                        <div className="text-[10px] font-black uppercase tracking-widest text-white/20 mb-1">Load Factor</div>
+                        <div className="text-lg font-black text-white/80">{db.load}</div>
                       </div>
-                      <button className="p-3 bg-black/5 border border-black/5 rounded-xl hover:bg-black/10 transition-all">
-                        <Settings size={18} className="text-black/40" />
+                      <button className="p-3 bg-white/[0.06] border border-white/[0.08] rounded-xl hover:bg-white/[0.1] transition-all">
+                        <Settings size={18} className="text-white/40" />
                       </button>
                     </div>
                   </GlassCard>
@@ -2260,14 +2260,14 @@ const GlobalPageRouter = () => {
             <div className="space-y-12">
               <div className="flex justify-between items-end">
                 <div>
-                  <h2 className="text-4xl font-black uppercase tracking-tighter text-black/80">System Settings</h2>
-                  <p className="text-[10px] text-black/30 uppercase tracking-widest mt-1">Neural Governance & Agent Monitoring</p>
+                  <h2 className="text-4xl font-black uppercase tracking-tighter text-white/80">System Settings</h2>
+                  <p className="text-[10px] text-white/30 uppercase tracking-widest mt-1">Neural Governance & Agent Monitoring</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
-                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-black/40">Agent Monitor</h3>
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white/40">Agent Monitor</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {agents.map(agent => (
                       <GlassCard key={agent.id} className="p-6">
@@ -2277,20 +2277,20 @@ const GlobalPageRouter = () => {
                           </div>
                           <div className="flex flex-col items-end">
                             <span className="text-[8px] font-black text-accent-green uppercase tracking-widest">Online</span>
-                            <span className="text-[10px] font-mono text-black/20">Uptime: 142h</span>
+                            <span className="text-[10px] font-mono text-white/20">Uptime: 142h</span>
                           </div>
                         </div>
                         <div className="mb-4">
-                          <div className="text-[10px] font-black text-black/80 uppercase tracking-widest">{agent.name}</div>
-                          <div className="text-[8px] text-black/40 uppercase font-bold tracking-tighter">{agent.role} // {agent.id}</div>
+                          <div className="text-[10px] font-black text-white/80 uppercase tracking-widest">{agent.name}</div>
+                          <div className="text-[8px] text-white/40 uppercase font-bold tracking-tighter">{agent.role} // {agent.id}</div>
                         </div>
                         <div className="space-y-3">
                           <div>
-                            <div className="flex justify-between text-[7px] font-black uppercase tracking-widest text-black/20 mb-1">
+                            <div className="flex justify-between text-[7px] font-black uppercase tracking-widest text-white/20 mb-1">
                               <span>Neural Load</span>
                               <span>{Math.floor(Math.random() * 40 + 10)}%</span>
                             </div>
-                            <div className="h-1 w-full bg-black/5 rounded-full overflow-hidden">
+                            <div className="h-1 w-full bg-white/[0.08] rounded-full overflow-hidden">
                               <motion.div 
                                 initial={{ width: 0 }}
                                 animate={{ width: `${Math.floor(Math.random() * 40 + 10)}%` }}
@@ -2298,9 +2298,9 @@ const GlobalPageRouter = () => {
                               />
                             </div>
                           </div>
-                          <div className="p-2 bg-black/[0.02] rounded-lg border border-black/5">
-                            <div className="text-[7px] font-black text-black/20 uppercase tracking-widest mb-1">Current Task</div>
-                            <div className="text-[9px] font-bold text-black/60 uppercase truncate">Optimizing Neural Bridge...</div>
+                          <div className="p-2 bg-white/[0.03] rounded-lg border border-white/[0.08]">
+                            <div className="text-[7px] font-black text-white/20 uppercase tracking-widest mb-1">Current Task</div>
+                            <div className="text-[9px] font-bold text-white/60 uppercase truncate">Optimizing Neural Bridge...</div>
                           </div>
                         </div>
                       </GlassCard>
@@ -2309,7 +2309,7 @@ const GlobalPageRouter = () => {
                 </div>
 
                 <div className="space-y-8">
-                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-black/40">System Governance</h3>
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white/40">System Governance</h3>
                   <GlassCard className="p-8 space-y-8">
                     {[
                       { id: 'autonomous', label: 'Autonomous Mode', desc: 'Allow Agent Lee to initiate tasks independently', state: isAutonomous, setter: setIsAutonomous },
@@ -2318,8 +2318,8 @@ const GlobalPageRouter = () => {
                     ].map(setting => (
                       <div key={setting.id} className="flex items-center justify-between gap-6">
                         <div className="flex-1">
-                          <div className="text-[10px] font-black text-black/80 uppercase tracking-widest mb-1">{setting.label}</div>
-                          <div className="text-[8px] text-black/40 uppercase font-bold tracking-tighter leading-tight">{setting.desc}</div>
+                          <div className="text-[10px] font-black text-white/80 uppercase tracking-widest mb-1">{setting.label}</div>
+                          <div className="text-[8px] text-white/40 uppercase font-bold tracking-tighter leading-tight">{setting.desc}</div>
                         </div>
                         <button 
                           onClick={() => setting.setter(!setting.state)}
@@ -2336,15 +2336,15 @@ const GlobalPageRouter = () => {
                       </div>
                     ))}
 
-                    <div className="pt-8 border-t border-black/5">
-                      <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-black/80 mb-4">
+                    <div className="pt-8 border-t border-white/[0.08]">
+                      <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-white/80 mb-4">
                         <span>Neural Bridge Strength</span>
                         <span className="text-accent-blue">98.4%</span>
                       </div>
-                      <div className="h-2 w-full bg-black/5 rounded-full relative overflow-hidden">
+                      <div className="h-2 w-full bg-white/[0.08] rounded-full relative overflow-hidden">
                         <div className="absolute inset-y-0 left-0 w-[98.4%] bg-accent-blue rounded-full" />
                       </div>
-                      <p className="text-[8px] text-black/20 uppercase tracking-widest mt-4 leading-relaxed">
+                      <p className="text-[8px] text-white/20 uppercase tracking-widest mt-4 leading-relaxed">
                         Master Agent LEE is currently operating at peak efficiency. All sub-agents are synchronized.
                       </p>
                     </div>
@@ -2382,12 +2382,12 @@ const AgentGrid = () => {
             "p-4 rounded-2xl border transition-all text-left group relative overflow-hidden",
             activeAgent.id === agent.id 
               ? `bg-accent-${agent.color.split('-')[1]}/10 border-accent-${agent.color.split('-')[1]}/40 shadow-lg` 
-              : "bg-black/[0.02] border-black/5 text-black/30 hover:bg-black/[0.05]"
+              : "bg-white/[0.03] border-white/[0.08] text-white/30 hover:bg-white/[0.06]"
           )}
         >
           <div className={cn(
             "w-10 h-10 rounded-xl flex items-center justify-center border mb-3 transition-all",
-            activeAgent.id === agent.id ? `border-accent-${agent.color.split('-')[1]}/40 bg-accent-${agent.color.split('-')[1]}/20` : "border-black/5 bg-black/5"
+            activeAgent.id === agent.id ? `border-accent-${agent.color.split('-')[1]}/40 bg-accent-${agent.color.split('-')[1]}/20` : "border-white/[0.08] bg-white/[0.06]"
           )}>
             <agent.icon size={18} className={activeAgent.id === agent.id ? `text-accent-${agent.color.split('-')[1]}` : ""} />
           </div>
@@ -2409,12 +2409,12 @@ const StudioWorkspace = () => {
     <div className="p-4 space-y-6">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-2xl font-black uppercase tracking-tighter text-[#1d1d1f]">Studio Output</h2>
-          <p className="text-[9px] font-mono text-black/30 uppercase tracking-widest">Neural Output Forge</p>
+          <h2 className="text-2xl font-black uppercase tracking-tighter text-white">Studio Output</h2>
+          <p className="text-[9px] font-mono text-white/30 uppercase tracking-widest">Neural Output Forge</p>
         </div>
         <div className="flex gap-2">
-          <button className="p-2.5 bg-black/5 border border-black/5 rounded-xl text-black/40 hover:text-black transition-colors"><Save size={16} /></button>
-          <button className="p-2.5 bg-black/5 border border-black/5 rounded-xl text-black/40 hover:text-black transition-colors"><Share2 size={16} /></button>
+          <button className="p-2.5 bg-black/5 border border-white/[0.08] rounded-xl text-white/40 hover:text-white transition-colors"><Save size={16} /></button>
+          <button className="p-2.5 bg-black/5 border border-white/[0.08] rounded-xl text-white/40 hover:text-white transition-colors"><Share2 size={16} /></button>
         </div>
       </div>
 
@@ -2422,12 +2422,12 @@ const StudioWorkspace = () => {
         <GlassCard neonColor={AGENTS.find(a => a.id === latestTask.agentId)?.color.split('-')[1] || 'blue'} className="p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-black/5 flex items-center justify-center border border-black/5">
+              <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center border border-white/[0.08]">
                 <Sparkles size={14} className="text-accent-blue" />
               </div>
               <div>
-                <div className="text-[10px] font-black uppercase tracking-widest text-[#1d1d1f]">{latestTask.type} OUTPUT</div>
-                <div className="text-[8px] font-mono text-black/30 uppercase">Generated by {latestTask.agentId}</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-white">{latestTask.type} OUTPUT</div>
+                <div className="text-[8px] font-mono text-white/30 uppercase">Generated by {latestTask.agentId}</div>
               </div>
             </div>
             <button className="text-[9px] font-black text-accent-blue uppercase tracking-widest hover:underline">Export Asset</button>
@@ -2435,21 +2435,21 @@ const StudioWorkspace = () => {
 
           <div className="space-y-4">
             {latestTask.output?.startsWith('[IMAGE_GENERATED]') ? (
-              <div className="aspect-video bg-black rounded-2xl overflow-hidden border border-black/5 group relative">
+              <div className="aspect-video bg-black rounded-2xl overflow-hidden border border-white/[0.08] group relative">
                 <img src={latestTask.output.split(' ')[1]} alt="Generated" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                   <span className="text-[10px] font-black uppercase tracking-widest text-white">Neural Render v4.2</span>
                 </div>
               </div>
             ) : (
-              <div className="bg-black/[0.03] border border-black/5 rounded-2xl p-5 text-[11px] font-mono leading-relaxed text-black/80 whitespace-pre-wrap max-h-96 overflow-y-auto no-scrollbar">
+              <div className="bg-black/[0.03] border border-white/[0.08] rounded-2xl p-5 text-[11px] font-mono leading-relaxed text-white/80 whitespace-pre-wrap max-h-96 overflow-y-auto no-scrollbar">
                 {latestTask.output}
               </div>
             )}
           </div>
         </GlassCard>
       ) : (
-        <div className="aspect-video bg-black/5 rounded-[40px] flex flex-col items-center justify-center gap-4 opacity-20 border-dashed border-2 border-black/10">
+        <div className="aspect-video bg-white/[0.04] rounded-[40px] flex flex-col items-center justify-center gap-4 opacity-20 border-dashed border-2 border-white/[0.1]">
           <MousePointer2 size={48} className="animate-bounce" />
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-black">Awaiting Neural Input</span>
         </div>
@@ -2683,33 +2683,33 @@ export default function AgentLeeCreatorsStudio() {
       projects, setProjects,
       studioContent, setStudioContent
     }}>
-      <div className="flex flex-col h-screen bg-soft-white text-[#1d1d1f] overflow-hidden font-sans">
+      <div className="flex flex-col h-screen bg-[#020408] text-white overflow-hidden font-sans">
         <div className="scanline pointer-events-none" />
         
         {/* Header: System Status & Logo */}
-        <header className="h-16 bg-white/80 border-b border-black/5 z-50 backdrop-blur-xl shrink-0">
+        <header className="h-16 bg-[#020408]/95 border-b border-white/[0.06] z-50 backdrop-blur-xl shrink-0">
           <div className="max-w-7xl mx-auto h-full px-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => setIsSidebarOpen(true)}
-                className="p-2 text-black/40 hover:text-accent-blue transition-all active:scale-90 bg-black/5 rounded-lg border border-black/5"
+                className="p-2 text-white/40 hover:text-accent-blue transition-all active:scale-90 bg-white/[0.06] rounded-lg border border-white/[0.08]"
               >
                 <Menu size={18} />
               </button>
               <div>
-                <h1 className="text-sm font-black uppercase tracking-[0.3em] text-[#1d1d1f]">Agent Lee</h1>
-                <p className="text-[8px] font-mono text-black/40 uppercase tracking-widest">Creators Studio // v4.2.0</p>
+                <h1 className="text-sm font-black uppercase tracking-[0.3em] text-white">Agent Lee</h1>
+                <p className="text-[8px] font-mono text-white/40 uppercase tracking-widest">Creators Studio // v4.2.0</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3 px-4 py-2 bg-black/5 rounded-full border border-black/5">
+              <div className="flex items-center gap-3 px-4 py-2 bg-white/[0.06] rounded-full border border-white/[0.08]">
                 <div className="w-1.5 h-1.5 rounded-full bg-accent-green shadow-[0_0_8px_#28cd41]" />
-                <span className="text-[7px] font-black uppercase tracking-widest text-black/60">Governor Online</span>
+                <span className="text-[7px] font-black uppercase tracking-widest text-white/60">Governor Online</span>
               </div>
               <button 
                 onClick={() => setIsNotepadOpen(true)}
-                className="p-2 text-black/40 hover:text-accent-blue transition-all active:scale-90 bg-black/5 rounded-lg border border-black/5 flex items-center gap-2"
+                className="p-2 text-white/40 hover:text-accent-blue transition-all active:scale-90 bg-white/[0.06] rounded-lg border border-white/[0.08] flex items-center gap-2"
               >
                 <Clipboard size={18} />
                 <span className="text-[8px] font-black uppercase tracking-widest hidden sm:inline">Notepad</span>

@@ -56,18 +56,18 @@ export function SystemAwarenessPanel({
 
   if (variant === 'shell') {
     return (
-      <div className={cn('rounded-2xl border border-black/10 bg-black/[0.03] px-4 py-3', className)}>
+      <div className={cn('rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-3', className)}>
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-black/70">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">
             <Database size={12} style={{ color: surface.color }} />
             Memory Governed
           </div>
-          <div className="h-3 w-px bg-black/10" />
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-black/60">
+          <div className="h-3 w-px bg-white/10" />
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-white/60">
             <Activity size={12} />
             Diagnostics Aware
           </div>
-          <div className="h-3 w-px bg-black/10" />
+          <div className="h-3 w-px bg-white/10" />
           <div className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: surface.color }}>
             {surface.label}
           </div>

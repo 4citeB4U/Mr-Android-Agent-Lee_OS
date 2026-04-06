@@ -24,7 +24,7 @@
 
 @layer base {
   body {
-    @apply bg-[#FDFDFD] text-black antialiased;
+    @apply bg-[#020408] text-white antialiased;
   }
 }
 
@@ -55,12 +55,12 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 242, 255, 0.25);
   }
 }
 

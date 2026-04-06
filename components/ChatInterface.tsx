@@ -87,7 +87,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-black/5 hover:bg-black/10 text-slate-600 rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.1] text-slate-300 rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0"
         >
           <Upload className="w-3.5 h-3.5" />
           Upload
@@ -97,7 +97,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <button
             type="button"
             onClick={onSave}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-black/5 hover:bg-black/10 text-primary rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.1] text-[#00f2ff]/80 rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0"
           >
             <Database className="w-3.5 h-3.5" />
             Download / Save
@@ -108,7 +108,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           type="button"
           onClick={onGenerate}
           disabled={isGenerating || !input.trim()}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-black/5 hover:bg-black/10 text-emerald-600 rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0 disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.1] text-emerald-400 rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0 disabled:opacity-50"
         >
           {isGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
           Agent Sparkles
@@ -116,7 +116,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
         <button
           type="button"
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-black/5 hover:bg-black/10 text-slate-600 rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.1] text-slate-300 rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0"
         >
           <Share2 className="w-3.5 h-3.5" />
           Share
@@ -126,7 +126,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <button
             type="button"
             onClick={onSendToStudio}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-black/5 hover:bg-black/10 text-purple-600 rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.1] text-purple-400 rounded-full transition-colors font-bold text-[10px] uppercase tracking-widest shrink-0"
           >
             <Code className="w-3.5 h-3.5" />
             Studio
@@ -141,7 +141,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={placeholder}
-            className="w-full bg-black/5 border border-black/10 rounded-2xl px-4 py-3 md:py-4 pr-16 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm font-medium placeholder:text-muted-foreground"
+            className="w-full bg-white/[0.06] border border-white/[0.1] text-white rounded-2xl px-4 py-3 md:py-4 pr-16 focus:outline-none focus:ring-2 focus:ring-[#00f2ff]/40 transition-all text-sm font-medium placeholder:text-white/30"
           />
           
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
@@ -163,7 +163,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             else if (!isListening && onStartVoice) onStartVoice();
           }}
           className={cn(
-            "relative p-1 md:p-2 rounded-2xl hover:bg-black/5 transition-all flex-shrink-0 cursor-pointer group",
+            "relative p-1 md:p-2 rounded-2xl hover:bg-white/[0.07] transition-all flex-shrink-0 cursor-pointer group",
             isListening && "animate-pulse"
           )}
           title="Voice Input (Mac Million Mic)"

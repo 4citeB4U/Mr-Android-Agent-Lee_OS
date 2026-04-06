@@ -116,10 +116,10 @@ export const FloatingChat: React.FC<FloatingChatProps> = ({ messages }) => {
               transition={{ duration: 0.3, ease: 'easeOut' }}
               className="rounded-2xl px-4 py-3 shadow-lg"
               style={{
-                background:    'rgba(255,255,255,0.82)',
+                background:    'rgba(8,16,30,0.92)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
-                border:        '1px solid rgba(255,255,255,0.6)',
+                border:        '1px solid rgba(255,255,255,0.08)',
                 borderLeft:    `3px solid ${color}`,
               }}
             >
@@ -131,7 +131,7 @@ export const FloatingChat: React.FC<FloatingChatProps> = ({ messages }) => {
                   {card.agent}
                 </p>
               )}
-              <p className="text-xs font-medium text-slate-800 leading-relaxed">
+              <p className="text-xs font-medium text-slate-100 leading-relaxed">
                 {snippet}
                 {card.content.length > 200 && (
                   <span className="text-slate-400 ml-1">…</span>

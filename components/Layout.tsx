@@ -142,11 +142,11 @@ export const Layout: React.FC<LayoutProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-[#FDFDFD] text-black font-sans overflow-hidden">
+    <div className="fixed inset-0 flex flex-col bg-[#020408] text-white font-sans overflow-hidden">
 
       {/* Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[#FDFDFD]" />
+        <div className="absolute inset-0 bg-[#020408]" />
         <AnimatePresence>
           {backgroundImage && (
             <motion.div
@@ -167,23 +167,23 @@ export const Layout: React.FC<LayoutProps> = ({
       </div>
 
       {/*  HEADER  */}
-      <header className="relative z-50 shrink-0 h-16 flex items-center justify-between px-4 md:px-6 bg-white/90 backdrop-blur-md border-b border-black/5 shadow-sm">
+      <header className="relative z-50 shrink-0 h-16 flex items-center justify-between px-4 md:px-6 bg-[#020408]/95 backdrop-blur-md border-b border-white/[0.06]">
 
         {/* Left  hamburger */}
         <button
           aria-label="Open menu"
           onClick={() => { audioOrchestrator.handleEvent('button:click'); setIsDrawerOpen(true); }}
-          className="p-2 rounded-2xl hover:bg-black/5 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+          className="p-2 rounded-2xl hover:bg-white/[0.07] active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
         >
-          <Menu className="w-6 h-6 text-black" />
+          <Menu className="w-6 h-6 text-white" />
         </button>
 
         {/* Center  title */}
         <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-none">
-          <div className="w-7 h-7 bg-black rounded-lg flex items-center justify-center shadow">
+          <div className="w-7 h-7 bg-[#00f2ff]/10 border border-[#00f2ff]/30 rounded-lg flex items-center justify-center">
             <Crown className="w-4 h-4 text-yellow-400" />
           </div>
-          <h1 className="text-base md:text-lg font-black tracking-tight text-black select-none">
+          <h1 className="text-base md:text-lg font-black tracking-tight text-white select-none">
             Agent Lee OS
           </h1>
         </div>
@@ -264,28 +264,28 @@ export const Layout: React.FC<LayoutProps> = ({
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', stiffness: 320, damping: 36 }}
-              className="fixed left-0 top-0 bottom-0 z-[200] w-[320px] max-w-[90vw] bg-white flex flex-col shadow-2xl overflow-hidden"
+              className="fixed left-0 top-0 bottom-0 z-[200] w-[320px] max-w-[90vw] bg-[#08101e] flex flex-col shadow-2xl shadow-black/60 border-r border-white/[0.06] overflow-hidden"
               onClick={e => e.stopPropagation()}
             >
               {/* Drawer header */}
-              <div className="shrink-0 h-14 flex items-center justify-between px-4 border-b border-black/5 bg-black/[0.02]">
+              <div className="shrink-0 h-14 flex items-center justify-between px-4 border-b border-white/[0.06] bg-white/[0.02]">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-black rounded-md flex items-center justify-center">
+                  <div className="w-6 h-6 bg-[#00f2ff]/10 border border-[#00f2ff]/30 rounded-md flex items-center justify-center">
                     <Crown className="w-3.5 h-3.5 text-yellow-400" />
                   </div>
-                  <span className="text-sm font-black tracking-tight">Menu</span>
+                  <span className="text-sm font-black tracking-tight text-white">Menu</span>
                 </div>
                 <button
                   onClick={() => setIsDrawerOpen(false)}
-                  className="p-2 rounded-xl hover:bg-black/5 transition-colors"
+                  className="p-2 rounded-xl hover:bg-white/[0.07] transition-colors text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* AgentLee mini status */}
-              <div className="shrink-0 flex items-center gap-3 px-4 py-3 border-b border-black/5">
-                <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-black/10 shadow-sm bg-black/5">
+              <div className="shrink-0 flex items-center gap-3 px-4 py-3 border-b border-white/[0.06]">
+                <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-white/[0.1] bg-white/[0.05]">
                   <AgentLee
                     voxelCode={voxelCode}
                     isSpeaking={isSpeaking}
@@ -297,27 +297,27 @@ export const Layout: React.FC<LayoutProps> = ({
                   {isSpeaking && (
                     <div className="absolute inset-0 rounded-2xl border-2 border-cyan-400 animate-pulse pointer-events-none" />
                   )}
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-[#08101e]" />
                 </div>
                 <div>
                   <p className="text-sm font-black tracking-tight">Agent Lee</p>
-                  <p className="text-[10px] text-black/40 uppercase tracking-widest font-semibold">
+                  <p className="text-[10px] text-white/40 uppercase tracking-widest font-semibold">
                     {isSpeaking ? 'Speaking' : isListening ? 'Listening' : 'Ready'}
                   </p>
                 </div>
               </div>
 
               {/* Engine Library */}
-              <div className="shrink-0 px-2 py-2 border-b border-black/5">
+              <div className="shrink-0 px-2 py-2 border-b border-white/[0.06]">
                 <button
                   onClick={() => { audioOrchestrator.handleEvent('button:click'); setIsLibraryOpen(p => !p); }}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-black/5 transition-colors text-left"
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-colors text-left"
                 >
                   <div className="flex items-center gap-2">
-                    <BookMarked className="w-4 h-4 text-blue-500" />
-                    <span className="text-xs font-bold text-black">Engine Library</span>
+                    <BookMarked className="w-4 h-4 text-blue-400" />
+                    <span className="text-xs font-bold text-white">Engine Library</span>
                   </div>
-                  <ChevronDown className={cn('w-3.5 h-3.5 text-black/40 transition-transform', isLibraryOpen && 'rotate-180')} />
+                  <ChevronDown className={cn('w-3.5 h-3.5 text-white/40 transition-transform', isLibraryOpen && 'rotate-180')} />
                 </button>
 
                 <AnimatePresence>
@@ -328,33 +328,31 @@ export const Layout: React.FC<LayoutProps> = ({
                       exit={{ opacity: 0, height: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="mt-1 rounded-xl border border-black/5 overflow-hidden">
+                      <div className="mt-1 rounded-xl border border-white/[0.08] overflow-hidden">
                         <div className="max-h-48 overflow-y-auto">
                           {savedVoxels.length === 0 ? (
-                            <p className="p-3 text-center text-[10px] text-black/40 uppercase tracking-widest">Nothing saved yet</p>
+                            <p className="p-3 text-center text-[10px] text-white/40 uppercase tracking-widest">Nothing saved yet</p>
                           ) : (
                             savedVoxels.map(voxel => (
                               <button
                                 key={voxel.id}
                                 onClick={() => { audioOrchestrator.handleEvent('button:click'); onSelectFromLake(voxel); setIsLibraryOpen(false); setIsDrawerOpen(false); }}
-                                className="w-full flex items-center gap-3 p-2 hover:bg-black/5 transition-all text-left group"
-                              >
+                                className="w-full flex items-center gap-3 p-2 hover:bg-white/[0.06] transition-all text-left group">
                                 <div className="w-8 h-8 rounded-lg bg-black/10 overflow-hidden flex-shrink-0">
                                   <img src={voxel.image} alt={voxel.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-xs font-bold truncate text-black">{voxel.name}</p>
-                                  <p className="text-[9px] text-black/40 uppercase">{voxel.date}</p>
+                                  <p className="text-xs font-bold truncate text-white">{voxel.name}</p>
+                                  <p className="text-[9px] text-white/40 uppercase">{voxel.date}</p>
                                 </div>
                               </button>
                             ))
                           )}
                         </div>
-                        <div className="border-t border-black/5 p-1">
+                        <div className="border-t border-white/[0.06] p-1">
                           <button
                             onClick={() => { audioOrchestrator.handleEvent('nav:click'); onPageChange('memory'); setIsLibraryOpen(false); setIsDrawerOpen(false); }}
-                            className="w-full flex items-center gap-1.5 justify-center py-1.5 text-[10px] font-bold uppercase tracking-widest text-blue-500 hover:bg-blue-50 rounded-lg transition-all"
-                          >
+                            className="w-full flex items-center gap-1.5 justify-center py-1.5 text-[10px] font-bold uppercase tracking-widest text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all">
                             <Upload className="w-3 h-3" />
                             Open Memory Lake
                           </button>
@@ -366,8 +364,8 @@ export const Layout: React.FC<LayoutProps> = ({
               </div>
 
               {/* Navigation grid */}
-              <nav className="shrink-0 px-2 py-2 border-b border-black/5">
-                <p className="text-[9px] font-bold uppercase tracking-widest text-black/30 px-2 mb-1.5">Pages</p>
+              <nav className="shrink-0 px-2 py-2 border-b border-white/[0.06]">
+                <p className="text-[9px] font-bold uppercase tracking-widest text-white/30 px-2 mb-1.5">Pages</p>
                 <div className="grid grid-cols-2 gap-1">
                   {NAV_ITEMS.map(item => {
                     const Icon = item.icon;
@@ -378,7 +376,7 @@ export const Layout: React.FC<LayoutProps> = ({
                         onClick={() => audioNavClick(item.id, currentPage, onPageChange, () => setIsDrawerOpen(false))}
                         className={cn(
                           'flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all text-left focus-visible:outline-none focus-visible:ring-2',
-                          active ? 'font-black shadow-sm' : 'text-black/60 hover:text-black hover:bg-black/5 font-bold'
+                          active ? 'font-black shadow-sm' : 'text-white/50 hover:text-white hover:bg-white/[0.07] font-bold'
                         )}
                         style={active ? { background: `${item.color}1A`, color: item.color } : {}}
                       >
