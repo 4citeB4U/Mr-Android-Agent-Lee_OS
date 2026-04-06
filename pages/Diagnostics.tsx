@@ -581,8 +581,11 @@ function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; is
   const characterGroupRef = useRef<THREE.Group>(null);
   const ringsGroupRef = useRef<THREE.Group>(null);
   const baseGroupRef = useRef<THREE.Group>(null);
-  const lightningRef = useRef<THREE.Group>(null);
-  const flashLightRef = useRef<THREE.PointLight>(null);
+  const stream1Ref = useRef<THREE.Points>(null);
+  const stream2Ref = useRef<THREE.Points>(null);
+  const STREAM_COUNT = 20;
+  const stream1Positions = useMemo(() => new Float32Array(STREAM_COUNT * 3), []);
+  const stream2Positions = useMemo(() => new Float32Array(STREAM_COUNT * 3), []);
 
   const bodyMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     color: 0x1a3a8f, emissive: 0x0066cc, emissiveIntensity: 0.6, roughness: 0.2, metalness: 0.7
@@ -623,39 +626,19 @@ function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; is
       baseGroupRef.current.rotation.y += 0.01;
     }
 
-    if (lightningRef.current && characterGroupRef.current && baseGroupRef.current) {
-      const start = new THREE.Vector3();
-      const end = new THREE.Vector3();
-      
-      characterGroupRef.current.getWorldPosition(start);
-      baseGroupRef.current.getWorldPosition(end);
-      
-      const strike = Math.random() > 0.85;
-
-      lightningRef.current.children.forEach((line: any) => {
-        if (strike) {
-          const pts = [];
-          const segs = 16;
-          for (let j = 0; j <= segs; j++) {
-            const p = new THREE.Vector3().lerpVectors(start, end, j/segs);
-            if(j > 0 && j < segs) {
-              const jitter = 4;
-              p.x += (Math.random() - 0.5) * jitter;
-              p.y += (Math.random() - 0.5) * jitter;
-              p.z += (Math.random() - 0.5) * jitter;
-            }
-            pts.push(p);
-          }
-          line.geometry.setFromPoints(pts);
-          line.visible = true;
-        } else {
-          line.visible = false;
+    if (stream1Ref.current && stream2Ref.current && characterGroupRef.current && baseGroupRef.current) {
+      const startLocal = characterGroupRef.current.position.clone();
+      const endLocal = startLocal.clone().add(baseGroupRef.current.position);
+      [stream1Ref, stream2Ref].forEach((ref, si) => {
+        const offset = si * 0.5;
+        const posAttr = ref.current!.geometry.attributes.position;
+        for (let k = 0; k < STREAM_COUNT; k++) {
+          const frac = ((t * 0.6 + offset + k / STREAM_COUNT) % 1);
+          const p = new THREE.Vector3().lerpVectors(startLocal, endLocal, frac);
+          posAttr.setXYZ(k, p.x, p.y, p.z);
         }
+        posAttr.needsUpdate = true;
       });
-      if (flashLightRef.current) {
-        flashLightRef.current.intensity = strike ? 100 : 2;
-        flashLightRef.current.position.copy(start).lerp(end, 0.5);
-      }
     }
   });
 
@@ -713,15 +696,18 @@ function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; is
         </group>
       </group>
 
-      <group ref={lightningRef}>
-        {[0, 1, 2].map((i) => (
-          <line key={i}>
-            <bufferGeometry />
-            <lineBasicMaterial color={0x00ffff} transparent opacity={0.8} blending={THREE.AdditiveBlending} />
-          </line>
-        ))}
-      </group>
-      <pointLight ref={flashLightRef} color={0x00ffff} intensity={1} distance={100} />
+      <points ref={stream1Ref}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[stream1Positions, 3]} />
+        </bufferGeometry>
+        <pointsMaterial size={0.6} color={0x00f2ff} transparent opacity={0.85} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </points>
+      <points ref={stream2Ref}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[stream2Positions, 3]} />
+        </bufferGeometry>
+        <pointsMaterial size={0.4} color={0xa855f7} transparent opacity={0.7} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </points>
     </group>
   );
 }
