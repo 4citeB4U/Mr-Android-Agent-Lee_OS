@@ -1629,121 +1629,7 @@ function AgentLeeAnchor() {
   );
 }
 
-// 7. GoverningBodyHUD — fixed lower-right panel
-const GOVERNING_BODY = [
-  { id: 'gabriel',          role: 'Chair — Law Enforcer',          color: '#7C3AED' },
-  { id: 'aegis',            role: 'Registry Keeper',                color: '#EF4444' },
-  { id: 'marshal',          role: 'Verification Corps',             color: '#7C3AED' },
-  { id: 'shield',           role: 'Security & Self-Healing',        color: '#EF4444' },
-  { id: 'brain-sentinel',   role: 'Neural Health Overseer',         color: '#10B981' },
-  { id: 'safety',           role: 'PII & Injection Defense',        color: '#EF4444' },
-  { id: 'leeway-standards', role: 'Standards Compliance',           color: '#39FF14' },
-  { id: 'janitor',          role: 'Retention & Storage Warden',     color: '#EF4444' },
-  { id: 'librarian',        role: 'Documentation Governance',       color: '#8B5CF6' },
-];
-
-function GoverningBodyHUD({ onAgentClick }: { onAgentClick: (agent: AgentData) => void }) {
-  const [collapsed, setCollapsed] = useState(false);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 40 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 40 }}
-      className="fixed bottom-[88px] md:bottom-6 right-4 md:right-6 z-30 w-64 md:w-72 pointer-events-auto"
-    >
-      <div 
-        className="rounded-3xl border overflow-hidden"
-        style={{ 
-          background: 'rgba(2,4,8,0.92)',
-          borderColor: 'rgba(124,58,237,0.4)',
-          boxShadow: '0 0 40px rgba(124,58,237,0.15)',
-          backdropFilter: 'blur(24px)',
-        }}
-      >
-        {/* Header */}
-        <button
-          onClick={() => setCollapsed(c => !c)}
-          className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/5 transition-colors"
-        >
-          <div className="flex items-center gap-3">
-            <div className="p-1.5 rounded-lg" style={{ backgroundColor: 'rgba(124,58,237,0.2)' }}>
-              <Gavel size={14} style={{ color: '#7C3AED' }} />
-            </div>
-            <div className="text-left">
-              <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Governing Body</p>
-              <p className="text-[8px] font-mono" style={{ color: '#7C3AED99' }}>
-                {GOVERNING_BODY.length} OFFICERS · ACTIVE QUORUM
-              </p>
-            </div>
-          </div>
-          {collapsed 
-            ? <ChevronRight size={14} className="text-white/40 rotate-90" />
-            : <ChevronRight size={14} className="text-white/40 -rotate-90" />
-          }
-        </button>
-
-        {/* Body */}
-        <AnimatePresence>
-          {!collapsed && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="overflow-hidden"
-            >
-              <div className="h-px" style={{ background: 'rgba(124,58,237,0.3)' }} />
-              <div className="px-4 py-3 space-y-2">
-                {GOVERNING_BODY.map(({ id, role, color }) => {
-                  const agent = AGENTS.find(a => a.id === id);
-                  if (!agent) return null;
-                  const Icon = agent.icon;
-                  return (
-                    <button
-                      key={id}
-                      onClick={() => onAgentClick(agent)}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all hover:scale-[1.02] text-left"
-                      style={{ 
-                        backgroundColor: `${color}10`,
-                        border: `1px solid ${color}25`,
-                      }}
-                    >
-                      <div className="p-1.5 rounded-lg shrink-0" style={{ backgroundColor: `${color}20` }}>
-                        <Icon size={12} style={{ color }} />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[9px] font-black text-white uppercase tracking-wide truncate">{agent.title}</p>
-                        <p className="text-[8px] font-mono truncate" style={{ color: `${color}99` }}>{role}</p>
-                      </div>
-                      <div
-                        className={cn("w-1.5 h-1.5 rounded-full shrink-0", agent.status === 'ACTIVE' ? 'animate-pulse' : '')}
-                        style={{ backgroundColor: agent.status === 'ACTIVE' ? '#4ade80' : '#6b7280' }}
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-              {/* Footer */}
-              <div 
-                className="px-5 py-3 flex items-center justify-between"
-                style={{ borderTop: '1px solid rgba(124,58,237,0.2)' }}
-              >
-                <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Quorum Status</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-[8px] font-black text-green-400 uppercase">Operational</span>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.div>
-  );
-}
-
-// 8. AgentCountHUD — top right status badge
+// 7. AgentCountHUD — top right status badge
 function AgentCountHUD() {
   const activeCount = AGENTS.filter(a => a.status === 'ACTIVE').length;
   const idleCount = AGENTS.filter(a => a.status === 'IDLE').length;
@@ -1830,8 +1716,6 @@ export default function App() {
               </div>
             </motion.div>
 
-            {/* Governing Body HUD */}
-            <GoverningBodyHUD onAgentClick={setSelectedAgent} />
           </>
         )}
       </AnimatePresence>
@@ -1904,15 +1788,13 @@ export default function App() {
           />
         </mesh>
         
-        {!isMobile && <Stars radius={200} depth={120} count={3000} factor={12} saturation={1} fade speed={1.5} />}
-        {!isMobile && <Sparkles count={2500} scale={25} size={2} speed={0.5} opacity={0.4} color="#00ffff" />}
+        <Stars radius={200} depth={120} count={isMobile ? 600 : 3000} factor={12} saturation={1} fade speed={isMobile ? 0.5 : 1.5} />
+        <Sparkles count={isMobile ? 300 : 2500} scale={25} size={isMobile ? 3 : 2} speed={isMobile ? 0.2 : 0.5} opacity={isMobile ? 0.5 : 0.4} color="#00ffff" />
         {!isMobile && <Sparkles count={1200} scale={35} size={4} speed={0.2} opacity={0.25} color="#9333ea" />}
 
-        {!isMobile && (
-          <EffectComposer>
-            <Bloom luminanceThreshold={0.35} mipmapBlur intensity={1.2} radius={0.25} />
-          </EffectComposer>
-        )}
+        <EffectComposer>
+          <Bloom luminanceThreshold={isMobile ? 0.6 : 0.35} mipmapBlur intensity={isMobile ? 0.6 : 1.2} radius={0.25} />
+        </EffectComposer>
       </Canvas>
 
       <AgentLeeDiagnostics 
