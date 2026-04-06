@@ -64,6 +64,24 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Detects mobile/Android (Galaxy Fold inner + outer screens, iOS, small viewports)
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const ua = navigator.userAgent;
+    return window.innerWidth < 768 || /Android|iPhone|iPod/i.test(ua);
+  });
+  useEffect(() => {
+    const check = () => {
+      const ua = navigator.userAgent;
+      setIsMobile(window.innerWidth < 768 || /Android|iPhone|iPod/i.test(ua));
+    };
+    window.addEventListener('resize', check, { passive: true });
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  return isMobile;
+}
+
 // --- Types ---
 interface AgentData {
   id: string;
@@ -559,7 +577,7 @@ function VoxelPart({ w, h, d, position, rotation = [0, 0, 0], material, edgeMate
 }
 
 // 2. Brain
-function Brain({ onBaseClick }: { onBaseClick?: () => void }) {
+function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; isMobile?: boolean }) {
   const characterGroupRef = useRef<THREE.Group>(null);
   const ringsGroupRef = useRef<THREE.Group>(null);
   const baseGroupRef = useRef<THREE.Group>(null);
@@ -579,12 +597,15 @@ function Brain({ onBaseClick }: { onBaseClick?: () => void }) {
     color: 0x00ffff, transparent: true, opacity: 0.15, side: THREE.DoubleSide, wireframe: true, blending: THREE.AdditiveBlending
   }), []);
 
-  const ringObjects = useMemo(() => [
-    { radius: 15, rx: Math.PI/2, ry: 0, speed: 0.015 },
-    { radius: 17, rx: 0, ry: Math.PI/2, speed: -0.015 },
-    { radius: 19, rx: Math.PI/4, ry: Math.PI/4, speed: 0.02 },
-    { radius: 21, rx: -Math.PI/4, ry: Math.PI/4, speed: -0.02 }
-  ], []);
+  const ringObjects = useMemo(() => {
+    const all = [
+      { radius: 15, rx: Math.PI/2, ry: 0, speed: 0.015 },
+      { radius: 17, rx: 0, ry: Math.PI/2, speed: -0.015 },
+      { radius: 19, rx: Math.PI/4, ry: Math.PI/4, speed: 0.02 },
+      { radius: 21, rx: -Math.PI/4, ry: Math.PI/4, speed: -0.02 }
+    ];
+    return isMobile ? all.slice(0, 1) : all;
+  }, [isMobile]);
 
   const ringRefs = useRef<THREE.Mesh[]>([]);
 
@@ -676,7 +697,7 @@ function Brain({ onBaseClick }: { onBaseClick?: () => void }) {
           {ringObjects.map((config, i) => (
             <group key={i} rotation={[config.rx, config.ry, 0]}>
               <mesh ref={(el) => { if (el) ringRefs.current[i] = el; }}>
-                <torusGeometry args={[config.radius, 0.06, 8, 120]} />
+                <torusGeometry args={[config.radius, 0.06, 8, isMobile ? 48 : 120]} />
                 <primitive object={ringMat} />
               </mesh>
             </group>
@@ -1570,6 +1591,44 @@ function SystemProgress({ label, progress, color }: { label: string; progress: n
   );
 }
 
+// Agent Lee always-visible status anchor — floats above the 3D canvas
+function AgentLeeAnchor() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="fixed bottom-28 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 select-none pointer-events-none"
+    >
+      <div
+        className="w-12 h-12 rounded-full border-2 overflow-hidden"
+        style={{
+          borderColor: '#00f2ff',
+          background: 'rgba(2,4,8,0.9)',
+          boxShadow: '0 0 20px rgba(0,242,255,0.55), 0 0 40px rgba(0,242,255,0.2)',
+        }}
+      >
+        <img
+          src="https://robohash.org/lee-prime?set=set1&bgset=bg1"
+          alt="Agent Lee"
+          className="w-full h-full object-contain"
+          referrerPolicy="no-referrer"
+        />
+      </div>
+      <div
+        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+        style={{
+          background: 'rgba(2,4,8,0.88)',
+          border: '1px solid rgba(0,242,255,0.3)',
+          backdropFilter: 'blur(8px)',
+        }}
+      >
+        <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+        <span className="text-[8px] font-black text-white uppercase tracking-widest">Agent Lee · Active</span>
+      </div>
+    </motion.div>
+  );
+}
+
 // 7. GoverningBodyHUD — fixed lower-right panel
 const GOVERNING_BODY = [
   { id: 'gabriel',          role: 'Chair — Law Enforcer',          color: '#7C3AED' },
@@ -1726,6 +1785,7 @@ export default function App() {
   const [selectedAgent, setSelectedAgent] = useState<AgentData | null>(null);
   const [isMerged, setIsMerged] = useState(false);
   const [isSystemReportOpen, setIsSystemReportOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <div className="w-full h-screen bg-[#020408] overflow-hidden relative font-sans">
@@ -1776,28 +1836,35 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <Canvas shadows={{ type: THREE.PCFShadowMap }} dpr={[1, 2]}>
-        <PerspectiveCamera makeDefault position={[0, 3, 22]} fov={55} />
+      {/* Agent Lee always-visible status anchor */}
+      {!selectedAgent && !isSystemReportOpen && <AgentLeeAnchor />}
+
+      <Canvas
+        shadows={!isMobile}
+        dpr={isMobile ? [0.5, 1] : [1, 2]}
+        gl={{ powerPreference: 'high-performance', antialias: !isMobile }}
+      >
+        <PerspectiveCamera makeDefault position={[0, 3, 22]} fov={isMobile ? 65 : 55} />
         <OrbitControls 
           enablePan={false} 
           enableZoom={true} 
           minDistance={12} 
           maxDistance={38}
           autoRotate={!selectedAgent && !isMerged}
-          autoRotateSpeed={0.25}
+          autoRotateSpeed={isMobile ? 0.1 : 0.25}
           target={[0, 0, 0]}
         />
         
-        <ambientLight intensity={0.15} />
-        <spotLight position={[10, 15, 10]} angle={0.2} penumbra={1} intensity={1.2} castShadow />
+        <ambientLight intensity={isMobile ? 0.5 : 0.15} />
+        <spotLight position={[10, 15, 10]} angle={0.2} penumbra={1} intensity={1.2} castShadow={!isMobile} />
         <pointLight position={[-10, -10, -10]} intensity={0.3} color="#7C3AED" />
         <pointLight position={[10, 10, -10]} intensity={0.2} color="#00f2ff" />
         
-        <Stars radius={100} depth={50} count={6000} factor={4} saturation={0} fade speed={1} />
-        <Environment preset="night" />
+        <Stars radius={100} depth={50} count={isMobile ? 400 : 6000} factor={4} saturation={0} fade speed={isMobile ? 0 : 1} />
+        {!isMobile && <Environment preset="night" />}
 
-        <group scale={window.innerWidth < 768 ? 0.7 : 1} visible={!selectedAgent && !isSystemReportOpen}>
-          <Brain onBaseClick={() => setIsSystemReportOpen(true)} />
+        <group scale={isMobile ? 0.55 : 1} visible={!selectedAgent && !isSystemReportOpen}>
+          <Brain onBaseClick={() => setIsSystemReportOpen(true)} isMobile={isMobile} />
           
           {AGENTS.map((agent) => (
             <group key={agent.id}>
@@ -1806,7 +1873,7 @@ export default function App() {
                 onClick={setSelectedAgent}
                 isSelected={selectedAgent?.id === agent.id}
                 isMerged={isMerged}
-                hideLabel={!!selectedAgent}
+                hideLabel={!!selectedAgent || isMobile}
               />
               <Connection 
                 start={[0, 0, 0]} 
@@ -1814,19 +1881,21 @@ export default function App() {
                 color={agent.color} 
                 isMerged={isMerged}
               />
-              <ParticleStream 
-                start={[0, 0, 0]} 
-                end={agent.position} 
-                color={agent.color} 
-                isMerged={isMerged}
-              />
+              {!isMobile && (
+                <ParticleStream 
+                  start={[0, 0, 0]} 
+                  end={agent.position} 
+                  color={agent.color} 
+                  isMerged={isMerged}
+                />
+              )}
             </group>
           ))}
         </group>
 
         {/* Skybox */}
         <mesh scale={200}>
-          <sphereGeometry args={[1, 64, 64]} />
+          <sphereGeometry args={[1, isMobile ? 16 : 64, isMobile ? 16 : 64]} />
           <meshBasicMaterial 
             color="#050810" 
             side={THREE.BackSide}
@@ -1835,13 +1904,15 @@ export default function App() {
           />
         </mesh>
         
-        <Stars radius={200} depth={120} count={3000} factor={12} saturation={1} fade speed={1.5} />
-        <Sparkles count={2500} scale={25} size={2} speed={0.5} opacity={0.4} color="#00ffff" />
-        <Sparkles count={1200} scale={35} size={4} speed={0.2} opacity={0.25} color="#9333ea" />
+        {!isMobile && <Stars radius={200} depth={120} count={3000} factor={12} saturation={1} fade speed={1.5} />}
+        {!isMobile && <Sparkles count={2500} scale={25} size={2} speed={0.5} opacity={0.4} color="#00ffff" />}
+        {!isMobile && <Sparkles count={1200} scale={35} size={4} speed={0.2} opacity={0.25} color="#9333ea" />}
 
-        <EffectComposer>
-          <Bloom luminanceThreshold={0.35} mipmapBlur intensity={1.2} radius={0.25} />
-        </EffectComposer>
+        {!isMobile && (
+          <EffectComposer>
+            <Bloom luminanceThreshold={0.35} mipmapBlur intensity={1.2} radius={0.25} />
+          </EffectComposer>
+        )}
       </Canvas>
 
       <AgentLeeDiagnostics 
