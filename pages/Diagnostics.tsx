@@ -585,27 +585,21 @@ function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; is
   const flashLightRef = useRef<THREE.PointLight>(null);
 
   const bodyMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: 0x002288, emissive: 0x0044aa, emissiveIntensity: 0.2, roughness: 0.3, metalness: 0.4
+    color: 0x1a3a8f, emissive: 0x0066cc, emissiveIntensity: 0.6, roughness: 0.2, metalness: 0.7
   }), []);
   const coreMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     color: 0xffffff, emissive: 0x00ffff, emissiveIntensity: 1.2
   }), []);
   const edgeMaterial = useMemo(() => new THREE.LineBasicMaterial({ 
-    color: 0x00ffff, transparent: true, opacity: 0.2 
-  }), []);
-  const ringMat = useMemo(() => new THREE.MeshBasicMaterial({
-    color: 0x00ffff, transparent: true, opacity: 0.15, side: THREE.DoubleSide, wireframe: true, blending: THREE.AdditiveBlending
+    color: 0x00f2ff, transparent: true, opacity: 0.6 
   }), []);
 
-  const ringObjects = useMemo(() => {
-    const all = [
-      { radius: 15, rx: Math.PI/2, ry: 0, speed: 0.015 },
-      { radius: 17, rx: 0, ry: Math.PI/2, speed: -0.015 },
-      { radius: 19, rx: Math.PI/4, ry: Math.PI/4, speed: 0.02 },
-      { radius: 21, rx: -Math.PI/4, ry: Math.PI/4, speed: -0.02 }
-    ];
-    return isMobile ? all.slice(0, 1) : all;
-  }, [isMobile]);
+  const ringObjects = useMemo(() => [
+    { radius: 15, rx: Math.PI/2, ry: 0, speed: 0.015, color: 0x00f2ff },         // cyan
+    { radius: 17, rx: 0, ry: Math.PI/2, speed: -0.015, color: 0xa855f7 },        // purple
+    { radius: 19, rx: Math.PI/4, ry: Math.PI/4, speed: 0.02, color: 0x10b981 },  // green
+    { radius: 21, rx: -Math.PI/4, ry: Math.PI/4, speed: -0.02, color: 0xf59e0b } // amber
+  ], []);
 
   const ringRefs = useRef<THREE.Mesh[]>([]);
 
@@ -698,7 +692,7 @@ function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; is
             <group key={i} rotation={[config.rx, config.ry, 0]}>
               <mesh ref={(el) => { if (el) ringRefs.current[i] = el; }}>
                 <torusGeometry args={[config.radius, 0.06, 8, isMobile ? 48 : 120]} />
-                <primitive object={ringMat} />
+                <meshBasicMaterial color={config.color} transparent opacity={0.2} side={THREE.DoubleSide} wireframe blending={THREE.AdditiveBlending} />
               </mesh>
             </group>
           ))}
@@ -1591,44 +1585,6 @@ function SystemProgress({ label, progress, color }: { label: string; progress: n
   );
 }
 
-// Agent Lee always-visible status anchor — floats above the 3D canvas
-function AgentLeeAnchor() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="fixed bottom-28 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 select-none pointer-events-none"
-    >
-      <div
-        className="w-12 h-12 rounded-full border-2 overflow-hidden"
-        style={{
-          borderColor: '#00f2ff',
-          background: 'rgba(2,4,8,0.9)',
-          boxShadow: '0 0 20px rgba(0,242,255,0.55), 0 0 40px rgba(0,242,255,0.2)',
-        }}
-      >
-        <img
-          src="https://robohash.org/lee-prime?set=set1&bgset=bg1"
-          alt="Agent Lee"
-          className="w-full h-full object-contain"
-          referrerPolicy="no-referrer"
-        />
-      </div>
-      <div
-        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-        style={{
-          background: 'rgba(2,4,8,0.88)',
-          border: '1px solid rgba(0,242,255,0.3)',
-          backdropFilter: 'blur(8px)',
-        }}
-      >
-        <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-        <span className="text-[8px] font-black text-white uppercase tracking-widest">Agent Lee · Active</span>
-      </div>
-    </motion.div>
-  );
-}
-
 // 7. AgentCountHUD — top right status badge
 function AgentCountHUD() {
   const activeCount = AGENTS.filter(a => a.status === 'ACTIVE').length;
@@ -1674,7 +1630,7 @@ export default function App() {
   const isMobile = useIsMobile();
 
   return (
-    <div className="w-full h-screen bg-[#020408] overflow-hidden relative font-sans">
+    <div className="w-full bg-[#020408] overflow-hidden relative font-sans" style={{ height: '100dvh' }}>
       <AnimatePresence>
         {!selectedAgent && (
           <>
@@ -1708,9 +1664,6 @@ export default function App() {
           </>
         )}
       </AnimatePresence>
-
-      {/* Agent Lee always-visible status anchor */}
-      {!selectedAgent && !isSystemReportOpen && <AgentLeeAnchor />}
 
       <Canvas
         shadows={!isMobile}
