@@ -588,10 +588,13 @@ function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; is
   const stream2Positions = useMemo(() => new Float32Array(STREAM_COUNT * 3), []);
 
   const bodyMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: 0x1a3a8f, emissive: 0x0066cc, emissiveIntensity: 0.6, roughness: 0.2, metalness: 0.7
+    color: 0x1a3a8f, emissive: 0x0066cc, emissiveIntensity: 0.4, roughness: 0.2, metalness: 0.7
   }), []);
   const coreMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: 0xffffff, emissive: 0x00ffff, emissiveIntensity: 1.2
+    color: 0x88ddff, emissive: 0x00aacc, emissiveIntensity: 0.5
+  }), []);
+  const basePlatMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: 0x001122, wireframe: true, emissive: 0x0088ff, emissiveIntensity: 0.08
   }), []);
   const edgeMaterial = useMemo(() => new THREE.LineBasicMaterial({ 
     color: 0x00f2ff, transparent: true, opacity: 0.6 
@@ -605,6 +608,9 @@ function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; is
   ], []);
 
   const ringRefs = useRef<THREE.Mesh[]>([]);
+  const _streamStart = useMemo(() => new THREE.Vector3(), []);
+  const _streamEnd = useMemo(() => new THREE.Vector3(), []);
+  const _streamP = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -627,15 +633,15 @@ function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; is
     }
 
     if (stream1Ref.current && stream2Ref.current && characterGroupRef.current && baseGroupRef.current) {
-      const startLocal = characterGroupRef.current.position.clone();
-      const endLocal = startLocal.clone().add(baseGroupRef.current.position);
+      _streamStart.copy(characterGroupRef.current.position);
+      _streamEnd.copy(characterGroupRef.current.position).add(baseGroupRef.current.position);
       [stream1Ref, stream2Ref].forEach((ref, si) => {
         const offset = si * 0.5;
         const posAttr = ref.current!.geometry.attributes.position;
         for (let k = 0; k < STREAM_COUNT; k++) {
           const frac = ((t * 0.6 + offset + k / STREAM_COUNT) % 1);
-          const p = new THREE.Vector3().lerpVectors(startLocal, endLocal, frac);
-          posAttr.setXYZ(k, p.x, p.y, p.z);
+          _streamP.lerpVectors(_streamStart, _streamEnd, frac);
+          posAttr.setXYZ(k, _streamP.x, _streamP.y, _streamP.z);
         }
         posAttr.needsUpdate = true;
       });
@@ -691,7 +697,7 @@ function Brain({ onBaseClick, isMobile = false }: { onBaseClick?: () => void; is
           onPointerOver={() => (document.body.style.cursor = 'pointer')}
           onPointerOut={() => (document.body.style.cursor = 'auto')}
         >
-          <VoxelPart w={4} h={4} d={4} position={[0, 0, 0]} material={new THREE.MeshStandardMaterial({color: 0x001122, wireframe: true, emissive: 0x0088ff, emissiveIntensity: 0.1})} edgeMaterial={edgeMaterial} />
+          <VoxelPart w={4} h={4} d={4} position={[0, 0, 0]} material={basePlatMat} edgeMaterial={edgeMaterial} />
           <VoxelPart w={1.5} h={1.5} d={1.5} position={[0, 0, 0]} material={coreMaterial} edgeMaterial={edgeMaterial} />
         </group>
       </group>
@@ -786,7 +792,7 @@ function AgentNode({ agent, onClick, isSelected, isMerged, hideLabel }: AgentNod
         <meshStandardMaterial 
           color={color} 
           emissive={color} 
-          emissiveIntensity={isSelected ? 4 : 2} 
+          emissiveIntensity={isSelected ? 0.9 : 0.25} 
           transparent
           opacity={isMerged ? 0 : 1}
           wireframe={id === 'nova' || id === 'atlas'}
@@ -1717,11 +1723,10 @@ export default function App() {
         </mesh>
         
         <Stars radius={200} depth={120} count={isMobile ? 600 : 3000} factor={12} saturation={1} fade speed={isMobile ? 0.5 : 1.5} />
-        <Sparkles count={isMobile ? 300 : 2500} scale={25} size={isMobile ? 3 : 2} speed={isMobile ? 0.2 : 0.5} opacity={isMobile ? 0.5 : 0.4} color="#00ffff" />
-        {!isMobile && <Sparkles count={1200} scale={35} size={4} speed={0.2} opacity={0.25} color="#9333ea" />}
+        {!isMobile && <Sparkles count={800} scale={25} size={1.5} speed={0.15} opacity={0.18} color="#00ffff" />}
 
         <EffectComposer>
-          <Bloom luminanceThreshold={isMobile ? 0.6 : 0.35} mipmapBlur intensity={isMobile ? 0.6 : 1.2} radius={0.25} />
+          <Bloom luminanceThreshold={0.85} mipmapBlur={false} intensity={0.35} radius={0.2} />
         </EffectComposer>
       </Canvas>
 
