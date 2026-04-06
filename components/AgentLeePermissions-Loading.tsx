@@ -92,13 +92,13 @@ export const COLORS = {
 };
 
 export const CONFIG = {
-    BG_COLOR: 0xf8fafc,
+    BG_COLOR: 0x000000,
     FLOOR_Y: -10,
     VOXEL_SIZE: 1.0,
 };
 
 const LOADING_TIME_MS = 15000; // 15 seconds total loading
-const MORPH_INTERVAL_MS = 3000; // Morph every 3 seconds
+const MORPH_INTERVAL_MS = 2000; // Morph every 2 seconds (faster)
 
 // --- Voxel Generators ---
 
@@ -241,6 +241,120 @@ export const Generators = {
         buildMiniEagle(-10, 2);
         buildMiniEagle(10, -2);
         return Array.from(map.values());
+    },
+    BlockEagle: (): VoxelData[] => {
+        const map = new Map<string, VoxelData>();
+        // Branch perch
+        for(let x = -8; x <= 8; x++) for(let y = -1; y <= 0; y++) for(let z = -1; z <= 1; z++) setBlock(map, x, y + 10, z, 0x5C4033);
+        // Body
+        for(let x = -2; x <= 2; x++) for(let y = 1; y <= 6; y++) for(let z = -2; z <= 2; z++) setBlock(map, x, y + 10, z, 0x4B3621);
+        // Wings spread
+        for(let x = 3; x <= 8; x++) for(let y = 4; y <= 6; y++) for(let z = -1; z <= 1; z++) {
+            setBlock(map, x, y + 10, z, 0x4B3621);
+            setBlock(map, -x, y + 10, z, 0x4B3621);
+        }
+        // White head
+        for(let x = -1; x <= 1; x++) for(let y = 7; y <= 9; y++) for(let z = -1; z <= 1; z++) setBlock(map, x, y + 10, z, 0xFFFFFF);
+        // Beak
+        setBlock(map, 0, 19, 2, 0xFFD700); setBlock(map, 0, 18, 2, 0xFFD700);
+        // Eyes
+        setBlock(map, -1, 19, -1, 0x000000); setBlock(map, 1, 19, -1, 0x000000);
+        return Array.from(map.values());
+    },
+    JetpackCat: (): VoxelData[] => {
+        const map = new Map<string, VoxelData>();
+        const catY = 5;
+        // Body
+        for(let x = -3; x <= 3; x++) for(let y = 0; y < 5; y++) for(let z = -2; z <= 2; z++) setBlock(map, x, catY + y, z, 0xE69F46);
+        // White belly
+        for(let x = -2; x <= 2; x++) for(let y = 0; y < 4; y++) setBlock(map, x, catY + y, -2, 0xFFFFFF);
+        // Head
+        for(let x = -2; x <= 2; x++) for(let y = 5; y < 9; y++) for(let z = -2; z <= 2; z++) setBlock(map, x, catY + y, z, 0xE69F46);
+        // Ears
+        setBlock(map, -2, catY + 9, -1, 0xE69F46); setBlock(map, 2, catY + 9, -1, 0xE69F46);
+        setBlock(map, -2, catY + 10, 0, 0xFF9999); setBlock(map, 2, catY + 10, 0, 0xFF9999);
+        // Eyes
+        setBlock(map, -1, catY + 7, -2, 0x333333); setBlock(map, 1, catY + 7, -2, 0x333333);
+        // Nose
+        setBlock(map, 0, catY + 6, -2, 0xFF6699);
+        // Jetpack (behind)
+        for(let x = -2; x <= 2; x++) for(let y = 1; y < 5; y++) setBlock(map, x, catY + y, 3, 0x888888);
+        setBlock(map, -1, catY + 1, 4, 0x666666); setBlock(map, 1, catY + 1, 4, 0x666666);
+        // Thrust flames
+        setBlock(map, -1, catY - 1, 3, 0xFF4400); setBlock(map, 1, catY - 1, 3, 0xFF4400);
+        setBlock(map, 0, catY - 2, 3, 0xFF8800);
+        return Array.from(map.values());
+    },
+    Pagoda: (): VoxelData[] => {
+        const map = new Map<string, VoxelData>();
+        // Ground platform
+        for(let x = -5; x <= 5; x++) for(let z = -5; z <= 5; z++) setBlock(map, x, 0, z, 0x7a9e55);
+        // Floor 1 (widest)
+        for(let x = -3; x <= 3; x++) for(let y = 1; y <= 4; y++) for(let z = -3; z <= 3; z++) {
+            if(Math.abs(x) === 3 || Math.abs(z) === 3) setBlock(map, x, y, z, 0xB83228);
+        }
+        for(let x = -4; x <= 4; x++) for(let z = -4; z <= 4; z++) setBlock(map, x, 5, z, 0x333333);
+        // Floor 2
+        for(let x = -2; x <= 2; x++) for(let y = 6; y <= 8; y++) for(let z = -2; z <= 2; z++) {
+            if(Math.abs(x) === 2 || Math.abs(z) === 2) setBlock(map, x, y, z, 0xB83228);
+        }
+        for(let x = -3; x <= 3; x++) for(let z = -3; z <= 3; z++) setBlock(map, x, 9, z, 0x333333);
+        // Floor 3 (top)
+        for(let x = -1; x <= 1; x++) for(let y = 10; y <= 12; y++) for(let z = -1; z <= 1; z++) setBlock(map, x, y, z, 0xB83228);
+        for(let x = -2; x <= 2; x++) for(let z = -2; z <= 2; z++) setBlock(map, x, 13, z, 0x333333);
+        // Gold spire
+        for(let y = 14; y <= 19; y++) setBlock(map, 0, y, 0, 0xFFD700);
+        setBlock(map, 0, 20, 0, 0xFFAA00);
+        return Array.from(map.values());
+    },
+    CyberpunkCity: (): VoxelData[] => {
+        const map = new Map<string, VoxelData>();
+        // Street grid
+        for(let x = -7; x <= 7; x++) for(let z = -7; z <= 7; z++) setBlock(map, x, 0, z, 0x111111);
+        // Road markings
+        for(let z = -7; z <= 7; z++) { setBlock(map, 0, 0, z, 0x222222); setBlock(map, z, 0, 0, 0x222222); }
+        // 4 neon towers (hollow perimeter walls)
+        const towers: [number, number, number, number][] = [[-5,-5,14,0xff00ff],[5,-5,19,0x00ffff],[-5,5,11,0xffff00],[5,5,16,0xff00ff]];
+        for(const [bx, bz, h, neon] of towers) {
+            for(let y = 1; y <= h; y++) {
+                const isNeonRow = y % 4 === 0;
+                for(let d = -1; d <= 1; d++) {
+                    setBlock(map, bx + d, y, bz - 1, isNeonRow ? neon : 0x1a1a1a);
+                    setBlock(map, bx + d, y, bz + 1, isNeonRow ? neon : 0x1a1a1a);
+                    setBlock(map, bx - 1, y, bz + d, isNeonRow ? neon : 0x1a1a1a);
+                    setBlock(map, bx + 1, y, bz + d, isNeonRow ? neon : 0x1a1a1a);
+                }
+            }
+        }
+        return Array.from(map.values());
+    },
+    SakuraIsland: (): VoxelData[] => {
+        const map = new Map<string, VoxelData>();
+        // Island base
+        for(let x = -6; x <= 6; x++) for(let z = -6; z <= 6; z++) {
+            const d = Math.sqrt(x*x + z*z);
+            if(d < 6) {
+                setBlock(map, x, 0, z, 0x7a9e55);
+                if(d < 4) setBlock(map, x, -1, z, 0x5c4033);
+                if(d < 2) setBlock(map, x, -2, z, 0x555555);
+            }
+        }
+        // Cherry blossom tree trunk
+        for(let y = 1; y <= 6; y++) {
+            setBlock(map, 0, y, 0, 0x3e2723);
+            setBlock(map, 1, y, 0, 0x3e2723);
+        }
+        // Blossoms (spheres of pink)
+        const blossomCenters = [[0,9,0,4],[3,7,1,3],[-3,7,-1,3],[1,11,1,3]];
+        for(const [cx, cy, cz, r] of blossomCenters) {
+            for(let x = -r; x <= r; x++) for(let y = -r; y <= r; y++) for(let z = -r; z <= r; z++) {
+                if(x*x+y*y+z*z <= r*r) {
+                    const col = (x+y+z) % 3 === 0 ? 0xffb7c5 : ((x+y) % 2 === 0 ? 0xff69b4 : 0xffc0cb);
+                    setBlock(map, cx+x, cy+y, cz+z, col);
+                }
+            }
+        }
+        return Array.from(map.values());
     }
 };
 
@@ -249,6 +363,11 @@ const MODELS = [
   { name: 'Cat', generator: Generators.Cat },
   { name: 'Rabbit', generator: Generators.Rabbit },
   { name: 'Twins', generator: Generators.Twins },
+  { name: 'Block Eagle', generator: Generators.BlockEagle },
+  { name: 'Jetpack Cat', generator: Generators.JetpackCat },
+  { name: 'Pagoda', generator: Generators.Pagoda },
+  { name: 'Cyberpunk City', generator: Generators.CyberpunkCity },
+  { name: 'Sakura Island', generator: Generators.SakuraIsland },
 ];
 
 // --- Voxel Engine ---
@@ -305,7 +424,7 @@ export class VoxelEngine {
     dirLight.position.set(50, 80, 30);
     this.scene.add(dirLight);
 
-    const planeMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 1 });
+    const planeMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 1 });
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), planeMat);
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = CONFIG.FLOOR_Y;
@@ -382,12 +501,12 @@ export class VoxelEngine {
     this.onStateChange(this.state);
 
     this.voxels.forEach(v => {
-        v.vx = (Math.random() - 0.5) * 1.5;
-        v.vy = Math.random() * 1.0 + 0.5;
-        v.vz = (Math.random() - 0.5) * 1.5;
-        v.rvx = (Math.random() - 0.5) * 0.4;
-        v.rvy = (Math.random() - 0.5) * 0.4;
-        v.rvz = (Math.random() - 0.5) * 0.4;
+        v.vx = (Math.random() - 0.5) * 2.5;
+        v.vy = Math.random() * 1.5 + 1.0;
+        v.vz = (Math.random() - 0.5) * 2.5;
+        v.rvx = (Math.random() - 0.5) * 0.7;
+        v.rvy = (Math.random() - 0.5) * 0.7;
+        v.rvz = (Math.random() - 0.5) * 0.7;
     });
   }
 
@@ -463,7 +582,7 @@ export class VoxelEngine {
   private updatePhysics() {
     if (this.state === AppState.DISMANTLING) {
         this.voxels.forEach(v => {
-            v.vy -= 0.04;
+            v.vy -= 0.07;
             v.x += v.vx; v.y += v.vy; v.z += v.vz;
             v.rx += v.rvx; v.ry += v.rvy; v.rz += v.rvz;
 
@@ -495,7 +614,7 @@ export class VoxelEngine {
                 return;
             }
 
-            const speed = 0.18;
+            const speed = 0.28;
             v.x += (t.x - v.x) * speed;
             v.y += (t.y - v.y) * speed;
             v.z += (t.z - v.z) * speed;
@@ -599,7 +718,7 @@ function LoadingView({ progress }: LoadingViewProps) {
             const nextModel = MODELS[nextIndex].generator();
             engineRef.current.rebuild(nextModel);
           }
-        }, 1000);
+        }, 600);
         
         return nextIndex;
       });
@@ -612,6 +731,18 @@ function LoadingView({ progress }: LoadingViewProps) {
 
   const [currentModelIndex, setCurrentModelIndex] = useState(0);
 
+  const triggerShapeChange = (modelIndex: number) => {
+    if (!engineRef.current || state !== AppState.STABLE) return;
+    setCurrentModelIndex(modelIndex);
+    engineRef.current.dismantle();
+    setTimeout(() => {
+      if (engineRef.current) {
+        const nextModel = MODELS[modelIndex].generator();
+        engineRef.current.rebuild(nextModel);
+      }
+    }, 600);
+  };
+
   return (
     <motion.div 
       key="loading"
@@ -619,7 +750,7 @@ function LoadingView({ progress }: LoadingViewProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1.5 }}
-      className="absolute inset-0 bg-[#f8fafc]"
+      className="absolute inset-0 bg-black"
     >
       <div ref={containerRef} className="w-full h-full opacity-90" />
 
@@ -635,7 +766,7 @@ function LoadingView({ progress }: LoadingViewProps) {
               initial={{ opacity: 0, letterSpacing: '0.1em' }}
               animate={{ opacity: 1, letterSpacing: '0.3em' }}
               transition={{ duration: 1.5, ease: "easeOut" }}
-              className="text-3xl md:text-5xl font-black uppercase text-slate-900 italic tracking-tighter leading-none"
+              className="text-3xl md:text-5xl font-black uppercase text-white italic tracking-tighter leading-none drop-shadow-[0_0_30px_rgba(0,242,255,0.5)]"
             >
               Agent Lee: Agentic Operating System
             </motion.h1>
@@ -643,25 +774,44 @@ function LoadingView({ progress }: LoadingViewProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.5 }}
               transition={{ delay: 0.8, duration: 1 }}
-              className="text-[10px] md:text-xs font-bold tracking-[1em] uppercase text-slate-500"
+              className="text-[10px] md:text-xs font-bold tracking-[1em] uppercase text-[#00f2ff]"
             >
               Initializing Kernel Subsystems
             </motion.div>
           </div>
         </motion.div>
 
-        <div className="w-full max-w-md space-y-4">
-          <div className="relative h-[1px] w-full bg-slate-200 overflow-hidden">
-            <motion.div 
-              className="absolute top-0 left-0 h-full bg-slate-900 shadow-[0_0_20px_rgba(0,0,0,0.1)]"
-              style={{ width: `${progress}%` }}
-              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-            />
+        <div className="w-full max-w-lg space-y-6">
+          {/* Shape selector */}
+          <div className="pointer-events-auto flex flex-wrap justify-center gap-2">
+            {MODELS.map((model, i) => (
+              <button
+                key={model.name}
+                onClick={() => triggerShapeChange(i)}
+                className={`px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] border transition-all duration-300 ${
+                  i === currentModelIndex
+                    ? 'bg-[#00f2ff] border-[#00f2ff] text-black'
+                    : 'bg-transparent border-slate-700 text-slate-500 hover:border-[#00f2ff] hover:text-[#00f2ff]'
+                }`}
+              >
+                {model.name}
+              </button>
+            ))}
           </div>
-          
-          <div className="flex justify-between items-center text-[9px] tracking-[0.4em] uppercase text-slate-600 font-bold">
-            <span>Loading</span>
-            <span>{Math.round(progress)}%</span>
+
+          <div className="w-full space-y-4">
+            <div className="relative h-[1px] w-full bg-slate-800 overflow-hidden">
+              <motion.div 
+                className="absolute top-0 left-0 h-full bg-[#00f2ff] shadow-[0_0_20px_rgba(0,242,255,0.8)]"
+                style={{ width: `${progress}%` }}
+                transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+              />
+            </div>
+            
+            <div className="flex justify-between items-center text-[9px] tracking-[0.4em] uppercase text-slate-500 font-bold">
+              <span>{MODELS[currentModelIndex]?.name ?? 'Loading'}</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -720,7 +870,7 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
   }, [progress, isLoaded]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-[#f8fafc] font-mono text-slate-900 shadow-[inset_0_0_120px_rgba(15,23,42,0.15)] transition-shadow duration-1000">
+    <div className="relative w-full h-screen overflow-hidden bg-black font-mono text-white shadow-[inset_0_0_120px_rgba(0,242,255,0.05)] transition-shadow duration-1000">
       <AnimatePresence mode="wait">
         {!permissionsGranted ? (
           <motion.div
@@ -729,11 +879,11 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="absolute inset-0 z-50 flex flex-col items-center justify-center p-6"
-            style={{ background: 'linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 40%, #e8f0fe 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #020408 0%, #040c18 40%, #020408 100%)' }}
           >
             {/* Subtle tech grid lines */}
             <div className="absolute inset-0 pointer-events-none" style={{
-              backgroundImage: 'linear-gradient(rgba(100,160,220,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(100,160,220,0.1) 1px, transparent 1px)',
+              backgroundImage: 'linear-gradient(rgba(0,242,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,242,255,0.05) 1px, transparent 1px)',
               backgroundSize: '60px 60px'
             }} />
 
@@ -746,11 +896,11 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
                 transition={{ duration: 0.6 }}
                 className="text-center space-y-3"
               >
-                <h2 className="text-2xl font-black uppercase tracking-[0.35em] text-[#1a3a5c]"
+                <h2 className="text-2xl font-black uppercase tracking-[0.35em] text-white"
                   style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.35em' }}>
                   System Access
                 </h2>
-                <p className="text-[10px] text-[#5580a0] uppercase tracking-[0.18em] leading-relaxed max-w-xs mx-auto">
+                <p className="text-[10px] text-slate-400 uppercase tracking-[0.18em] leading-relaxed max-w-xs mx-auto">
                   Agent Lee requires authorization to access hardware subsystems for optimal performance.
                 </p>
               </motion.div>
@@ -797,25 +947,25 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
                     transition={{ duration: 0.4, delay: 0.25 + i * 0.08 }}
                     className="flex items-center gap-4 px-4 py-3 rounded-2xl"
                     style={{
-                      background: 'rgba(255,255,255,0.7)',
+                      background: 'rgba(8,16,30,0.85)',
                       backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(100,180,255,0.35)',
-                      boxShadow: '0 2px 16px rgba(80,160,255,0.08)',
+                      border: '1px solid rgba(0,242,255,0.25)',
+                      boxShadow: '0 2px 16px rgba(0,242,255,0.08)',
                     }}
                   >
                     {/* Blue glow icon bubble */}
                     <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
                       style={{
-                        background: 'radial-gradient(circle at 40% 35%, rgba(180,230,255,0.9), rgba(100,180,255,0.35))',
-                        boxShadow: '0 0 18px rgba(80,180,255,0.45), inset 0 1px 2px rgba(255,255,255,0.6)',
-                        border: '1px solid rgba(100,200,255,0.5)',
+                        background: 'radial-gradient(circle at 40% 35%, rgba(0,30,50,0.9), rgba(0,100,120,0.35))',
+                        boxShadow: '0 0 18px rgba(0,242,255,0.3), inset 0 1px 2px rgba(0,242,255,0.15)',
+                        border: '1px solid rgba(0,242,255,0.4)',
                       }}
                     >
                       {perm.icon}
                     </div>
 
                     {/* Label */}
-                    <span className="flex-1 text-sm font-black uppercase tracking-[0.15em] text-[#1a3a5c]">
+                    <span className="flex-1 text-sm font-black uppercase tracking-[0.15em] text-white">
                       {perm.label}
                     </span>
 
@@ -884,7 +1034,7 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
             initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
             animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute inset-0 flex flex-col items-center justify-center bg-[#f8fafc]"
+            className="absolute inset-0 flex flex-col items-center justify-center bg-black"
           >
             <div className="text-center space-y-8">
               <motion.div
@@ -892,8 +1042,8 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.5, duration: 1 }}
               >
-                <h1 className="text-4xl md:text-6xl font-black uppercase tracking-[0.5em] text-slate-900 italic">Welcome</h1>
-                <p className="text-xs text-slate-500 uppercase tracking-[1em] mt-4">System Online</p>
+                <h1 className="text-4xl md:text-6xl font-black uppercase tracking-[0.5em] text-white italic drop-shadow-[0_0_40px_rgba(0,242,255,0.4)]">Welcome</h1>
+                <p className="text-xs text-[#00f2ff] uppercase tracking-[1em] mt-4">System Online</p>
               </motion.div>
               
               <motion.div 
@@ -902,7 +1052,7 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
                 transition={{ delay: 1.5, duration: 1 }}
                 className="pt-12"
               >
-                <button onClick={onComplete} className="px-8 py-3 bg-slate-900 text-white text-[10px] uppercase tracking-[0.3em] hover:bg-slate-800 transition-all duration-500 pointer-events-auto shadow-[0_0_20px_rgba(15,23,42,0.5)]">
+                <button onClick={onComplete} className="px-8 py-3 bg-black border border-[#00f2ff] text-[#00f2ff] text-[10px] uppercase tracking-[0.3em] hover:bg-[#00f2ff] hover:text-black transition-all duration-500 pointer-events-auto shadow-[0_0_20px_rgba(0,242,255,0.4)]">
                   Access Dashboard
                 </button>
               </motion.div>
