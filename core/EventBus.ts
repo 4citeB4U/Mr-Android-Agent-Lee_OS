@@ -20,7 +20,6 @@ type EventMap = {
   'vision:screen_text': { text: string; confidence: number };
   'vision:scene_summary': { summary: string };
   'vision:ui_hints': { hints: string[] };
-  'vision:model-used': { model: string; local: boolean; fallback?: boolean };
   'router:intent': { intent: string; mode: 'local' | 'gemini'; confidence: number; reason: string };
   'redaction:applied': { originalLength: number; redactedLength: number; categories: string[] };
   'file:event': import('./fileOps').FileEvent;
@@ -72,7 +71,6 @@ type EventMap = {
   'leeway-rtc:peers': { peers: any[] };
   'leeway-rtc:audio-ready': { streamId: string };
   'leeway-rtc:reconnect-failed': {};
-  'leeway-rtc:new-track': { track: MediaStreamTrack; peerId: string; kind: string };
   // Additional agent events
   'agent:active': { agent: string; task: string };
   'agent:done': { agent: string; result?: string };
@@ -147,6 +145,20 @@ type EventMap = {
   'native:notification-sent': { id: number; title: string };
   'native:notification-error': { error: string };
   'native:review-error': { error: string };
+  // RTC initialization and state events
+  'rtc:state-change': { state: string };
+  'rtc:initialized': { timestamp: number };
+  'rtc:init-error': { error: any };
+  'rtc:voice-ready': { timestamp: number };
+  'rtc:voice-error': { error: any };
+  'rtc:vision-ready': { timestamp: number };
+  'rtc:vision-error': { error: any };
+  'rtc:vision-disabled': { reason: string };
+  'rtc:health-check-failed': { error: any };
+  'rtc:disconnected': { timestamp: number };
+  // App-level RTC events
+  'app:rtc-ready': { timestamp: number };
+  'app:rtc-error': { error: string };
 };
 
 type Listener<T> = (data: T) => void;
