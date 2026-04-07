@@ -150,7 +150,7 @@ export class VisionAgent {
     try {
       raw = await OllamaVisionClient.analyseImage(imageBase64, VISION_MODELS.primary);
       modelUsed = VISION_MODELS.primary;
-      eventBus.emit('vision:model-used', { model: modelUsed, local: true });
+      console.log(`[Vision] Using local model: ${modelUsed}`);
     } catch (localError) {
       console.warn(`[Vision] Local model ${VISION_MODELS.primary} failed, using Gemini fallback:`, localError);
 
@@ -160,12 +160,12 @@ export class VisionAgent {
           prompt: 'Analyse this image.',
           systemPrompt: VISION_SYSTEM,
           agent: 'Vision',
-          model: VISION_MODELS.fallback,
+          model: 'gemini-2.0-flash',
           imageBase64,
         });
         raw = resp.text;
-        modelUsed = VISION_MODELS.fallback;
-        eventBus.emit('vision:model-used', { model: modelUsed, local: false, fallback: true });
+        modelUsed = 'gemini-2.0-flash';
+        console.log(`[Vision] Using fallback model: ${modelUsed}`);
       } catch (cloudError) {
         eventBus.emit('agent:error', {
           agent: 'Vision',
