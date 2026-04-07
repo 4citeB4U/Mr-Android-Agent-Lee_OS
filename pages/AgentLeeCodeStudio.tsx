@@ -46,7 +46,7 @@ import {
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { eventBus } from '../core/EventBus';
-import { memoryLakeClient } from '../core/launchpad/memoryLakeClient';
+import { palliumClient } from '../core/launchpad/memoryLakeClient';
 import { pushDiagnosticsReport } from '../core/diagnostics_bridge';
 import type { LaunchRecord, DeployableBundle } from '../core/launchpad/types';
 import Editor from '@monaco-editor/react';

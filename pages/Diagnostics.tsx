@@ -58,6 +58,7 @@ import {
 } from 'recharts';
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { eventBus } from '../core/EventBus';
 
 // --- Utility ---
 function cn(...inputs: ClassValue[]) {
@@ -1370,6 +1371,28 @@ function SystemDiagnostics({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     return () => clearInterval(interval);
   }, [isOpen]);
 
+  const [lastLatency, setLastLatency] = useState<number>(0);
+  const [inferenceEvents, setInferenceEvents] = useState<{ id: string; tier: string; latency: number; timestamp: string }[]>([]);
+
+  useEffect(() => {
+    const unsubRouter = eventBus.on('router:intent', (data: any) => {
+      const ms = data.latency || data.metadata?.diagnostics?.latencyMs;
+      if (ms) {
+        setLastLatency(ms);
+        setInferenceEvents(prev => [{
+          id: Math.random().toString(36).slice(2, 9),
+          tier: data.tier || 'ROUTED',
+          latency: ms,
+          timestamp: new Date().toLocaleTimeString()
+        }, ...prev].slice(0, 5));
+      }
+    });
+
+    return () => {
+      unsubRouter();
+    };
+  }, []);
+
   const pieData = [
     { name: 'System Core', value: 30, color: '#00f2ff' },
     { name: 'App Logic', value: 45, color: '#A855F7' },
@@ -1412,11 +1435,12 @@ function SystemDiagnostics({ isOpen, onClose }: { isOpen: boolean; onClose: () =
           </div>
 
           <div className="flex-1 overflow-y-auto p-8 md:p-12 scrollbar-hide">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8">
               <MetricCard icon={Cpu} label="CPU Usage" value={`${metrics.cpu.toFixed(1)}%`} color="#00f2ff" sub="4-core load avg" />
               <MetricCard icon={Database} label="Memory Used" value={`${metrics.mem.toFixed(1)}%`} color="#A855F7" sub={`${(metrics.mem * 32 / 100).toFixed(1)} GB / 32 GB`} />
               <MetricCard icon={Wifi} label="Network Throughput" value={`${(metrics.net/10).toFixed(1)} Mb/s`} color="#10B981" sub="inbound + outbound" />
               <MetricCard icon={Thermometer} label="Core Temperature" value={`${metrics.temp.toFixed(1)}°C`} color="#EF4444" sub="safe threshold: 90°C" />
+              <MetricCard icon={Gauge} label="Cognitive Latency" value={`${lastLatency || '0'}ms`} color="#F59E0B" sub="Local-First Response" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -1481,18 +1505,44 @@ function SystemDiagnostics({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               </div>
             </div>
 
-            {/* Progress Bars Section */}
-            <div className="p-8 rounded-[2.5rem] border border-white/10 mb-8" style={{ background: 'rgba(0,0,0,0.6)' }}>
-              <h4 className="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
-                <Gauge size={14} className="text-[#00f2ff]" /> Sub-System Threading
-              </h4>
-              <div className="space-y-6">
-                <SystemProgress label="Neural Engine" progress={85} color="#00f2ff" />
-                <SystemProgress label="Voxel Manifestation" progress={62} color="#A855F7" />
-                <SystemProgress label="I/O Buffer" progress={44} color="#10B981" />
-                <SystemProgress label="Security Protocol" progress={98} color="#EF4444" />
-                <SystemProgress label="Memory Lake Sync" progress={71} color="#F59E0B" />
-                <SystemProgress label="Voice Pipeline" progress={88} color="#EC4899" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              {/* Progress Bars Section */}
+              <div className="p-8 rounded-[2.5rem] border border-white/10" style={{ background: 'rgba(0,0,0,0.6)' }}>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
+                  <Gauge size={14} className="text-[#00f2ff]" /> Sub-System Threading
+                </h4>
+                <div className="space-y-6">
+                  <SystemProgress label="Neural Engine" progress={85} color="#00f2ff" />
+                  <SystemProgress label="Voxel Manifestation" progress={62} color="#A855F7" />
+                  <SystemProgress label="I/O Buffer" progress={44} color="#10B981" />
+                  <SystemProgress label="Security Protocol" progress={98} color="#EF4444" />
+                  <SystemProgress label="Memory Lake Sync" progress={71} color="#F59E0B" />
+                  <SystemProgress label="Voice Pipeline" progress={88} color="#EC4899" />
+                </div>
+              </div>
+
+              {/* Inference Event Log */}
+              <div className="p-8 rounded-[2.5rem] border border-white/10" style={{ background: 'rgba(0,0,0,0.6)' }}>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
+                  <Zap size={14} className="text-amber-400" /> Inference Event Log
+                </h4>
+                <div className="space-y-3">
+                  {inferenceEvents.length === 0 ? (
+                    <p className="text-[10px] font-mono text-white/20 italic">Awaiting cognitive triggers...</p>
+                  ) : (
+                    inferenceEvents.map(ev => (
+                      <div key={ev.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                        <div className="flex flex-col">
+                          <span className="text-[9px] font-black text-white/50 uppercase tracking-widest">{ev.tier}</span>
+                          <span className="text-[8px] font-mono text-white/30">{ev.timestamp}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-sm font-black text-white">{ev.latency}ms</span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
 

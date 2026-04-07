@@ -156,8 +156,8 @@ export const Home: React.FC<HomeProps> = ({
             onShapeChange={setCurrentShape}
           />
         </div>
-        {/* Shape name and progress bar */}
-        <div className="absolute bottom-0 left-0 w-full flex flex-col items-center pb-8 pointer-events-none">
+        {/* Shape name and progress bar - REMOVED */}
+        <div className="absolute bottom-0 left-0 w-full flex flex-col items-center pb-8 pointer-events-none hidden">
           <div className="text-xs md:text-base font-bold uppercase tracking-[0.2em] text-[#00f2ff] drop-shadow-[0_0_10px_rgba(0,242,255,0.7)] mb-2">
             {currentShape}
           </div>

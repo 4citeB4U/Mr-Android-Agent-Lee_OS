@@ -44,18 +44,29 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 // Firebase Imports
-import { initializeApp } from 'firebase/app';
 import { enforceFileGovernance } from '../core/governanceEnforcer';
 import { createFileMeta, logFileEvent } from '../core/fileOps';
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, User } from 'firebase/auth';
-import { getFirestore, collection, doc, setDoc, addDoc, serverTimestamp, query, orderBy, limit, onSnapshot, getDocFromServer } from 'firebase/firestore';
-import firebaseConfig from '../firebase-applet-config.json';
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
+import { 
+  auth, 
+  db, 
+  googleProvider,
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup, 
+  onAuthStateChanged, 
+  collection, 
+  doc, 
+  setDoc, 
+  addDoc, 
+  serverTimestamp, 
+  query, 
+  orderBy, 
+  limit, 
+  onSnapshot, 
+  getDocFromServer,
+  type FirebaseUser 
+} from '../components/firebase';
+import type { User } from 'firebase/auth';
 
 enum OperationType {
   CREATE = 'create',

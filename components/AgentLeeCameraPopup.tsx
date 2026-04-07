@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import LeewayRTCClient from '../core/LeewayRTCClient';
 
 interface CameraPopupProps {
   visible: boolean;
@@ -18,23 +19,19 @@ export const AgentLeeCameraPopup: React.FC<CameraPopupProps> = ({ visible, onClo
 
   useEffect(() => {
     if (visible) {
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(s => {
-          setStream(s);
-          if (videoRef.current) videoRef.current.srcObject = s;
-        })
-        .catch(() => onClose());
+      const rtc = LeewayRTCClient.getInstance();
+      rtc.publish(true).then(() => {
+        const s = rtc.getLocalStream();
+        setStream(s);
+        if (videoRef.current) videoRef.current.srcObject = s;
+      }).catch(() => onClose());
     } else {
       if (stream) {
-        stream.getTracks().forEach(track => track.stop());
+        // We don't necessarily want to stop the RTC stream if multiple people use it, 
+        // but for this component, we stop showing it.
         setStream(null);
       }
     }
-    // Cleanup on unmount
-    return () => {
-      if (stream) stream.getTracks().forEach(track => track.stop());
-    };
-    // eslint-disable-next-line
   }, [visible]);
 
   // Drag logic

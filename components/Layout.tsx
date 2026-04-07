@@ -14,13 +14,13 @@ family=lucide
 glyph=layout-dashboard
 
 5WH:
-WHAT = Root layout shell  clean header, hamburger drawer (nav + chat), mic footer, floating chat
-WHY = Reduced clutter: all interaction lives in hamburger; mic in footer; floating cards on right
+WHAT = Root layout shell  clean header, hamburger drawer (nav + chat), AgentleeMic footer, floating chat
+WHY = Reduced clutter: all interaction lives in hamburger; 3D voxel mic in footer; floating cards on right
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = components/Layout.tsx
 WHEN = 2026
 HOW = Hamburger holds nav + AgentLee widget + full ChatConsole; header has title + upload/download/share;
-      footer shows only Mac Million Mic; FloatingChat overlays right side for 5-second message cards
+      footer shows only AgentleeMic (advanced 3D voxel); FloatingChat overlays right side for 5-second message cards
 
 AGENTS:
 ASSESS
@@ -43,6 +43,8 @@ import { cn } from '../lib/utils';
 import { AgentLee } from './AgentLee';
 import { ChatConsole, ChatMessage } from './ChatConsole';
 import { FloatingChat } from './FloatingChat';
+import { AgentLeeWidget } from './AgentLeeWidget';
+import { AgentLeeMic, AgentState } from './AgentleeMic';
 import { audioOrchestrator } from '../utils/audioOrchestrator';
 
 export type PageId =
@@ -136,12 +138,6 @@ export const Layout: React.FC<LayoutProps> = ({
     e.target.value = '';
   };
 
-  const handleMicClick = () => {
-    if (isListening && onStopVoice) onStopVoice();
-    else if (!isListening && onStartVoice) onStartVoice();
-  };
-
-
   return (
     <div className="fixed inset-0 flex flex-col bg-black text-white font-sans overflow-hidden">
 
@@ -214,34 +210,29 @@ export const Layout: React.FC<LayoutProps> = ({
 
       </main>
 
-      {/*  FOOTER  Mac Million Mic only  */}
-      <footer className="fixed bottom-0 left-0 right-0 z-[1001] flex items-center justify-center py-3 pointer-events-none">
-        <button
-          onClick={handleMicClick}
-          aria-label={isListening ? 'Stop listening' : 'Start voice input'}
-          className={cn(
-            'relative pointer-events-auto rounded-full transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/20',
-            isListening && 'animate-pulse'
-          )}
-        >
-          {isListening && (
-            <span className="absolute inset-0 rounded-full border-2 border-red-400 animate-ping opacity-60 pointer-events-none" />
-          )}
-          <img
-            src={`${import.meta.env.BASE_URL}images/MacMillionMic.png`}
-            alt="Tap to speak"
-            className={cn(
-              'w-16 h-16 object-contain drop-shadow-lg transition-all',
-              isListening
-                ? 'scale-110 drop-shadow-[0_0_14px_rgba(239,68,68,0.7)]'
-                : 'drop-shadow-[0_0_8px_rgba(0,0,0,0.25)] hover:scale-105'
-            )}
+      {/*  FOOTER  AgentleeMic (Advanced 3D Voxel Mic - Sole System Mic)  */}
+      <footer className="fixed bottom-0 left-0 right-0 z-[1001] flex items-center justify-center py-2 pointer-events-none">
+        <div className="pointer-events-auto rounded-full transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/20">
+          <AgentLeeMic 
+            compact={true}
+            onStateChange={(state) => {
+              if (state !== AgentState.IDLE && state !== AgentState.LISTENING) {
+                audioOrchestrator.handleEvent('agent:active');
+              }
+              // Show error indication in footer
+              if (state === AgentState.ERROR) {
+                console.warn('[Layout] Mic Error - Check console and ensure VITE_GEMINI_API_KEY is set in .env.local');
+              }
+            }}
           />
-        </button>
+        </div>
       </footer>
 
       {/*  FLOATING CHAT (right side, TikTok-style)  */}
       <FloatingChat messages={messages} />
+
+      {/*  AGENT LEE WIDGET (minimized popup for background operations)  */}
+      <AgentLeeWidget isOpen={false} />
 
       {/* Hidden file input */}
       <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />

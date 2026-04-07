@@ -50,7 +50,10 @@ import {
   where,
   orderBy,
   limit,
-  Timestamp
+  Timestamp,
+  serverTimestamp,
+  addDoc,
+  getDocFromServer
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -73,6 +76,8 @@ export type { User };
 export {
   signInWithPopup,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  getAuth,
   collection,
   doc,
   setDoc,
@@ -83,7 +88,10 @@ export {
   where,
   orderBy,
   limit,
-  Timestamp
+  Timestamp,
+  serverTimestamp,
+  addDoc,
+  getDocFromServer
 };
 
 export function handleFirestoreError(error: unknown, operation: string, path: string) {

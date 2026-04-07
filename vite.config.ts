@@ -44,15 +44,43 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [react(), tailwindcss()],
       build: {
-        chunkSizeWarningLimit: 1000,
+        chunkSizeWarningLimit: 1500,
+        minify: 'terser',
+        terserOptions: {
+          compress: {
+            drop_console: true,
+            passes: 3,
+            ecma: 2020,
+          },
+          mangle: true,
+          format: {
+            comments: false,
+          },
+        },
         rollupOptions: {
           output: {
-            manualChunks: {
-              vendor: ['react', 'react-dom'],
-              firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore'],
-              monaco: ['@monaco-editor/react'],
-              gemini: ['@google/genai'],
-            }
+            manualChunks: (id) => {
+              // Vendor chunks
+              if (id.includes('node_modules/react')) return 'react-vendor';
+              if (id.includes('node_modules/firebase')) return 'firebase-vendor';
+              if (id.includes('node_modules/@google')) return 'gemini-vendor';
+              if (id.includes('node_modules/three')) return 'three-vendor';
+              if (id.includes('node_modules/framer-motion')) return 'framer-vendor';
+              if (id.includes('node_modules/lucide-react')) return 'icons-vendor';
+              if (id.includes('node_modules/@monaco-editor')) return 'monaco-vendor';
+              
+              // Core app chunks
+              if (id.includes('/agents/')) return 'agents-bundle';
+              if (id.includes('/core/')) return 'core-bundle';
+              
+              // Database-specific chunks - high priority
+              if (id.includes('PalliumGateway') || id.includes('MultiDatabaseManager') || id.includes('SchemaRegistry')) {
+                return 'database-layer';
+              }
+            },
+            entryFileNames: 'assets/[name]-[hash].js',
+            chunkFileNames: 'assets/[name]-[hash].js',
+            assetFileNames: 'assets/[name]-[hash][extname]',
           }
         }
       },

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
     <title>Agent Lee Agentic Operating System</title>
     <meta name="description" content="Agent Lee Agentic Operating System — A sovereign, offline-first, VM-first multi-agent AI operating platform designed and developed by LeeWay Innovations." />
     <meta name="keywords" content="Agent Lee, Agentic OS, AI Operating System, Multi-Agent, LeeWay Innovations, LeeWay Industries, Leonard Lee, Sovereign AI" />
@@ -11,12 +11,17 @@
     <meta property="og:description" content="Sovereign AI operating platform with VM-first execution, multi-agent orchestration, and offline-first design. Designed &amp; Developed by LeeWay Innovations." />
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#020408" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Agent Lee" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/images/agent-lee-banner.png" type="image/png" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="stylesheet" href="/index.css">
   </head>
   <body class="bg-black text-white antialiased">
     <div id="root"></div>
+    <script src="/capacitor.js"></script>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>

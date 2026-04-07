@@ -280,17 +280,19 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
                 )}
               />
 
-              {/* Voice button */}
+              {/* Voice button - Disabled, use footer AgentleeMic instead */}
               <button
                 type="button"
-                onClick={isListening ? onStopVoice : onStartVoice}
                 className={cn(
                   'p-1.5 rounded-xl transition-all shrink-0 bg-transparent hover:bg-white/5',
-                  isListening && 'bg-red-500/20 border border-red-500/40 animate-pulse'
+                  'opacity-50 cursor-not-allowed'
                 )}
-                title={isListening ? 'Stop listening' : 'Voice input'}
+                title="Use footer AgentleeMic instead"
+                disabled
               >
-                <img src={`${import.meta.env.BASE_URL}images/MacMillionMic.png`} alt="Voice input" className="w-[18px] h-[18px] object-contain opacity-70 hover:opacity-100" />
+                <svg className="w-[18px] h-[18px] text-gray-400 object-contain" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4" />
+                </svg>
               </button>
 
               <button

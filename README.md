@@ -313,9 +313,8 @@ Mic (PCM 16-bit LE 16kHz) → WebSocket → FastAPI server
 **Key config:** `voice/server/.env.example` · Client env: `VITE_VOICE_WS_URL=ws://localhost:8765/ws`
 
 <div align="center">
-<img width="220" alt="Agentic Phone Button" src="./public/images/Agenticphonebutton.png" />&nbsp;&nbsp;&nbsp;
-<img width="220" alt="MacMillion Mic" src="./public/images/MacMillionMic.png" />
-<br/><em>Agent Lee voice hardware — agentic phone button · MacMillion Mic</em>
+<img width="220" alt="Agentic Phone Button" src="./public/images/Agenticphonebutton.png" />
+<br/><em>Agent Lee voice interface — 3D Voxel Microphone (AgentleeMic) in footer · Advanced real-time voice I/O</em>
 </div>
 
 <div align="center">

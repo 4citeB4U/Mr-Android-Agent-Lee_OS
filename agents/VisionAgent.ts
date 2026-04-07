@@ -37,6 +37,43 @@ MIT
 import { GeminiClient } from '../core/GeminiClient';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
+import LeewayRTCClient from '../core/LeewayRTCClient';
+
+// 2026 Vision Models - Local-first with cloud fallback
+const VISION_MODELS = {
+  primary: import.meta.env.VITE_VISION_MODEL || 'llama3.2-vision',
+  fallback: 'gemini-2.0-flash'
+};
+
+// Ollama client for local vision models
+class OllamaVisionClient {
+  static async analyseImage(imageBase64: string, model: string): Promise<string> {
+    const ollamaUrl = import.meta.env.VITE_OLLAMA_URL || 'http://localhost:11434';
+
+    const response = await fetch(`${ollamaUrl}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model,
+        prompt: VISION_SYSTEM,
+        images: [imageBase64],
+        format: 'json',
+        stream: false,
+        options: {
+          temperature: 0.1,
+          num_predict: 1024
+        }
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Ollama vision failed: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.response;
+  }
+}
 
 const CORE_SYSTEM = buildAgentLeeCorePrompt();
 const VISION_SYSTEM = `${CORE_SYSTEM}
@@ -55,6 +92,38 @@ export class VisionAgent {
    * Capture the user's screen and analyse it.
    * Requires the browser to support getDisplayMedia.
    */
+  /**
+   * Capture a frame from the LeeWay RTC camera stream and analyse it.
+   */
+  static async captureFromRTC(): Promise<void> {
+    const rtc = LeewayRTCClient.getInstance();
+    const stream = rtc.getLocalStream();
+    if (!stream || stream.getVideoTracks().length === 0) {
+      eventBus.emit('agent:error', { agent: 'Vision', error: 'No RTC video stream available' });
+      return;
+    }
+
+    try {
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      await video.play();
+
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(video, 0, 0);
+      
+      const imageBase64 = canvas.toDataURL('image/png').split(',')[1];
+      video.pause();
+      video.srcObject = null;
+      
+      await VisionAgent.analyseImage(imageBase64);
+    } catch (err) {
+      eventBus.emit('agent:error', { agent: 'Vision', error: `RTC frame capture failed: ${String(err)}` });
+    }
+  }
+
   static async captureAndAnalyse(): Promise<void> {
     let imageBase64: string;
     try {
@@ -69,23 +138,41 @@ export class VisionAgent {
   /**
    * Analyse a caller-provided base64 PNG/JPEG image.
    * Emits vision:screen_text, vision:scene_summary, vision:ui_hints to EventBus.
+   * 2026: Uses Llama 3.2 Vision locally, falls back to Gemini
    */
   static async analyseImage(imageBase64: string, mimeType = 'image/png'): Promise<void> {
     eventBus.emit('agent:active', { agent: 'Vision', task: 'Analysing image' });
 
     let raw: string;
+    let modelUsed: string;
+
+    // Try 2026 local vision model first (Llama 3.2 Vision)
     try {
-      const resp = await GeminiClient.generate({
-        prompt: 'Analyse this image.',
-        systemPrompt: VISION_SYSTEM,
-        agent: 'Vision',
-        model: 'gemini-2.0-flash',
-        imageBase64,
-      });
-      raw = resp.text;
-    } catch (err) {
-      eventBus.emit('agent:error', { agent: 'Vision', error: `Gemini vision call failed: ${String(err)}` });
-      return;
+      raw = await OllamaVisionClient.analyseImage(imageBase64, VISION_MODELS.primary);
+      modelUsed = VISION_MODELS.primary;
+      eventBus.emit('vision:model-used', { model: modelUsed, local: true });
+    } catch (localError) {
+      console.warn(`[Vision] Local model ${VISION_MODELS.primary} failed, using Gemini fallback:`, localError);
+
+      // Fallback to Gemini 2.0 Flash Vision
+      try {
+        const resp = await GeminiClient.generate({
+          prompt: 'Analyse this image.',
+          systemPrompt: VISION_SYSTEM,
+          agent: 'Vision',
+          model: VISION_MODELS.fallback,
+          imageBase64,
+        });
+        raw = resp.text;
+        modelUsed = VISION_MODELS.fallback;
+        eventBus.emit('vision:model-used', { model: modelUsed, local: false, fallback: true });
+      } catch (cloudError) {
+        eventBus.emit('agent:error', {
+          agent: 'Vision',
+          error: `Both local and cloud vision failed: Local(${localError}), Cloud(${cloudError})`
+        });
+        return;
+      }
     }
 
     try {

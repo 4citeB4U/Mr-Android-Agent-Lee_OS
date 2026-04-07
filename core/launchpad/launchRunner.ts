@@ -70,7 +70,7 @@ async function updateStep(
     updated_at: Date.now(),
   };
   await palliumClient.jobs.update(updated);
-  eventBus.emit('launchpad:job_updated', { launchId: job.launch_id, jobId: job.id });
+  eventBus.emit('launchpad:job_updated', { launchId: job.launch_id, jobId: job.id, status });
   return updated;
 }
 
@@ -139,7 +139,7 @@ async function stepAnnounce(launch: LaunchRecord, links: { label: string; url: s
   // TODO: post to connected social providers (Twitter, etc.)
   await new Promise(r => setTimeout(r, 300));
   // Emit an observability event so monitoring surface picks it up
-  eventBus.emit('launchpad:job_updated', { launchId: launch.id, jobId: '' });
+  eventBus.emit('launchpad:job_updated', { launchId: launch.id, jobId: '', status: 'announced' });
 }
 
 // ── Main Entry Point ───────────────────────────────────────────

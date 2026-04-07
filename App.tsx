@@ -102,6 +102,14 @@ import { JanitorSentinel } from './agents/JanitorSentinel';
 import { LibrarianAegis } from './agents/LibrarianAegis';
 import { MarshalVerify } from './agents/MarshalVerify';
 import { LeewayStandardsAgent } from './agents/LeewayStandardsAgent';
+import { FirebaseService } from './core/FirebaseService';
+import { BackgroundTaskManager } from './core/BackgroundTaskManager';
+import { WidgetCommandController } from './core/WidgetCommandController';
+import { PalliumGateway, insertAgentLeeDocuments } from './core/PalliumGateway';
+import { MultiDatabaseManager } from './core/MultiDatabaseManager';
+import { SchemaRegistry } from './core/SchemaRegistry';
+import { DeviceTelemetry } from './core/DeviceTelemetry';
+import { NativeBridge } from './core/NativeBridge';
 
 interface SavedVoxel {
   id: string;
@@ -214,6 +222,37 @@ const App: React.FC = () => {
   useEffect(() => {
     logIdentityLoad();
     logAction('system', '[BOOT] Agent Lee Agentic Operating System initialized — Powered by Leeway Innovations');
+
+    // Initialize Firebase services (before any agents)
+    const firebase = FirebaseService.getInstance();
+    const backgroundTaskManager = BackgroundTaskManager.getInstance();
+    const widgetController = WidgetCommandController.getInstance();
+    
+    // Initialize Pallium and multi-database system
+    const pallium = PalliumGateway;
+    const multiDbManager = MultiDatabaseManager;
+    const schemaRegistry = SchemaRegistry;
+    
+    // Initialize native app support (DeviceTelemetry + NativeBridge)
+    logAction('system', `[NATIVE] Device telemetry monitor initialized`);
+    logAction('system', `[NATIVE] Native bridge initialized on platform: ${NativeBridge.getPlatform()}`);
+    
+    // Export schemas to Pallium for discovery
+    schemaRegistry.exportSchemaToPallium().catch(
+      err => logAction('system', `[SCHEMA] Failed to export schemas: ${err instanceof Error ? err.message : String(err)}`)
+    );
+    
+    // Insert Agent Lee documents into all databases
+    insertAgentLeeDocuments().catch(
+      err => logAction('system', `[PALLIUM] Failed to insert Agent Lee documents: ${err instanceof Error ? err.message : String(err)}`)
+    );
+    
+    logAction('system', '[FIREBASE] Firebase service initialized');
+    logAction('system', '[BACKGROUND] Background task manager initialized');
+    logAction('system', '[WIDGET] Widget command controller initialized');
+    logAction('system', '[PALLIUM] Pallium gateway initialized as central data hub');
+    logAction('system', '[DATABASE] Multi-database manager initialized for 5 external + Pallium');
+    logAction('system', '[SCHEMA] Schema registry initialized with full database discovery');
 
     // Initialize governance agents
     ClerkArchive.initialize();
