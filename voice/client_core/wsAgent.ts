@@ -36,6 +36,26 @@ const WS_URL = (() => {
   return `${proto}://${location.host}/ws`;
 })();
 
+// ── RTC Status Logging ────────────────────────────────────────────────────
+function logRTCStatus(severity: 'CONNECTING' | 'CONNECTED' | 'DISCONNECTED' | 'STATE_CHANGE' | 'ERROR', message: string) {
+  const log = {
+    id: Date.now().toString(),
+    type: `rtc:${severity.toLowerCase()}`,
+    message: `[Voice RTC] ${message}`,
+    timestamp: new Date().toISOString()
+  };
+  
+  // Store in localStorage for debugging
+  try {
+    const existing = JSON.parse(localStorage.getItem('agent_lee_logs') || '[]');
+    localStorage.setItem('agent_lee_logs', JSON.stringify([log, ...existing].slice(0, 100)));
+  } catch (e) {
+    console.error('[RTC] Failed to log status:', e);
+  }
+  
+  console.log(`[RTC ${severity}]`, message);
+}
+
 // Robust auto-reconnect and endpoint adaptation
 function createAdaptiveSocket(url: string) {
   let currentUrl = url;
@@ -45,14 +65,24 @@ function createAdaptiveSocket(url: string) {
 
   function connect() {
     if (socket) socket.disconnect();
+    console.log('[RTC] Connecting to:', currentUrl);
+    logRTCStatus('CONNECTING', `Attempting connection to ${currentUrl}`);
     socket = new AgentLeeSocket(currentUrl);
     socket.connect();
     socket.on('state', (e) => {
+      console.log('[RTC] State:', e.state);
+      logRTCStatus('STATE_CHANGE', `WebSocket state: ${e.state}`);
       if (e.state === 'disconnected' || e.state === 'error') {
         scheduleReconnect();
+      } else if (e.state === 'connected') {
+        logRTCStatus('CONNECTED', 'Successfully connected to Voice RTC server');
       }
     });
-    socket.on('error', () => scheduleReconnect());
+    socket.on('error', (err) => {
+      console.error('[RTC] Error:', err);
+      logRTCStatus('ERROR', `Connection error: ${err}`);
+      scheduleReconnect();
+    });
     // Optionally, listen for server-suggested endpoint changes
     socket.on('redirect', (e: any) => {
       if (e.url && e.url !== currentUrl) {
@@ -86,8 +116,7 @@ let captureInst: AudioCapture | null = null;
 let energySmoother = 0;
 
 
-// ── Initialise ────────────────────────────────────────────────────────────────
-const ui = new AgentUI();
+// ── Initialise ────────────────────────────────────────────────────────────────logRTCStatus('CONNECTING', `Initializing Voice RTC client. WebSocket URL: ${WS_URL}`);const ui = new AgentUI();
 const adaptive = createAdaptiveSocket(WS_URL);
 const socket = adaptive.getSocket();
 const playback = new AudioPlayback(22050);
