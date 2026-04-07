@@ -88,6 +88,7 @@ import LeeWayUniverse from './components/LeeWayUniverse';
 import AgentLeeWorkstation from './pages/AgentLeeWorkstation';
 import { LeewayWatermark } from './components/LeewayWatermark';
 import { ChatConsole, ChatMessage } from './components/ChatConsole';
+import RTCBootstrap from './components/RTCBootstrap';
 import { logIdentityLoad } from './core/agent_lee_prompt_assembler';
 import { BODY_SYSTEM_ATLAS } from './core/agent_lee_system_awareness';
 import { createBodyAwarenessSnapshot } from './core/agent_lee_system_awareness';
@@ -821,6 +822,11 @@ const App: React.FC = () => {
 
   return (
     <>
+      <RTCBootstrap
+        onReady={() => console.log('[App] RTC initialized - Agent Lee ready for voice + vision')}
+        onError={(error) => console.error('[App] RTC initialization failed:', error)}
+      />
+
       <Layout
         currentPage={currentPage}
         onPageChange={handlePageChange}
