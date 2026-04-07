@@ -782,23 +782,6 @@ function LoadingView({ progress }: LoadingViewProps) {
         </motion.div>
 
         <div className="w-full max-w-lg space-y-6">
-          {/* Shape selector */}
-          <div className="pointer-events-auto flex flex-wrap justify-center gap-2">
-            {MODELS.map((model, i) => (
-              <button
-                key={model.name}
-                onClick={() => triggerShapeChange(i)}
-                className={`px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] border transition-all duration-300 ${
-                  i === currentModelIndex
-                    ? 'bg-[#00f2ff] border-[#00f2ff] text-black'
-                    : 'bg-transparent border-slate-700 text-slate-500 hover:border-[#00f2ff] hover:text-[#00f2ff]'
-                }`}
-              >
-                {model.name}
-              </button>
-            ))}
-          </div>
-
           <div className="w-full space-y-4">
             <div className="relative h-[1px] w-full bg-slate-800 overflow-hidden">
               <motion.div 
@@ -863,11 +846,24 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
   }, [permissionsGranted, isLoaded]);
 
   useEffect(() => {
+    // Auto-trigger permissions grant after short delay
+    const permTimer = setTimeout(() => {
+      logAction('permissions', 'Requesting hardware subsystem authorization (Camera, Mic, GPS).');
+      setPermissionsGranted(true);
+    }, 500);
+    return () => clearTimeout(permTimer);
+  }, []);
+
+  useEffect(() => {
     if (progress >= 100 && !isLoaded) {
-      const timer = setTimeout(() => setIsLoaded(true), 2000);
+      const timer = setTimeout(() => {
+        setIsLoaded(true);
+        // Auto-complete after welcome screen
+        setTimeout(() => onComplete(), 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [progress, isLoaded]);
+  }, [progress, isLoaded, onComplete]);
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black font-mono text-white shadow-[inset_0_0_120px_rgba(0,242,255,0.05)] transition-shadow duration-1000">
@@ -991,39 +987,21 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
                 ))}
               </motion.div>
 
-              {/* AUTHORIZE SYSTEM button */}
-              <motion.button
+              {/* Auto-authorize system */}
+              <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
-                whileHover={{ scale: 1.02, boxShadow: '0 0 40px rgba(60,180,255,0.6)' }}
-                whileTap={{ scale: 0.97 }}
-                onClick={async () => {
-                  logAction('permissions', 'Requesting hardware subsystem authorization (Camera, Mic, GPS).');
-                  try {
-                    await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-                    await new Promise((resolve, reject) => {
-                      navigator.geolocation.getCurrentPosition(resolve, reject);
-                    });
-                    logAction('permissions', 'Sensory inputs engaged. Authorizations granted.');
-                  } catch (err) {
-                    console.warn("Permissions not fully granted:", err);
-                    logAction('permissions', 'Warning: Partial sensory deprivation. Authorizations denied or unavailable.');
-                  } finally {
-                    setPermissionsGranted(true);
-                  }
-                }}
-                className="w-full py-4 font-black uppercase tracking-[0.3em] text-white text-sm pointer-events-auto"
+                className="w-full py-4 font-black uppercase tracking-[0.3em] text-white text-sm text-center"
                 style={{
                   background: 'linear-gradient(135deg, #0d2a4a 0%, #1a4a7a 50%, #0d2a4a 100%)',
                   borderRadius: '6px',
-                  clipPath: 'polygon(12px 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 12px 100%, 0% 50%)',
                   boxShadow: '0 0 25px rgba(60,180,255,0.45), 0 0 60px rgba(60,180,255,0.15), inset 0 1px 1px rgba(100,200,255,0.2)',
                   border: '1px solid rgba(100,200,255,0.5)',
                 }}
               >
-                Authorize System
-              </motion.button>
+                Authorizing System...
+              </motion.div>
             </div>
           </motion.div>
         ) : !isLoaded ? (
@@ -1052,9 +1030,7 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
                 transition={{ delay: 1.5, duration: 1 }}
                 className="pt-12"
               >
-                <button onClick={onComplete} className="px-8 py-3 bg-black border border-[#00f2ff] text-[#00f2ff] text-[10px] uppercase tracking-[0.3em] hover:bg-[#00f2ff] hover:text-black transition-all duration-500 pointer-events-auto shadow-[0_0_20px_rgba(0,242,255,0.4)]">
-                  Access Dashboard
-                </button>
+                <p className="text-[10px] text-[#00f2ff] uppercase tracking-[0.3em] animate-pulse">Connecting to Agent Lee...</p>
               </motion.div>
             </div>
           </motion.div>
