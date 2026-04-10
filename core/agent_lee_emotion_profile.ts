@@ -24,7 +24,7 @@ HOW = TypeScript const object used by voice router, prompt assembler, and UI sen
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 ECHO
 
 LICENSE:
@@ -63,3 +63,4 @@ export const AGENT_LEE_EMOTION_PROFILE = {
     creativeMoments: "energy, curiosity, collaborative excitement",
   },
 } as const;
+

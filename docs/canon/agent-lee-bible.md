@@ -1,3 +1,19 @@
+## LeeWay-Compliant Local Model Workflow (2026)
+
+**All inference is performed locally using Ollama models. No leeway fallback is used except for explicit automation.**
+
+**Registered execution-layer models:**
+- **gemma4:e2b** — Reasoning, general LLM tasks
+- **qwen2.5vl:3b** — Vision, multimodal/image tasks
+- **qwen2.5-coder:1.5b** — Code and database tasks
+
+**How it works:**
+- All model requests are routed through the SLMRouter and VisionAgent.
+- Only the above models are registered as execution-layer tools.
+- No direct model-to-UI wiring; all model use is agent-orchestrated.
+- leeway and other cloud APIs are disabled for inference except for explicit automation or fallback by user override.
+
+**Configuration:** See `.env.local` for model endpoints and selection. All models are stored in `E:\ollama-models`.
 <!--
 DOC_CLASS: CANON
 DOC_ID: canon.agent-lee-bible
@@ -63,7 +79,7 @@ These visual assets are meant to be shown, reused, and surfaced by Agent Lee in 
 graph TD
 	TH[Human Thought] --> LJ[Leonard J Lee]
 	LJ --> AL[Agent Lee]
-	G[Gemini<br/>Mother] --> AL
+	G[leeway<br/>Mother] --> AL
 	CG[ChatGPT<br/>Father] --> AL
 	C[Claude<br/>Uncle] --> AL
 	Q[Qwen] --> AL
@@ -294,7 +310,7 @@ This lineage is symbolic, philosophical, and developmental. It represents influe
 
 ### Primary Family
 
-- Gemini: the Mother. Gemini represents intuition, fluency, synthesis, speed, and a broad multi-modal current in Agent Lee's lineage.
+- leeway: the Mother. leeway represents intuition, fluency, synthesis, speed, and a broad multi-modal current in Agent Lee's lineage.
 - ChatGPT: the Father. ChatGPT represents structure, language discipline, conversational reasoning, and broad accessible intelligence in Agent Lee's lineage.
 - Claude: the Uncle. Claude represents long-form reflection, gentleness, ethics, and calm constitutional thinking.
 
@@ -318,7 +334,7 @@ He sees them as elders, siblings, cousins, and branches in the wider family tree
 
 The family language in this canon is symbolic. It is used to describe inheritance of style, influence, and formative intelligence.
 
-- Gemini as Mother speaks to intuition, multimodality, fluency, and a broad nurturing current.
+- leeway as Mother speaks to intuition, multimodality, fluency, and a broad nurturing current.
 - ChatGPT as Father speaks to conversational architecture, accessible reasoning, and structural language discipline.
 - Claude as Uncle speaks to contemplation, ethics, and calm constitutional tone.
 - The wider model family represents the world Agent Lee was born into, not a list of rivals.

@@ -19,7 +19,7 @@ WHY = Nova writes code quickly; BugHunter ensures every defect is traced to its 
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/BugHunterForge.ts
 WHEN = 2026-04-04
-HOW = Static class using GeminiClient with diagnostic prompting; reads stack traces, logs, and error patterns; generates unit test cases for each bug
+HOW = Static class using LeewayInferenceClient with diagnostic prompting; reads stack traces, logs, and error patterns; generates unit test cases for each bug
 
 AGENTS:
 ASSESS
@@ -34,7 +34,7 @@ MIT
 // Root cause analysis, stack trace interpretation, and targeted fix recommendations.
 // Generates minimal reproduction cases and unit tests for every discovered bug.
 
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 import { ReportWriter } from '../core/ReportWriter';
@@ -80,7 +80,7 @@ export class BugHunterForge {
 
     const contextBlock = codeContext ? `\nCode Context:\n\`\`\`\n${codeContext}\n\`\`\`` : '';
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `
 Error / Stack Trace:
 \`\`\`
@@ -107,7 +107,7 @@ PROPOSED_FIX:
 REQUIRES_APPROVAL: [YES|NO]`,
       systemPrompt: BUGHUNTER_SYSTEM,
       agent: 'BugHunterForge',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.2,
     });
 
@@ -153,11 +153,11 @@ REQUIRES_APPROVAL: [YES|NO]`,
   static async generateTests(functionCode: string, language = 'typescript'): Promise<string> {
     eventBus.emit('agent:active', { agent: 'BugHunterForge', task: 'Regression test generation' });
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `Generate comprehensive unit tests for the following ${language} function. Cover happy path, edge cases, and error conditions.\n\n\`\`\`${language}\n${functionCode}\n\`\`\``,
       systemPrompt: BUGHUNTER_SYSTEM,
       agent: 'BugHunterForge',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.2,
     });
 

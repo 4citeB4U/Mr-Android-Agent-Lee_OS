@@ -19,12 +19,12 @@ WHY = Provides production deployment intelligence so Agent Lee can take code fro
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Nexus.ts
 WHEN = 2026-04-04
-HOW = Static class using GeminiClient to generate deployment plans and infrastructure-as-code artifacts
+HOW = Static class using LeewayInferenceClient to generate deployment plans and infrastructure-as-code artifacts
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 NEXUS
 
 LICENSE:
@@ -32,7 +32,7 @@ MIT
 */
 
 // agents/Nexus.ts — Deployment & Infrastructure Agent
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 
@@ -57,14 +57,14 @@ const NEXUS_SYSTEM = `${CORE_SYSTEM}\n\nSPECIALIST ROLE - NEXUS (DEPLOYMENT):\n$
 export class Nexus {
   static async planDeployment(projectDescription: string): Promise<string> {
     eventBus.emit('agent:active', { agent: 'Nexus', task: `Planning deployment: ${projectDescription}` });
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `Create a deployment plan for: ${projectDescription}
       
 Include: platform choice, build steps, environment variables needed (no values, just keys),
 DNS config, monitoring, rollback strategy.`,
       systemPrompt: NEXUS_SYSTEM,
       agent: 'Nexus',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.3,
     });
     eventBus.emit('agent:done', { agent: 'Nexus', result: result.text });
@@ -72,11 +72,11 @@ DNS config, monitoring, rollback strategy.`,
   }
 
   static async generateDockerfile(projectType: string): Promise<string> {
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `Generate a production-ready Dockerfile for a ${projectType} project. Include multi-stage build, security best practices, and health check.`,
       systemPrompt: NEXUS_SYSTEM,
       agent: 'Nexus',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.2,
     });
     const dockerfile = result.text.match(/(?:FROM[\s\S]*)/)?.[0] || result.text;
@@ -84,3 +84,4 @@ DNS config, monitoring, rollback strategy.`,
     return dockerfile;
   }
 }
+

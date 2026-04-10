@@ -19,7 +19,7 @@ WHY = Agent Lee needs structured knowledge mapping to cross-reference concepts, 
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/AdamCortex.ts
 WHEN = 2026-04-04
-HOW = Static class using GeminiClient to generate and query Cypher-style knowledge graph structures backed by MemoryDB
+HOW = Static class using LeewayInferenceClient to generate and query Cypher-style knowledge graph structures backed by MemoryDB
 
 AGENTS:
 ASSESS
@@ -34,7 +34,7 @@ MIT
 // Manages conceptual knowledge graphs: nodes, edges, traversal, and semantic queries.
 // Activated when Atlas, Sage, or AgentLee needs cross-domain relationship mapping.
 
-import { GeminiClient } from '../core/GeminiClient';
+import { LLMProvider } from '../core/LLMProvider';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 import { ReportWriter } from '../core/ReportWriter';
@@ -87,9 +87,9 @@ export class AdamCortex {
   static async buildGraph(topic: string, context?: string): Promise<KnowledgeGraph> {
     eventBus.emit('agent:active', { agent: 'AdamCortex', task: `Building graph: ${topic}` });
 
-    const result = await GeminiClient.generate({
-      prompt: `
-Map the knowledge graph for: "${topic}"
+    // LLMProvider.generate expects a prompt argument, so we must update its definition if needed.
+    // For now, assume it takes a prompt and returns a string.
+    const prompt = `Map the knowledge graph for: "${topic}"
 ${context ? `Additional context: ${context}` : ''}
 
 Return a JSON object with:
@@ -97,21 +97,15 @@ Return a JSON object with:
   "nodes": [{ "id": "...", "entity_type": "...", "name": "...", "properties": {} }],
   "edges": [{ "from": "...", "to": "...", "relationship": "...", "weight": 0.8, "status": "CONFIRMED|INFERRED" }],
   "summary": "One paragraph prose summary of the domain structure"
-}`,
-      systemPrompt: ADAM_SYSTEM,
-      agent: 'AdamCortex',
-      model: 'gemini-2.0-flash',
-      temperature: 0.2,
-    });
-
-    const jsonMatch = result.text.match(/\{[\s\S]*\}/);
-    let graph: KnowledgeGraph = { nodes: [], edges: [], summary: result.text };
-
+}`;
+    const result = await LLMProvider.generate(prompt);
+    let graph: KnowledgeGraph = { nodes: [], edges: [], summary: result };
+    const jsonMatch = result.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       try {
         graph = JSON.parse(jsonMatch[0]) as KnowledgeGraph;
       } catch {
-        graph.summary = result.text;
+        graph.summary = result;
       }
     }
 
@@ -137,15 +131,9 @@ Return a JSON object with:
 
     const graphText = `Nodes: ${JSON.stringify(graph.nodes)}\nEdges: ${JSON.stringify(graph.edges)}`;
 
-    const result = await GeminiClient.generate({
-      prompt: `Graph Data:\n${graphText}\n\nQuestion: ${question}\n\nAnswer by traversing the graph relationships.`,
-      systemPrompt: ADAM_SYSTEM,
-      agent: 'AdamCortex',
-      model: 'gemini-2.0-flash',
-      temperature: 0.3,
-    });
-
+    const prompt2 = `Graph Data:\n${graphText}\n\nQuestion: ${question}\n\nAnswer by traversing the graph relationships.`;
+    const result2 = await LLMProvider.generate(prompt2);
     eventBus.emit('agent:done', { agent: 'AdamCortex', result: 'graph:query complete' });
-    return result.text;
+    return result2;
   }
 }

@@ -36,7 +36,7 @@ import { ReportWriter, type ReportEvent, type ReportEventType } from '../core/Re
 import { ReportIndex } from '../core/ReportIndex';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 
 const AGENT_ID = 'Clerk_Archive';
 const FAMILY   = 'ARCHIVE' as const;
@@ -149,13 +149,13 @@ export class ClerkArchive {
     return report;
   }
 
-  /** Generate a daily summary using Gemini (for SITREP contribution). */
+  /** Generate a daily summary using leeway (for SITREP contribution). */
   static async generateDailySummary(): Promise<string> {
     const summary = await ReportIndex.summary();
     const coreSystem = buildAgentLeeCorePrompt();
 
     try {
-      const result = await GeminiClient.generate({
+      const result = await LeewayInferenceClient.generate({
         prompt: `Generate a concise agent report coverage summary for the SITREP.
 Total events: ${summary.total}
 Agents reporting: ${summary.agents}
@@ -166,7 +166,7 @@ Recent events: ${JSON.stringify(summary.recentEvents.slice(0, 3))}
 Return a 3-5 sentence summary for inclusion in the daily SITREP.`,
         systemPrompt: `${coreSystem}\n\nYou are Clerk Archive, Keeper of Reports. Be concise and factual.`,
         agent: 'AgentLee',
-        model: 'gemini-2.0-flash',
+        model: 'gemma4:e2b',
         temperature: 0.2,
       });
       return result.text;
@@ -188,3 +188,4 @@ Return a 3-5 sentence summary for inclusion in the daily SITREP.`,
     });
   }
 }
+

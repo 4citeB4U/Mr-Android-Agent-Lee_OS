@@ -19,7 +19,7 @@ WHY = Minimize latency & cost by using fastest capable inference method
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = core/AgentLeeResponseRouter.ts
 WHEN = 2026
-HOW = Persona Rules → Qwen Local → Gemini Fallback with automatic tier selection and fallback
+HOW = Persona Rules → Qwen Local → leeway Fallback with automatic tier selection and fallback
 
 AGENTS:
 ASSESS
@@ -31,12 +31,12 @@ MIT
 
 import LeewayRTCClient, { RTCState } from './LeewayRTCClient';
 import QwenBridge, { QwenStatus } from './QwenBridge';
-import { GeminiLiveClient } from './GeminiLiveClient';
+import { LeewayInferenceClient } from './LeewayInferenceClient';
 
 export enum InferenceTier {
   PERSONA_RULES = 'persona_rules',
   QWEN_LOCAL = 'qwen_local',
-  GEMINI_FALLBACK = 'gemini_fallback',
+  OLLAMA_LOCAL = 'ollama_local',
 }
 
 export interface InferenceResult {
@@ -57,16 +57,14 @@ export interface InferenceResult {
  * Priority:
  * 1. Persona Rules (instant, < 100ms) - for known intents and RTC context
  * 2. Qwen Local (fast, < 2s) - for complex requests when model available
- * 3. Gemini Fallback (slow, < 5s) - when Qwen unavailable, for compatibility
+ * 3. leeway Fallback (slow, < 5s) - when Qwen unavailable, for compatibility
  */
 export class AgentLeeResponseRouter {
   private qwenBridge: QwenBridge;
-  private geminiClient: GeminiLiveClient;
   private rtcState?: { connectionState: string; iceState: string; peerCount: number };
 
   constructor(rtcState?: { connectionState: string; iceState: string; peerCount: number }) {
     this.qwenBridge = QwenBridge.getInstance();
-    this.geminiClient = new GeminiLiveClient();
     this.rtcState = rtcState;
   }
 
@@ -88,23 +86,11 @@ export class AgentLeeResponseRouter {
         };
       }
 
-      // Tier 2: Phi Local (if available)
+      // Tier 2: Qwen local
       if (this.qwenBridge.getStatus() === QwenStatus.ONLINE) {
         try {
-          // Check if the task is complex enough to warrant Gemini "Operations Assistant"
-          if (this.isComplexTask(input)) {
-            console.log('[Router] Complex task detected, invoking Gemini Operations Assistant');
-            const response = await this.invokeGeminiFallback(input);
-            return {
-              response,
-              tier: InferenceTier.GEMINI_FALLBACK,
-              latency: Date.now() - startTime,
-              metadata: { model: 'gemini-2.0-flash-ops-assistant', confidence: 0.95 },
-            };
-          }
-
-          const bridge = QwenBridge.getInstance();
           const response = await this.invokeQwen(input);
+          const bridge = QwenBridge.getInstance();
           return {
             response,
             tier: InferenceTier.QWEN_LOCAL,
@@ -112,26 +98,19 @@ export class AgentLeeResponseRouter {
             metadata: { model: bridge.getStats().model, confidence: 0.85 },
           };
         } catch (error) {
-          console.warn(`[Router] Local model failed, falling back to Gemini Operations Assistant:`, error);
+          console.warn('[Router] Qwen failed, falling back to Ollama:', error);
         }
       }
 
-      // Tier 3: Gemini (Complex / Fallback)
-      const response = await this.invokeGeminiFallback(input);
+      // Tier 3: Ollama local (primary fallback — still local, no cloud)
+      const response = await this.invokeOllama(input);
       const totalLatency = Date.now() - startTime;
-      
-      // Inject telemetry for performance audit transparency
-      console.log(`[Router] Diagnostics: ${input.slice(0, 20)}... -> Tier: ${InferenceTier.GEMINI_FALLBACK} Latency: ${totalLatency}ms`);
-      
+      console.log(`[Router] Routed to Ollama. Latency: ${totalLatency}ms`);
       return {
         response,
-        tier: InferenceTier.GEMINI_FALLBACK,
+        tier: InferenceTier.OLLAMA_LOCAL,
         latency: totalLatency,
-        metadata: { 
-          model: 'gemini-2.0-flash-fallback', 
-          confidence: 0.8,
-          diagnostics: { latencyMs: totalLatency }
-        },
+        metadata: { model: 'ollama-local', confidence: 0.8 },
       };
     } catch (error) {
       console.error('[Router] All inference tiers failed:', error);
@@ -266,65 +245,15 @@ Be professional and direct.`;
   }
 
   /**
-   * Invoke Gemini as fallback
+   * Invoke local Ollama as the fallback (no cloud calls ever)
    */
-  private async invokeGeminiFallback(input: string): Promise<string> {
-    const apiKey = (import.meta.env.VITE_GEMINI_API_KEY as string) || '';
-
-    if (!apiKey) {
-      throw new Error('Gemini API key not configured');
-    }
-
-    // Use lightweight REST API, not Live API (to avoid heavy dependencies)
-    const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: input,
-                },
-              ],
-            },
-          ],
-          systemInstruction: {
-            parts: [
-              {
-                text: 'You are Agent Lee. Respond concisely (1-3 sentences max). Be professional.',
-              },
-            ],
-          },
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 256,
-          },
-        }),
-        signal: AbortSignal.timeout(30000),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`);
-    }
-
-    const data = await response.json() as {
-      candidates?: Array<{
-        content?: {
-          parts?: Array<{ text?: string }>;
-        };
-      }>;
-    };
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!text) {
-      throw new Error('Empty response from Gemini');
-    }
-
-    return text;
+  private async invokeOllama(input: string): Promise<string> {
+    const result = await LeewayInferenceClient.generate({
+      prompt: input,
+      systemPrompt: 'You are Agent Lee, a helpful AI assistant managing WebRTC sessions. Respond concisely (1-3 sentences max). Be professional and direct.',
+      temperature: 0.7,
+    });
+    return result.text;
   }
 
   /**
@@ -336,3 +265,4 @@ Be professional and direct.`;
 }
 
 export default AgentLeeResponseRouter;
+

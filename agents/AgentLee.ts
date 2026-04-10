@@ -19,12 +19,12 @@ WHY = Central routing and execution brain — plans, delegates, verifies, and de
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/AgentLee.ts
 WHEN = 2026-04-04
-HOW = Static class with respond(), plan(), and verify() methods using GeminiClient and EventBus
+HOW = Static class with respond(), plan(), and verify() methods using LeewayInferenceClient and EventBus
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 NOVA
 ECHO
 
@@ -36,10 +36,11 @@ MIT
 // Master planner, task setter, and verified finisher.
 // Always researches → plans → delegates → verifies → delivers with evidence.
 
-import { GeminiClient, GeminiRequest } from '../core/GeminiClient';
+
 import { AgentRouter, TaskIntent } from '../core/AgentRouter';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
+import { LLMProvider } from '../core/LLMProvider';
 
 const LEE_SYSTEM_PROMPT = buildAgentLeeCorePrompt();
 const LEE_SPECIFIC_INSTRUCTIONS = `
@@ -67,32 +68,19 @@ export class AgentLee {
       ? `\n[STYLE DIRECTIVE: Respond in the form of a ${intent.style}]`
       : '';
 
-    const request: GeminiRequest = {
-      prompt: `${userMessage}${styleDirective}`,
-      systemPrompt: FULL_SYSTEM_PROMPT,
-      agent: 'AgentLee',
-      model: 'gemini-2.0-flash',
-      temperature: 0.8,
-      history,
-      streamCallback,
-    };
-
-    const result = await GeminiClient.stream(request);
-    
+    // Use only local logic or LLMProvider if needed
+    const result = await LLMProvider.generate(`${userMessage}${styleDirective}`);
     AgentRouter.addHistory('user', userMessage);
     AgentRouter.addHistory('model', result);
-    
     eventBus.emit('agent:done', { agent: 'AgentLee', result });
-    
     return result;
   }
 
   static async plan(task: string): Promise<string> {
     eventBus.emit('agent:active', { agent: 'AgentLee', task: 'Creating plan...' });
     
-    const result = await GeminiClient.generate({
-      prompt: `Create a detailed, step-by-step execution plan for: "${task}"
-      
+    // Use only local logic or LLMProvider if needed
+    const result = await LLMProvider.generate(`Create a detailed, step-by-step execution plan for: "${task}"
 Format as:
 PLAN: <one sentence summary>
 RESEARCH NEEDED: <yes/no — what to look up>
@@ -101,34 +89,24 @@ STEPS:
 2. ...
 AGENTS NEEDED: <list of agents>
 SUCCESS CRITERIA: <how we know it's done>
-ESTIMATED TIME: <rough estimate>`,
-      systemPrompt: FULL_SYSTEM_PROMPT,
-      agent: 'AgentLee',
-      model: 'gemini-2.0-flash-thinking-exp',
-      temperature: 0.3,
-    });
-    
-    return result.text;
+ESTIMATED TIME: <rough estimate>`);
+    return result;
   }
 
   static async verify(task: string, result: string): Promise<{ passed: boolean; notes: string }> {
-    const verification = await GeminiClient.generate({
-      prompt: `Verify this task was completed correctly.
+    // Use only local logic or LLMProvider if needed
+    const verification = await LLMProvider.generate(`Verify this task was completed correctly.
 TASK: ${task}
 RESULT: ${result}
 
 Check: completeness, correctness, quality, edge cases.
-Return JSON: { "passed": true/false, "notes": "..." }`,
-      agent: 'AgentLee',
-      model: 'gemini-2.0-flash',
-      temperature: 0.1,
-    });
-
+Return JSON: { "passed": true/false, "notes": "..." }`);
     try {
-      const json = verification.text.match(/\{[\s\S]*\}/)?.[0];
+      const json = verification.match(/\{[\s\S]*\}/)?.[0];
       return json ? JSON.parse(json) : { passed: true, notes: 'Verification completed' };
     } catch {
-      return { passed: true, notes: verification.text };
+      return { passed: true, notes: verification };
     }
   }
 }
+

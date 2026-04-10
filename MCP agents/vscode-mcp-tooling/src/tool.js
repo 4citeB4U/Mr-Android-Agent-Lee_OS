@@ -67,7 +67,7 @@ function diag() {
   console.log("[diag] NODE_EXE:", CONFIG.NODE_EXE);
   console.log("[diag] STITCH_PATH:", CONFIG.STITCH_PATH);
 
-  const needKeys = ["GEMINI_API_KEY", "STITCH_API_KEY", "HF_TOKEN", "TESTSPRITE_API_KEY", "INSFORGE_TOKEN", "INSFORGE_API_KEY"];
+  const needKeys = ["leeway_API_KEY", "STITCH_API_KEY", "HF_TOKEN", "TESTSPRITE_API_KEY", "INSFORGE_TOKEN", "INSFORGE_API_KEY"];
   for (const k of needKeys) console.log("[diag] ENV " + k + ":", process.env[k] ? "set" : "missing");
 }
 
@@ -148,8 +148,8 @@ async function runPkgByEntry(pkgSpec, pkgDirName) {
 async function runStitch() {
   const env = { ...process.env };
 
-  // Prefer GEMINI_API_KEY when both are present
-  if (env.GOOGLE_API_KEY && env.GEMINI_API_KEY) delete env.GOOGLE_API_KEY;
+  // Prefer leeway_API_KEY when both are present
+  if (env.leeway_API_KEY && env.leeway_API_KEY) delete env.leeway_API_KEY;
 
   const cwd = stripOuterQuotes(CONFIG.STITCH_PATH);
   if (!cwd || !fs.existsSync(cwd)) return { code: 2, out: "", err: "Missing STITCH_PATH: " + cwd };
@@ -189,3 +189,4 @@ try {
   console.error("Fatal error:", err);
   process.exit(1);
 }
+

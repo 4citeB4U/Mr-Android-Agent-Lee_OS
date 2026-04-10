@@ -56,7 +56,7 @@ PROPRIETARY
 // ─── Intent types ────────────────────────────────────────────────────────────
 
 export type IntentClass =
-  | "conversation" // Natural chat → Gemini lane
+  | "conversation" // Natural chat → leeway lane
   | "planning" // Task decomposition → GLM-4.7-Flash → PlannerAgent
   | "desktop_action" // PC ops → DesktopCommanderAgent via Cerebral
   | "browser_action" // Web tasks → PlaywrightAgent
@@ -73,7 +73,7 @@ export type IntentClass =
 // ─── Model lanes ─────────────────────────────────────────────────────────────
 
 export type ModelLane =
-  | "gemini" // Natural conversation, final narration, multimodal
+  | "leeway" // Natural conversation, final narration, multimodal
   | "glm_flash" // Fast planning, routing, mission summaries (GLM-4.7-Flash)
   | "glm_vision" // Visual analysis (GLM-4.6V-Flash)
   | "qwen_local" // Privacy-first, offline fallback (Qwen 2.5)
@@ -182,7 +182,7 @@ export const AGENT_LEE_CORE_CONTRACT: CoreContract = {
     "Select the correct MCP agent and ModelLane",
     "Enforce policy and approval rules before execution",
     "Merge outputs from multiple agents",
-    "Produce final user-facing narration via Gemini lane",
+    "Produce final user-facing narration via leeway lane",
     "Write MissionSummary to MemoryAgent after every interaction",
     "Maintain short session state",
     "Report system health via HealthAgent",
@@ -206,6 +206,7 @@ export const AGENT_LEE_CORE_CONTRACT: CoreContract = {
     "narration",
     "mission_id",
   ],
-  model_lanes: ["gemini", "glm_flash", "qwen_local"],
+  model_lanes: ["leeway", "glm_flash", "qwen_local"],
   deployment_location: "cloudflare",
 };
+

@@ -15,16 +15,16 @@ glyph=git-branch
 
 5WH:
 WHAT = Central intent classifier and task router for all agent dispatch
-WHY = Routes user messages to the correct specialized agent based on Gemini-powered intent classification
+WHY = Routes user messages to the correct specialized agent based on leeway-powered intent classification
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = core/AgentRouter.ts
 WHEN = 2026
-HOW = Static class using GeminiClient to classify tasks, maintain conversation history, and dispatch to agents
+HOW = Static class using LeewayInferenceClient to classify tasks, maintain conversation history, and dispatch to agents
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 ROUTER
 
 LICENSE:
@@ -33,37 +33,25 @@ MIT
 
 // core/AgentRouter.ts
 // Routes user intents to the correct agent.
-// Uses Gemini to classify the task, then dispatches to the right team member.
+// Uses leeway to classify the task, then dispatches to the right team member.
 
-import { GeminiClient, AgentName } from './GeminiClient';
+import { LeewayInferenceClient, AgentName } from './LeewayInferenceClient';
 import { buildAgentLeeCorePrompt } from './agent_lee_prompt_assembler';
-import {
-  type WorkflowId,
-  WORKFLOWS,
-  type TaskRecord,
-  type Zone,
-  LEE_PRIME_GOVERNANCE_PROMPT,
-  parseLeePrimeCommand,
-} from './GovernanceContract';
-import { TaskGraph } from './TaskGraph';
-import { eventBus } from './EventBus';
 
-const CORE_SYSTEM = buildAgentLeeCorePrompt();
+  interface TaskIntent {
+    agent: string;
+    task: string;
+    requiresVM: boolean;
+    requiresVoice: boolean;
+    requiresSearch: boolean;
+    requiresCode: boolean;
+    requiresImage: boolean;
+    workflow: string;
+    priority: 'low' | 'medium' | 'high' | 'critical';
+    style?: 'normal' | 'poem' | 'story' | 'riddle' | 'simple';
+  }
 
-export interface TaskIntent {
-  agent: AgentName;
-  task: string;
-  requiresVM: boolean;
-  requiresVoice: boolean;
-  requiresSearch: boolean;
-  requiresCode: boolean;
-  requiresImage: boolean;
-  workflow: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  style?: 'normal' | 'poem' | 'story' | 'riddle' | 'simple';
-}
-
-const CLASSIFICATION_SYSTEM = `${CORE_SYSTEM}
+const CLASSIFICATION_SYSTEM = `${buildAgentLeeCorePrompt()}
 
 You are Agent Lee's task router. Classify the user's request and return ONLY valid JSON.
 遵循以下分类原则:
@@ -100,66 +88,82 @@ Return JSON only:
   "style": "<normal|poem|story|riddle|simple>"
 }`;
 
-const WORKFLOW_MAP: Record<AgentName, string> = {
-  AgentLee: 'orchestration',
-  Atlas: 'research',
-  Nova: 'coding',
-  Echo: 'voice_emotion',
-  Sage: 'memory_dream',
-  Shield: 'security',
-  Pixel: 'visual',
-  Nexus: 'deployment',
-  Aria: 'social',
-  // Realtime voice pipeline agents — handled locally, no workflow doc
-  LiveConductor: 'voice_pipeline',
-  StreamingSTT: 'voice_pipeline',
-  StreamingTTS: 'voice_pipeline',
-  Vision: 'vision',
-  Router: 'routing',
-  SafetyRedaction: 'safety',
-  // CORTEX bloodline — reasoning and policy sub-agents
-  LilyCortex: 'reasoning',
-  GabrielCortex: 'governance',
-  AdamCortex: 'knowledge_graph',
-  // ARCHIVE bloodline
-  ScribeArchive: 'chronicle',
-  // AEGIS bloodline
-  GuardAegis: 'registry_audit',
-  // FORGE bloodline — engineering helpers
-  BugHunterForge: 'debugging',
-  SyntaxForge: 'architecture',
-  // SENTINEL bloodline
-  BrainSentinel: 'health_monitor',
-};
+// Extend AgentName type for model tools
+export type ModelToolAgent = 'ModelGemma' | 'ModelVision' | 'ModelCoder';
+
+const WORKFLOW_MAP: Record<AgentName | ModelToolAgent, string> = {
+    ModelGemma: 'model_gemma',
+    ModelVision: 'model_vision',
+    ModelCoder: 'model_coder',
+    AgentLee: 'orchestration',
+    Atlas: 'research',
+    Nova: 'coding',
+    Echo: 'voice_emotion',
+    Sage: 'memory_dream',
+    Shield: 'security',
+    Pixel: 'visual',
+    Nexus: 'deployment',
+    Aria: 'social',
+    LiveConductor: 'voice_pipeline',
+    StreamingSTT: 'voice_pipeline',
+    StreamingTTS: 'voice_pipeline',
+    Vision: 'vision',
+    Router: 'routing',
+    SafetyRedaction: 'safety',
+    LilyCortex: 'reasoning',
+    GabrielCortex: 'governance',
+    AdamCortex: 'knowledge_graph',
+    ScribeArchive: 'chronicle',
+    GuardAegis: 'registry_audit',
+    BugHunterForge: 'debugging',
+    SyntaxForge: 'architecture',
+    BrainSentinel: 'health_monitor',
+  };
+
+// Recognize model tool actions
+function detectModelToolAction(task: string): ModelToolAgent | null {
+  if (/model\.gemma\.run/i.test(task)) return 'ModelGemma';
+  if (/model\.vision\.run/i.test(task)) return 'ModelVision';
+  if (/model\.coder\.run/i.test(task)) return 'ModelCoder';
+	return null;
+}
+
 
 export class AgentRouter {
   private static history: { role: 'user' | 'model'; content: string }[] = [];
 
   static async classify(userMessage: string, detectedEmotion?: string): Promise<TaskIntent> {
-    const emotionContext = detectedEmotion 
-      ? `\nUser's detected emotional tone: ${detectedEmotion}. Adapt style accordingly.` 
+    // Check for explicit model tool action
+    const modelTool = detectModelToolAction(userMessage);
+    if (modelTool) {
+      return {
+        agent: modelTool,
+        task: userMessage,
+        requiresVM: false,
+        requiresVoice: false,
+        requiresSearch: false,
+        requiresCode: false,
+        requiresImage: false,
+        workflow: WORKFLOW_MAP[modelTool],
+        priority: 'medium',
+        style: 'normal',
+      };
+    }
+
+    const emotionContext = detectedEmotion
+      ? `\nUser's detected emotional tone: ${detectedEmotion}. Adapt style accordingly.`
       : '';
 
     try {
-      const result = await GeminiClient.generate({
+      const result = await LeewayInferenceClient.generate({
         prompt: `Classify this request: "${userMessage}"${emotionContext}`,
         systemPrompt: CLASSIFICATION_SYSTEM,
         agent: 'AgentLee',
-        model: 'gemini-2.0-flash',
+        model: 'gemma4:e2b',
         temperature: 0.1,
       });
 
       // Parse JSON from response
-      const jsonMatch = result.text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error('Invalid classification response');
-      
-      const intent: TaskIntent = JSON.parse(jsonMatch[0]);
-      intent.workflow = WORKFLOW_MAP[intent.agent] || 'orchestration';
-      
-      return intent;
-    } catch (err) {
-      // Fallback: return AgentLee as default
-      console.error('[AgentRouter] Classification failed, using default:', err);
       return {
         agent: 'AgentLee',
         task: userMessage,
@@ -172,14 +176,19 @@ export class AgentRouter {
         priority: 'medium',
         style: 'normal',
       };
-    }
-  }
-
-  static addHistory(role: 'user' | 'model', content: string) {
-    this.history.push({ role, content });
-    // Keep last 20 exchanges only
-    if (this.history.length > 40) {
-      this.history = this.history.slice(-40);
+    } catch {
+      return {
+        agent: 'AgentLee',
+        task: userMessage,
+        requiresVM: false,
+        requiresVoice: false,
+        requiresSearch: false,
+        requiresCode: false,
+        requiresImage: false,
+        workflow: 'orchestration',
+        priority: 'medium',
+        style: 'normal',
+      };
     }
   }
 
@@ -218,11 +227,11 @@ G6 = Deployment / release / server / GitHub push
 G7 = Health / diagnostics / safe mode`;
 
     try {
-      const result = await GeminiClient.generate({
+      const result = await LeewayInferenceClient.generate({
         prompt: `Classify this request: "${message}"`,
         systemPrompt: GOVPROMPT,
         agent: 'AgentLee',
-        model: 'gemini-2.0-flash',
+        model: 'gemma4:e2b',
         temperature: 0.1,
       });
       const match = result.text.match(/\{[\s\S]*?\}/);
@@ -263,11 +272,11 @@ G7 = Health / diagnostics / safe mode`;
 
     try {
       // Wake lead
-      const leadResult = await GeminiClient.generate({
+      const leadResult = await LeewayInferenceClient.generate({
         prompt: objective,
         systemPrompt: coreSystem,
         agent: lead as AgentName,
-        model: 'gemini-2.0-flash',
+        model: 'gemma4:e2b',
         temperature: 0.3,
       });
 
@@ -279,11 +288,11 @@ G7 = Health / diagnostics / safe mode`;
       if (helpers.length > 0 && runningCount < budget.maxActiveAgents) {
         for (const helper of helpers.slice(0, 1)) { // max 1 helper pass per baton
           try {
-            const helperResult = await GeminiClient.generate({
+            const helperResult = await LeewayInferenceClient.generate({
               prompt: `Lead agent (${lead}) completed: "${finalText.slice(0, 500)}"\n\nYour helper role: contribute your expertise to the objective: "${objective}"`,
               systemPrompt: coreSystem,
               agent: helper as AgentName,
-              model: 'gemini-2.0-flash',
+              model: 'gemma4:e2b',
               temperature: 0.3,
             });
             if (helperResult.text.trim()) {
@@ -310,3 +319,4 @@ G7 = Health / diagnostics / safe mode`;
     return parseLeePrimeCommand(message) !== null;
   }
 }
+

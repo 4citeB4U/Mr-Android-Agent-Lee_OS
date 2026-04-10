@@ -19,12 +19,12 @@ WHY = Provides visual intelligence so Agent Lee can produce and render image and
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Pixel.ts
 WHEN = 2026-04-04
-HOW = Static class using generateImage/generateVoxelScene services and GeminiClient for UI design
+HOW = Static class using generateImage/generateVoxelScene services and LeewayInferenceClient for UI design
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 PIXEL
 
 LICENSE:
@@ -32,9 +32,9 @@ MIT
 */
 
 // agents/Pixel.ts — Visual & Voxel Agent
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
-import { generateImage, generateVoxelScene } from '../services/gemini';
+import { generateImage, generateVoxelScene } from '../services/leeway_inference';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 
 const CORE_SYSTEM = buildAgentLeeCorePrompt();
@@ -79,12 +79,12 @@ export class Pixel {
 
   static async designUI(description: string): Promise<string> {
     eventBus.emit('vm:open', { agent: 'Pixel', task: `Designing UI: ${description}` });
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `Create a modern, beautiful UI component for: ${description}
 Return complete self-contained HTML/CSS/JS. Use glassmorphism, dark theme, neon accents.`,
       systemPrompt: PIXEL_SYSTEM,
       agent: 'Pixel',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.6,
     });
     const html = result.text.match(/<!DOCTYPE html>[\s\S]*<\/html>/i)?.[0] || result.text;
@@ -92,3 +92,4 @@ Return complete self-contained HTML/CSS/JS. Use glassmorphism, dark theme, neon 
     return html;
   }
 }
+

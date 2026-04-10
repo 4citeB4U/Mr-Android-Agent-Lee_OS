@@ -5,11 +5,11 @@ OWNER: Leonard J Lee / Leeway Innovations
 LAST_UPDATED: 2026-04-04
 -->
 
-# Agent Lee Voxel OS — Master Plan (Current State)
-> Engine: Google Gemini + local llama.cpp | Auth: Google OAuth only | No raw API keys on frontend ever
+# Agent Lee Agentic Operating System — Master Plan (Current State)
+> Engine: leeway leeway + local llama.cpp | Auth: leeway OAuth only | No raw API keys on frontend ever
 
 ## Security Foundation
-User Google Login → Firebase idToken → Cloud Function → Gemini API (server-side key)
+User leeway Login → Firebase idToken → Cloud Function → leeway API (server-side key)
 
 ## The 20-Agent System (9 Families)
 
@@ -63,7 +63,7 @@ Lily/Gabriel/Adam Cortex, Syntax/Patch/BugHunter Forge, Scribe Archive, Guard Ae
 | Voice | Realtime Voice | LiveConductorAgent | STT, TTS, Router, Safety, Vision |
 
 ## Architecture Phases (Completed)
-1. Auth + Gemini Foundation ✔
+1. Auth + leeway Foundation ✔
 2. Core Agent Team (9 agents) ✔
 3. Agent VM Popup (`AgentLeeVM.tsx`) ✔
 4. Voice/Emotion/Social ✔
@@ -76,3 +76,4 @@ Lily/Gabriel/Adam Cortex, Syntax/Patch/BugHunter Forge, Scribe Archive, Guard Ae
 - Extended MCP portal network
 - Multi-device memory sync (Firebase Firestore)
 - Production deploy with custom domain
+

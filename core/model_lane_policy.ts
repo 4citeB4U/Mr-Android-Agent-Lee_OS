@@ -2,7 +2,7 @@
 LEEWAY HEADER — DO NOT REMOVE
 
 REGION: AI.ORCHESTRATION.CORE.MODEL_POLICY
-TAG: AI.ORCHESTRATION.CORE.MODEL_POLICY.GEMINI
+TAG: AI.ORCHESTRATION.CORE.MODEL_POLICY.leeway
 
 COLOR_ONION_HEX:
 NEON=#4285F4
@@ -14,33 +14,31 @@ family=lucide
 glyph=route
 
 5WH:
-WHAT = Gemini model lane policy for consistent free-tier-first routing
+WHAT = leeway model lane policy for consistent free-tier-first routing
 WHY = Keeps default model usage aligned across pages, services, agents, and creators workflows
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = core/model_lane_policy.ts
 WHEN = 2026
-HOW = Central constants and helpers for preferred/default/fallback Gemini model IDs
+HOW = Central constants and helpers for preferred/default/fallback leeway model IDs
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 
 LICENSE:
 MIT
 */
 
-export const GEMINI_FREE_TIER_PRIMARY = 'gemini-2.0-flash';
-export const GEMINI_FREE_TIER_THINKING = 'gemini-2.0-flash-thinking-exp';
 
-export const GEMINI_IMAGE_MODEL_CANDIDATES = [
-  'gemini-2.0-flash-exp-image-generation',
-  'gemini-2.5-flash-image'
-] as const;
+// Ollama-only model policy
+export const OLLAMA_LLM = 'llama3.2-vision';
+export const OLLAMA_CODER = 'qwen2.5-coder:1.5b';
+export const OLLAMA_VISION = 'qwen2.5vl:3b';
 
-export function firstDefinedModel(...models: Array<string | undefined | null>): string {
-  for (const model of models) {
-    if (model && model.trim()) return model.trim();
-  }
-  return GEMINI_FREE_TIER_PRIMARY;
-}
+export const MODEL_LANES = [
+  OLLAMA_LLM,
+  OLLAMA_CODER,
+  OLLAMA_VISION,
+];
+

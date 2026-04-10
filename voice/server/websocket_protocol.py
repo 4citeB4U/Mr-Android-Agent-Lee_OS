@@ -35,7 +35,7 @@ class AgentState(str, Enum):
 
 class RouteMode(str, Enum):
     LOCAL = "local"
-    GEMINI = "gemini"
+    leeway = "leeway"
 
 
 # ── Client → Server ──────────────────────────────────────────────────────────
@@ -133,3 +133,4 @@ def make_final_response(text: str, route: RouteMode = RouteMode.LOCAL) -> dict[s
 
 def make_error(code: str, message: str) -> dict[str, Any]:
     return ErrorEvent(code=code, message=message).model_dump()
+

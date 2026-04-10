@@ -35,7 +35,7 @@ MIT
 
 import { ReportWriter } from '../core/ReportWriter';
 import { eventBus } from '../core/EventBus';
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 
 const AGENT_ID = 'Librarian_Aegis';
@@ -266,11 +266,11 @@ export class LibrarianAegis {
     return lines.join('\n');
   }
 
-  /** Generate a Gemini-powered summary of current doc health. */
+  /** Generate a leeway-powered summary of current doc health. */
   static async docHealthSummary(report: DocsAuditReport): Promise<string> {
     const coreSystem = buildAgentLeeCorePrompt();
     try {
-      const result = await GeminiClient.generate({
+      const result = await LeewayInferenceClient.generate({
         prompt: `Summarize the docs audit in 2-3 sentences for the daily SITREP.
 Files checked: ${report.files_checked}
 Drift items: ${report.drift_count}
@@ -278,7 +278,7 @@ Compliant: ${report.compliant_count}
 Top drift: ${report.drift_items.slice(0, 3).map(d => d.path + ' (' + d.issue + ')').join(', ')}`,
         systemPrompt: `${coreSystem}\n\nYou are Librarian Aegis, Documentation Governance Officer. Be factual and concise.`,
         agent: 'AgentLee',
-        model: 'gemini-2.0-flash',
+        model: 'gemma4:e2b',
         temperature: 0.2,
       });
       return result.text;
@@ -300,3 +300,4 @@ Top drift: ${report.drift_items.slice(0, 3).map(d => d.path + ' (' + d.issue + '
     });
   }
 }
+

@@ -1,3 +1,11 @@
+// --- Agent Lee Mic Morph Forms and Generators ---
+export const MORPH_FORMS = ["Eagle", "Cat", "Rabbit"];
+export const V_RES = 2;
+export const Generators: Record<string, () => any[]> = {
+  Eagle: () => [],
+  Cat: () => [],
+  Rabbit: () => []
+};
 /*
 LEEWAY HEADER — DO NOT REMOVE
 
@@ -25,7 +33,7 @@ AGENTS:
 ASSESS
 AUDIT
 ALIGN
-GEMINI
+leeway
 
 LICENSE:
 MIT
@@ -71,3 +79,5 @@ export const AGENT_LEE_BEHAVIOR_CONTRACT = {
     presentation: "Return final outputs to correct app surface",
   },
 } as const;
+
+

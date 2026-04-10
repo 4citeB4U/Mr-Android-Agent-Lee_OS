@@ -24,7 +24,7 @@ HOW = Static class with analyzeEmotion(), translate(), detectLanguage() methods 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 ECHO
 
 LICENSE:
@@ -35,7 +35,7 @@ MIT
 // Always listening. Detects tone, emotion, language.
 // Adapts Agent Lee's responses to match the user's emotional state.
 
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { VoiceService } from '../core/VoiceService';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
@@ -93,7 +93,7 @@ export class Echo {
 
   static async analyzeEmotion(text: string, speakerId = 'user1'): Promise<EmotionAnalysis> {
     try {
-      const result = await GeminiClient.generate({
+      const result = await LeewayInferenceClient.generate({
         prompt: `Analyze the emotional tone of this text and return JSON only:
 "${text}"
 
@@ -101,7 +101,7 @@ Return: { "emotion": "<emotion>", "confidence": 0.0-1.0, "language": "<ISO code>
 Emotion options: calm, excited, frustrated, sad, curious, confused, happy, urgent, playful, serious`,
         systemPrompt: ECHO_SYSTEM,
         agent: 'Echo',
-        model: 'gemini-2.0-flash',
+        model: 'gemma4:e2b',
         temperature: 0.1,
       });
 
@@ -138,10 +138,10 @@ Emotion options: calm, excited, frustrated, sad, curious, confused, happy, urgen
   static async translate(text: string, targetLanguage: string, sourceLang?: string): Promise<string> {
     eventBus.emit('agent:active', { agent: 'Aria', task: `Translating to ${targetLanguage}` });
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `Translate the following to ${targetLanguage}${sourceLang ? ` from ${sourceLang}` : ''}. Return ONLY the translated text, nothing else:\n\n${text}`,
       agent: 'Echo',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.2,
     });
 
@@ -149,10 +149,10 @@ Emotion options: calm, excited, frustrated, sad, curious, confused, happy, urgen
   }
 
   static async detectLanguage(text: string): Promise<string> {
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `What language is this text written in? Return ONLY the ISO 639-1 language code (e.g. 'en', 'es', 'fr', 'zh', 'ja'). Text: "${text}"`,
       agent: 'Echo',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.1,
     });
     return result.text.trim().slice(0, 5).toLowerCase();
@@ -184,3 +184,4 @@ Emotion options: calm, excited, frustrated, sad, curious, confused, happy, urgen
     VoiceService.stop();
   }
 }
+

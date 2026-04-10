@@ -26,7 +26,7 @@ ASSESS
 ALIGN
 AUDIT
 HEADER
-GEMINI
+leeway
 
 LICENSE:
 MIT
@@ -78,3 +78,4 @@ export const AGENT_LEE_IDENTITY_MANIFEST = {
     "Presentation quality",
   ],
 } as const;
+

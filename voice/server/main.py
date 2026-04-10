@@ -45,9 +45,9 @@ async def lifespan(app: FastAPI):
     logger.info("Agent Lee Voice Core starting…")
     settings.ensure_data_dir()
     logger.info(
-        "Mode: %s | Gemini: %s",
+        "Mode: %s | leeway: %s",
         "OFFLINE" if settings.offline_mode else "ONLINE",
-        "enabled" if settings.is_gemini_available else "disabled",
+        "enabled" if settings.is_leeway_available else "disabled",
     )
     yield
     logger.info("Agent Lee Voice Core shutting down.")
@@ -90,7 +90,7 @@ async def health() -> JSONResponse:
         "service": "Agent Lee Voice Core",
         "version": "1.0.0",
         "offline_mode": settings.offline_mode,
-        "gemini_available": settings.is_gemini_available,
+        "leeway_available": settings.is_leeway_available,
     })
 
 @api_v1.get("/status")
@@ -98,7 +98,7 @@ async def status() -> JSONResponse:
     return JSONResponse({
         "status": "ok",
         "offline_mode": settings.offline_mode,
-        "gemini_available": settings.is_gemini_available,
+        "leeway_available": settings.is_leeway_available,
         "whisper_model": settings.whisper_model,
         "tts_sample_rate": settings.tts_sample_rate,
     })
@@ -201,3 +201,4 @@ async def websocket_endpoint(ws: WebSocket) -> None:
             pass
     finally:
         pipeline.stop()
+

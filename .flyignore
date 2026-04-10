@@ -1,0 +1,18 @@
+# Fly.io ignore file for Agent Lee OS
+# Prevents large artifacts from being uploaded to the remote builder
+
+.git
+node_modules
+dist
+test-results
+system_reports
+reports
+*.md
+.env
+.env.local
+serviceAccountKey.json
+public/sound/introtoapp.wav
+public/sound/mixkit-game-show-fun-suspense-942.wav
+public/sound/mixkit-game-show-intro-943.wav
+public/sound/mixkit-medieval-show-fanfare-announcement-226.wav
+public/sound/otnoise.wav

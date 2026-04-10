@@ -1,4 +1,4 @@
-﻿/*
+/*
 LEEWAY HEADER  DO NOT REMOVE
 
 REGION: UI.COMPONENT.LAYOUT.SHELL
@@ -25,7 +25,7 @@ HOW = Hamburger holds nav + AgentLee widget + full ChatConsole; header has title
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 
 LICENSE:
 MIT
@@ -44,7 +44,7 @@ import { AgentLee } from './AgentLee';
 import { ChatConsole, ChatMessage } from './ChatConsole';
 import { FloatingChat } from './FloatingChat';
 import { AgentLeeWidget } from './AgentLeeWidget';
-import { AgentLeeMic, AgentState } from './AgentleeMic';
+import { AgentLeeMic, AgentState, AgentLeeMicProps } from './AgentleeMic';
 import { audioOrchestrator } from '../utils/audioOrchestrator';
 
 export type PageId =
@@ -58,9 +58,6 @@ interface LayoutProps {
   onPageChange: (page: PageId) => void;
   voxelCode: string | null;
   isSpeaking?: boolean;
-  isListening?: boolean;
-  onStartVoice?: () => void;
-  onStopVoice?: () => void;
   isChangingForm?: boolean;
   onSendMessage: (msg: string) => void;
   onFileUpload: (file: File) => void;
@@ -71,7 +68,7 @@ interface LayoutProps {
   onSelectFromLake: (voxel: any) => void;
   onSendToStudio?: () => void;
   backgroundImage?: string | null;
-  /** Full conversation history  shown in hamburger drawer and floating cards */
+  /** Full conversation history — shown in hamburger drawer and floating cards */
   messages?: ChatMessage[];
 }
 
@@ -108,9 +105,6 @@ export const Layout: React.FC<LayoutProps> = ({
   onPageChange,
   voxelCode,
   isSpeaking = false,
-  isListening = false,
-  onStartVoice,
-  onStopVoice,
   isChangingForm = false,
   onSendMessage,
   onFileUpload,
@@ -201,7 +195,7 @@ export const Layout: React.FC<LayoutProps> = ({
             className={
               ['code', 'creators', 'deployment', 'vm'].includes(currentPage)
                 ? 'h-full w-full overflow-hidden'
-                : 'h-full w-full overflow-y-auto overflow-x-hidden no-scrollbar pb-24'
+                : 'h-full w-full overflow-y-auto overflow-x-hidden no-scrollbar pb-64'
             }
           >
             {children}
@@ -210,29 +204,29 @@ export const Layout: React.FC<LayoutProps> = ({
 
       </main>
 
-      {/*  FOOTER  AgentleeMic (Advanced 3D Voxel Mic - Sole System Mic)  */}
-      <footer className="fixed bottom-0 left-0 right-0 z-[1001] flex items-center justify-center py-2 pointer-events-none">
-        <div className="pointer-events-auto rounded-full transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/20">
-          <AgentLeeMic 
-            compact={true}
-            onStateChange={(state) => {
-              if (state !== AgentState.IDLE && state !== AgentState.LISTENING) {
-                audioOrchestrator.handleEvent('agent:active');
-              }
-              // Show error indication in footer
-              if (state === AgentState.ERROR) {
-                console.warn('[Layout] Mic Error - Check console and ensure VITE_GEMINI_API_KEY is set in .env.local');
-              }
-            }}
-          />
+
+      {/*  AGENTLEE MIC — Fixed Bottom Center, No Footer  */}
+      <div className="fixed bottom-4 left-1/2 z-[1001] -translate-x-1/2 pointer-events-none">
+        <div className="pointer-events-auto rounded-full transition-transform hover:scale-105 active:scale-95 focus-visible:outline-none">
+            {(
+              <AgentLeeMic
+                compact={true}
+                className="w-32 h-32"
+                onStateChange={(state: AgentState) => {
+                  if (state !== AgentState.IDLE && state !== AgentState.LISTENING) {
+                    audioOrchestrator.handleEvent('agent:active');
+                  }
+                  if (state === AgentState.ERROR) {
+                    console.error('[Layout] Mic Error - Check RTC status and .env configuration');
+                  }
+                }}
+              />
+            ) as React.ReactElement<AgentLeeMicProps, typeof AgentLeeMic>}
         </div>
-      </footer>
+      </div>
 
       {/*  FLOATING CHAT (right side, TikTok-style)  */}
       <FloatingChat messages={messages} />
-
-      {/*  AGENT LEE WIDGET (minimized popup for background operations)  */}
-      <AgentLeeWidget isOpen={false} />
 
       {/* Hidden file input */}
       <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
@@ -277,24 +271,15 @@ export const Layout: React.FC<LayoutProps> = ({
 
               {/* AgentLee mini status */}
               <div className="shrink-0 flex items-center gap-3 px-4 py-3 border-b border-white/[0.06]">
-                <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-white/[0.1] bg-white/[0.05]">
-                  <AgentLee
-                    voxelCode={voxelCode}
-                    isSpeaking={isSpeaking}
-                    isChangingForm={isChangingForm}
-                    size="small"
-                    className="w-full h-full"
-                    backgroundImage={backgroundImage}
-                  />
-                  {isSpeaking && (
-                    <div className="absolute inset-0 rounded-2xl border-2 border-cyan-400 animate-pulse pointer-events-none" />
-                  )}
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-[#08101e]" />
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-white/[0.1] bg-slate-800/50 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent" />
+                  <div className="text-[10px] font-black text-cyan-400">LEE</div>
+                  <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-[#08101e]" />
                 </div>
                 <div>
                   <p className="text-sm font-black tracking-tight">Agent Lee</p>
                   <p className="text-[10px] text-white/40 uppercase tracking-widest font-semibold">
-                    {isSpeaking ? 'Speaking' : isListening ? 'Listening' : 'Ready'}
+                    {isSpeaking ? 'Speaking' : 'Ready'}
                   </p>
                 </div>
               </div>
@@ -385,9 +370,6 @@ export const Layout: React.FC<LayoutProps> = ({
                 <ChatConsole
                   messages={messages}
                   onSendMessage={onSendMessage}
-                  onStartVoice={onStartVoice}
-                  onStopVoice={onStopVoice}
-                  isListening={isListening}
                   className="h-full border-none shadow-none rounded-none bg-transparent"
                 />
               </div>
@@ -398,3 +380,4 @@ export const Layout: React.FC<LayoutProps> = ({
     </div>
   );
 };
+

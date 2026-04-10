@@ -19,12 +19,12 @@ WHY = Ensures the system can detect, contain, and repair its own failures withou
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Shield.ts
 WHEN = 2026-04-04
-HOW = Static class with global error listeners, GeminiClient diagnosis, and Sage memory integration
+HOW = Static class with global error listeners, LeewayInferenceClient diagnosis, and Sage memory integration
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 SHIELD
 
 LICENSE:
@@ -35,7 +35,7 @@ MIT
 // Monitors the system, detects failures, containerizes corrupted modules,
 // investigates, repairs, logs the incident, and feeds it to the dream cycle.
 
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
 import { ReportWriter } from '../core/ReportWriter';
 import { Sage } from './Sage';
@@ -149,9 +149,9 @@ export class Shield {
     // Log to Sage memory
     Sage.log('error', `[Shield] Error in ${moduleName}: ${errorMessage}`, 'Shield');
 
-    // Diagnose with Gemini
+    // Diagnose with leeway
     try {
-      const diagnosis = await GeminiClient.generate({
+      const diagnosis = await LeewayInferenceClient.generate({
         prompt: `Diagnose this system error and provide a repair strategy:
 Module: ${moduleName}
 Error: ${errorMessage}
@@ -166,7 +166,7 @@ Provide:
 Return structured JSON: { "rootCause": "...", "severity": "...", "action": "patch|isolate|delete", "fix": "...", "prevention": "..." }`,
         systemPrompt: SHIELD_SYSTEM,
         agent: 'Shield',
-        model: 'gemini-2.0-flash',
+        model: 'gemma4:e2b',
         temperature: 0.2,
       });
 
@@ -197,7 +197,7 @@ Return structured JSON: { "rootCause": "...", "severity": "...", "action": "patc
     const warnings: string[] = [];
     
     const dangerousPatterns = [
-      /AIzaSy[A-Za-z0-9_-]{35}/,  // Google API keys
+      /AIzaSy[A-Za-z0-9_-]{35}/,  // leeway API keys
       /sk-[A-Za-z0-9]{48}/,        // OpenAI keys
       /hf_[A-Za-z0-9]{36}/,        // HuggingFace tokens
       /ghp_[A-Za-z0-9]{36}/,       // GitHub PATs
@@ -336,3 +336,4 @@ Return structured JSON: { "rootCause": "...", "severity": "...", "action": "patc
     }
   }
 }
+

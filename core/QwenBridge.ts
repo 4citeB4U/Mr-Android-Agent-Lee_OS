@@ -19,7 +19,7 @@ WHY = Provides fast local inference without cloud API calls; reduces latency and
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = core/QwenBridge.ts
 WHEN = 2026
-HOW = REST API to local Qwen (via Ollama, LM Studio, or vLLM); falls back to Gemini if offline
+HOW = REST API to local Qwen (via Ollama, LM Studio, or vLLM); no cloud fallback
 
 AGENTS:
 ASSESS
@@ -48,7 +48,7 @@ export enum QwenStatus {
 
 /**
  * QwenBridge - Routes inference requests to local Qwen model
- * Provides fallback mechanisms and health checking
+ * Provides health checking only (no fallback)
  */
 export class QwenBridge {
   private static instance: QwenBridge | null = null;
@@ -62,7 +62,7 @@ export class QwenBridge {
   private constructor(config: Partial<QwenConfig> = {}) {
     this.config = {
       baseUrl: (import.meta.env.VITE_QWEN_API_URL as string) || 'http://localhost:11434',
-      model: (import.meta.env.VITE_LOCAL_MODEL as string) || 'phi',
+      model: (import.meta.env.VITE_LOCAL_MODEL as string) || 'qwen2.5vl:3b',
       temperature: 0.7,
       maxTokens: 256,
       timeout: 30000, // 30 seconds

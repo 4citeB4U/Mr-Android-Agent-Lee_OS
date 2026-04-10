@@ -102,7 +102,7 @@ export async function recallContext(args: Record<string, unknown>): Promise<{
   // ─── Layer 3: NotebookLM deep recall (grounded canonical knowledge) ───────
   const notebookId = env("NOTEBOOKLM_NOTEBOOK_ID", "");
   const apiKey =
-    env("NOTEBOOKLM_GOOGLE_API_KEY", "") || env("GEMINI_API_KEY", "");
+    env("NOTEBOOKLM_leeway_API_KEY", "") || env("leeway_API_KEY", "");
 
   if (!notebookId || !apiKey) {
     return { summary: "", key_facts: [], episode_ids: [], layer: "empty" };
@@ -110,7 +110,7 @@ export async function recallContext(args: Record<string, unknown>): Promise<{
 
   try {
     const res = await fetch(
-      `https://notebooklm.googleapis.com/v1beta/notebooks/${notebookId}:query?key=${apiKey}`,
+      `https://notebooklm.leewayapis.com/v1beta/notebooks/${notebookId}:query?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -139,3 +139,4 @@ export async function recallContext(args: Record<string, unknown>): Promise<{
     return { summary: "", key_facts: [], episode_ids: [], layer: "empty" };
   }
 }
+

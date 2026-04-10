@@ -32,14 +32,14 @@ MIT
 
 // core/VoiceService.ts
 // VOICE PRIORITY CHAIN:
-//   1. Gemini Live (bidirectional WebSocket audio — first line)
+//   1. leeway Live (bidirectional WebSocket audio — first line)
 //   2. voice-agent-mcp Edge-TTS REST /speak (offline/fallback)
 //   3. Browser Web Speech API (last-resort fallback)
 
-import { geminiLiveClient, type GeminiLiveSessionConfig } from './GeminiLiveClient';
+import { leewayVoiceClient, type LeewayVoiceSessionConfig } from './LeewayVoiceClient';
 
 const VOICE_AGENT_URL = import.meta.env.VITE_VOICE_AGENT_URL ?? 'http://127.0.0.1:3010';
-const GEMINI_LIVE_API_KEY = import.meta.env.VITE_GEMINI_API_KEY ?? '';
+const leeway_LIVE_API_KEY = '' ?? '';
 
 export interface SpeakOptions {
   text: string;
@@ -78,14 +78,14 @@ class VoiceServiceClass {
     }
     window.speechSynthesis?.cancel();
     if (this.liveSessionActive) {
-      geminiLiveClient.disconnect();
+      leewayVoiceClient.disconnect();
       this.liveSessionActive = false;
     }
   }
 
   /**
    * Speak text using the priority chain:
-   *   Tier 1: Gemini Live (streaming audio back from Gemini)
+   *   Tier 1: leeway Live (streaming audio back from leeway)
    *   Tier 2: voice-agent-mcp Edge-TTS /speak REST endpoint
    *   Tier 3: Browser SpeechSynthesis
    */
@@ -96,8 +96,8 @@ class VoiceServiceClass {
     if (opts.forceTier === 'edge-tts') return this.speakViaEdgeTTS(opts);
     if (opts.forceTier === 'browser') { this.browserSpeak(opts.text); return; }
 
-    // --- Tier 1: Gemini Live ---
-    if (GEMINI_LIVE_API_KEY) {
+    // --- Tier 1: leeway Live ---
+    if (leeway_LIVE_API_KEY) {
       const success = await this.speakViaLive(opts).then(() => true).catch(() => false);
       if (success) { this.activeTier = 'live'; return; }
     }
@@ -111,15 +111,15 @@ class VoiceServiceClass {
     this.browserSpeak(opts.text);
   }
 
-  // ── Tier 1: Gemini Live text→audio ─────────────────────────
+  // ── Tier 1: leeway Live text→audio ─────────────────────────
   private async speakViaLive(opts: SpeakOptions): Promise<void> {
-    if (!GEMINI_LIVE_API_KEY) throw new Error('No Gemini API key for Live');
+    if (!leeway_LIVE_API_KEY) throw new Error('No leeway API key for Live');
 
     return new Promise<void>((resolve, reject) => {
       const audioChunks: Uint8Array[] = [];
 
-      const config: GeminiLiveSessionConfig = {
-        model: 'gemini-2.0-flash-live-001',
+      const config: LeewayVoiceSessionConfig = {
+        model: 'gemma4:e2b',
         systemPrompt: opts.systemPrompt,
         onMessage: (msg) => {
           if (msg.audioBase64) {
@@ -144,12 +144,12 @@ class VoiceServiceClass {
         },
       };
 
-      geminiLiveClient.connect(GEMINI_LIVE_API_KEY, config)
+      leewayVoiceClient.connect(leeway_LIVE_API_KEY, config)
         .then(() => {
           this.liveSessionActive = true;
-          geminiLiveClient.sendText(opts.text);
+          leewayVoiceClient.sendText(opts.text);
           // Disconnect after 8s to flush audio
-          setTimeout(() => { if (geminiLiveClient.isConnected) geminiLiveClient.disconnect(); }, 8000);
+          setTimeout(() => { if (leewayVoiceClient.isConnected) leewayVoiceClient.disconnect(); }, 8000);
         })
         .catch(reject);
     });
@@ -215,3 +215,4 @@ class VoiceServiceClass {
 }
 
 export const VoiceService = new VoiceServiceClass();
+

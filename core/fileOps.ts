@@ -1,9 +1,25 @@
+// Utility to get file history by file ID
+export async function getFileHistory(fileId: string) {
+  const meta = await MemoryDB.getFileMeta(fileId);
+  return meta ? meta.history : [];
+}
+
+// Utility to get file meta (including all locations/copies)
+export async function getFileMeta(fileId: string) {
+  return await MemoryDB.getFileMeta(fileId);
+}
+
+// Utility to list all tracked files
+export async function listAllTrackedFiles() {
+  return await MemoryDB.listFileMetas();
+}
 // fileOps.ts
 // File operation utilities with full traceability, monitoring, and Leeway 5W+How compliance
 
 import { v4 as uuidv4 } from 'uuid';
 import { eventBus } from './EventBus';
 import { enforceGovernance } from './CentralGovernance';
+import { MemoryDB } from './MemoryDB';
 
 export interface FileMeta {
   id: string; // agent-style unique ID
@@ -40,7 +56,7 @@ export function createFileMeta({ name, createdBy, location, why, how }: Omit<Fil
   };
 }
 
-export function logFileEvent(event: FileEvent) {
+export async function logFileEvent(event: FileEvent) {
   // Enforce governance before logging
   const gov = enforceGovernance({
     domain: 'file',
@@ -51,5 +67,20 @@ export function logFileEvent(event: FileEvent) {
   });
   if (!gov.allowed) throw new Error(`Governance block: ${gov.policy} - ${gov.reason}`);
   eventBus.emit('file:event', event);
-  // Optionally: persist to audit log or DB
+
+  // Persist to MemoryDB FileIndex
+  const fileId = event.meta.id;
+  let metaWithHistory = await MemoryDB.getFileMeta(fileId);
+  if (!metaWithHistory) {
+    metaWithHistory = { ...event.meta, history: [] };
+  } else {
+    // Update meta fields if changed
+    metaWithHistory = {
+      ...metaWithHistory,
+      ...event.meta,
+      history: metaWithHistory.history || []
+    };
+  }
+  metaWithHistory.history.push(event);
+  await MemoryDB.setFileMeta(fileId, metaWithHistory);
 }

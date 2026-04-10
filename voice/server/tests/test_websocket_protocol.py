@@ -54,9 +54,9 @@ class TestMakeHelpers:
         assert msg["type"] == "final_response_text"
         assert msg["route"] == "local"
 
-    def test_make_final_response_gemini(self):
-        msg = make_final_response("done", RouteMode.GEMINI)
-        assert msg["route"] == "gemini"
+    def test_make_final_response_leeway(self):
+        msg = make_final_response("done", RouteMode.leeway)
+        assert msg["route"] == "leeway"
 
     def test_make_error(self):
         msg = make_error("stt_error", "Whisper failed")
@@ -80,3 +80,4 @@ class TestEventModels:
     def test_error_event(self):
         e = ErrorEvent(code="test", message="msg")
         assert e.type == "error"
+

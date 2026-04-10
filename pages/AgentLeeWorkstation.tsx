@@ -14,13 +14,13 @@ family=lucide
 glyph=monitor
 
 5WH:
-WHAT = Page wrapper that mounts AgentLeeVM with self-contained state
-WHY = AgentLeeVM requires parent-managed props; this page wires all state locally so it can be
+WHAT = Page wrapper that mounts AgentVM with self-contained state
+WHY = AgentVM requires parent-managed props; this page wires all state locally so it can be
       navigated to directly from App.tsx without polluting global App state
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = pages/AgentLeeWorkstation.tsx
 WHEN = 2026
-HOW = Manages vfs/messages/showPreview/activeFilePath state locally; routes onSendMessage to GeminiClient
+HOW = Manages vfs/messages/showPreview/activeFilePath state locally; routes onSendMessage to LeewayInferenceClient
 
 AGENTS:
 ASSESS
@@ -33,8 +33,8 @@ MIT
 */
 
 import React, { useState, useCallback } from 'react';
-import { AgentLeeVM, initialVFS, VFSDirectory } from '../components/AgentLeeVM';
-import { GeminiClient } from '../core/GeminiClient';
+import { AgentVM, initialVFS, VFSDirectory } from '../components/AgentVM';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 
 type VMMessage = { role: 'user' | 'agent' | 'system'; content: string };
@@ -71,7 +71,7 @@ const AgentLeeWorkstation: React.FC = () => {
         .filter(m => m.role !== 'system')
         .map(m => ({ role: m.role === 'agent' ? 'model' as const : 'user' as const, content: m.content }));
 
-      const reply = await GeminiClient.stream({
+      const reply = await LeewayInferenceClient.stream({
         prompt: content,
         systemPrompt: SYSTEM_PROMPT,
         agent: 'AgentLee',
@@ -101,7 +101,7 @@ const AgentLeeWorkstation: React.FC = () => {
   }, [isThinking, messages]);
 
   return (
-    <AgentLeeVM
+    <AgentVM
       vfs={vfs}
       onVFSChange={setVfs}
       activeFilePath={activeFilePath}

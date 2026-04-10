@@ -24,7 +24,7 @@ HOW = Three.js brain renderer + OrbitControls, Recharts telemetry, p5.js particl
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+LEEWAY_INFERENCE
 SHIELD
 MARSHAL
 CLERK
@@ -36,9 +36,9 @@ LICENSE:
 MIT
 */
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Stars, PerspectiveCamera, Environment, Sparkles, Html, Line as DreiLine } from '@react-three/drei';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { Canvas } from '@react-three/fiber';
+import { PerspectiveCamera } from '@react-three/drei';
+// 3D cortex imports removed — now loaded via VisualCortex
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Activity, Shield, Zap, X, ShieldCheck, Cpu, Database, Play, Square, 
@@ -50,8 +50,8 @@ import {
   Radio, GitBranch, ShieldAlert, Mic, Code, Share2, Layers, Users,
   BookMarked, Gauge, Braces, ChevronRight
 } from 'lucide-react';
-import * as THREE from 'three';
-import { GoogleGenAI, Modality } from "@google/genai";
+// THREE.js removed — now loaded via VisualCortex
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line, BarChart, Bar
@@ -117,7 +117,7 @@ const AGENTS_RAW: Omit<AgentData, 'position'>[] = [
     imageUrl: 'https://robohash.org/lee-prime?set=set1&bgset=bg1',
     color: '#00f2ff',
     description: 'Master planner and sovereign orchestrator of the Agent Lee Agentic OS. Routes G1–G8 workflows across all 26 named agents with real-time telemetry.',
-    tools: ['Task Router', 'Context Assembler', 'Event Bus', 'Gemini 2.5 Flash', 'World Registry'],
+    tools: ['Task Router', 'Context Assembler', 'Event Bus', 'Gemma 4 (Local)', 'World Registry'],
     workflow: ['Receive Intent', 'Decompose Goal', 'Delegate', 'Verify', 'Synthesize', 'Deliver'],
     status: 'ACTIVE',
     metrics: { cpu: 42, memory: 128, latency: 120 },
@@ -150,7 +150,7 @@ const AGENTS_RAW: Omit<AgentData, 'position'>[] = [
     imageUrl: 'https://robohash.org/atlas?set=set1&bgset=bg1',
     color: '#3B82F6',
     description: 'Research intelligence agent. Performs web searches, GitHub scanning, HuggingFace discovery, and cross-domain synthesis via AdamCortex knowledge graphs.',
-    tools: ['Google Search', 'Repo Scanner', 'Paper Summarizer', 'Trend Analyzer', 'HuggingFace API'],
+    tools: ['LeeWay Search', 'Repo Scanner', 'Paper Summarizer', 'Trend Analyzer', 'Local Knowledge API'],
     workflow: ['Query Expansion', 'Source Validation', 'Graph Query', 'Synthesis', 'Citation'],
     status: 'IDLE',
     metrics: { cpu: 12, memory: 256, latency: 800 },
@@ -180,7 +180,7 @@ const AGENTS_RAW: Omit<AgentData, 'position'>[] = [
     imageUrl: 'https://robohash.org/pixel?set=set1&bgset=bg1',
     color: '#A855F7',
     description: 'Visual manifestation and design engine. Generates images, voxelizes scenes, and designs modern UIs. Feeds outputs to Scribe and reports via Clerk Archive.',
-    tools: ['Imagen 3', 'Voxelizer', 'UI Designer', 'Asset Scaler', 'Palette Engine'],
+    tools: ['LeeWay Vision', 'Voxelizer', 'UI Designer', 'Asset Scaler', 'Palette Engine'],
     workflow: ['Prompt Engineering', 'Draft Generation', 'Upscaling', 'Voxelization', 'Export'],
     status: 'IDLE',
     metrics: { cpu: 0, memory: 128, latency: 0 },
@@ -513,7 +513,7 @@ const AGENTS_RAW: Omit<AgentData, 'position'>[] = [
     icon: GitBranch,
     imageUrl: 'https://robohash.org/router?set=set1&bgset=bg1',
     color: '#F59E0B',
-    description: 'Classifies each user turn and decides local LLM vs Gemini routing. Applies model_lane_policy to balance latency, cost, and capability.',
+    description: 'Classifies each user turn and decides local LLM vs LeeWay Live routing. Applies model_lane_policy to balance latency and privacy.',
     tools: ['Intent Classifier', 'Lane Policy', 'Model Selector', 'Cost Estimator'],
     workflow: ['Classify Intent', 'Apply Policy', 'Select Model', 'Route Request', 'Monitor Cost'],
     status: 'ACTIVE',
@@ -1010,48 +1010,16 @@ function AgentLeeDiagnostics({ agent: initialAgent, onClose }: AgentLeeDiagnosti
     setIsReporting(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const { VoiceService } = await import('../core/VoiceService');
       const currentTask = agent.tasks.find(t => t.isRunning) || agent.tasks[0];
       const reportText = currentTask 
         ? `Agent ${agent.title} status is ${agent.status}. Current task: ${currentTask.label}, progress ${currentTask.progress} percent.`
         : `Agent ${agent.title} status is ${agent.status}. No active tasks at this time.`;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-preview-tts",
-        contents: [{ parts: [{ text: `Say in a professional, slightly robotic voice: ${reportText}` }] }],
-        config: {
-          responseModalities: [Modality.AUDIO],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: { voiceName: 'Kore' },
-            },
-          },
-        },
-      });
-
-      const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-      if (base64Audio) {
-        const binaryString = atob(base64Audio);
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-
-        const ctx = audioContext || new (window.AudioContext || (window as any).webkitAudioContext)();
-        if (!audioContext) setAudioContext(ctx);
-
-        const audioBuffer = await ctx.decodeAudioData(bytes.buffer);
-        const source = ctx.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(ctx.destination);
-        source.onended = () => setIsReporting(false);
-        source.start(0);
-      } else {
-        setIsReporting(false);
-      }
-    } catch (error) {
-      console.error("TTS Error:", error);
+      await VoiceService.speak({ text: reportText });
+      setIsReporting(false);
+    } catch (err) {
+      console.error('[Diagnostics] Report synthesis failed:', err);
       setIsReporting(false);
     }
   };

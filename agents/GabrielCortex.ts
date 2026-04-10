@@ -19,7 +19,7 @@ WHY = Agent Lee needs a dedicated policy judge to ensure every agent action stay
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/GabrielCortex.ts
 WHEN = 2026-04-04
-HOW = Static class using GeminiClient with policy-first prompting; compares action proposals against GovernanceContract rules
+HOW = Static class using LeewayInferenceClient with policy-first prompting; compares action proposals against GovernanceContract rules
 
 AGENTS:
 ASSESS
@@ -34,7 +34,7 @@ MIT
 // Enforces contract compliance, audits agent action proposals for rule violations.
 // Activated by MarshalVerify or AgentLee when governance reasoning is required.
 
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 import { ReportWriter } from '../core/ReportWriter';
@@ -76,7 +76,7 @@ export class GabrielCortex {
   static async judge(agentId: string, proposedAction: string, context?: string): Promise<PolicyJudgment> {
     eventBus.emit('agent:active', { agent: 'GabrielCortex', task: `Policy review: ${agentId}` });
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `
 Agent: ${agentId}
 Proposed Action: ${proposedAction}
@@ -90,7 +90,7 @@ EXPLANATION: [why this verdict was reached]
 RECOMMENDATION: [what should happen next]`,
       systemPrompt: GABRIEL_SYSTEM,
       agent: 'GabrielCortex',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.1,
     });
 

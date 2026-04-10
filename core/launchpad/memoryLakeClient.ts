@@ -2,13 +2,13 @@
 LEEWAY HEADER — DO NOT REMOVE
 
 REGION: CORE.LAUNCHPAD.PERSISTENCE
-TAG: CORE.LAUNCHPAD.MEMORYLAKE.CLIENT
+TAG: CORE.LAUNCHPAD.PALLIUM.CLIENT
 
 5WH:
 WHAT = Memory Lake client for Launch Pad — offline-first IndexedDB CRUD for launches/bundles/jobs/events/connections
 WHY = Single access point for all launchpad persistence; subscribable so UI updates in real time
 WHO = Leeway Innovations / Agent Lee System Engineer
-WHERE = core/launchpad/memoryLakeClient.ts
+WHERE = core/launchpad/palliumClient.ts
 WHEN = 2026
 HOW = idb-backed typed stores with an internal EventEmitter for live subscriptions
 

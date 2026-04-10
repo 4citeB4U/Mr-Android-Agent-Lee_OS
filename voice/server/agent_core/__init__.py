@@ -1,7 +1,7 @@
 """
 server/agent_core/__init__.py – Public re-exports for the agent core.
 """
-from .gemini_heavy_brain_agent import GeminiHeavyBrainAgent
+from .leeway_heavy_brain_agent import leewayHeavyBrainAgent
 from .local_brain_agent import LocalBrainAgent
 from .memory_agent import MemoryAgent
 from .prosody_agent import ProsodyAgent
@@ -17,8 +17,9 @@ __all__ = [
     "RouterAgent",
     "RouteDecision",
     "LocalBrainAgent",
-    "GeminiHeavyBrainAgent",
+    "leewayHeavyBrainAgent",
     "MemoryAgent",
     "ProsodyAgent",
     "TTSAgent",
 ]
+

@@ -23,7 +23,7 @@ HOW = React functional component wiring all pages, agents, conversation state, s
 
 AGENTS:
 AZR
-GEMINI
+LEEWAY
 NOVA
 ECHO
 
@@ -61,7 +61,7 @@ HOW = React functional component wiring all pages, agents, conversation state, s
 
 AGENTS:
 AZR
-GEMINI
+LEEWAY
 NOVA
 ECHO
 
@@ -69,21 +69,15 @@ LICENSE:
 MIT
 */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Layout, PageId } from './components/Layout';
 import { audioManager } from './utils/audioManager';
 import { audioOrchestrator } from './utils/audioOrchestrator';
 import { idleWatcher } from './utils/idleWatcher';
 import { Home } from './pages/Home';
-import Diagnostics from './pages/Diagnostics';
 import { Settings } from './pages/Settings';
 import AgentLeeLaunchPad from './pages/AgentLeeLaunchPad';
-import Pallium from './components/MemoryLake';
-import AgentLeeCodeStudio from './pages/AgentLeeCodeStudio';
-import AgentLeeDBCenter from './pages/DatabaseHub';
-import PermissionsLoading from './components/AgentLeePermissions-Loading';
-import AgentLeeCreatorsStudio from './pages/AgentLeeCreatorsStudio';
 import LeeWayUniverse from './components/LeeWayUniverse';
 import AgentLeeWorkstation from './pages/AgentLeeWorkstation';
 import { LeewayWatermark } from './components/LeewayWatermark';
@@ -94,6 +88,7 @@ import { BODY_SYSTEM_ATLAS } from './core/agent_lee_system_awareness';
 import { createBodyAwarenessSnapshot } from './core/agent_lee_system_awareness';
 import { pushDiagnosticsReport } from './core/diagnostics_bridge';
 import { eventBus } from './core/EventBus';
+import { Sage } from './agents/Sage';
 import { MemoryDB } from './core/MemoryDB';
 import { parseLeePrimeCommand, LEE_PRIME_COMMANDS, WORKFLOWS } from './core/GovernanceContract';
 import { TaskGraph } from './core/TaskGraph';
@@ -111,6 +106,20 @@ import { MultiDatabaseManager } from './core/MultiDatabaseManager';
 import { SchemaRegistry } from './core/SchemaRegistry';
 import { DeviceTelemetry } from './core/DeviceTelemetry';
 import { NativeBridge } from './core/NativeBridge';
+import { AgentLeeRuntimeBootstrap } from './core/AgentLeeRuntimeBootstrap';
+
+// --- Cortex/Heavy Components (Lazy Loaded) ---
+const Diagnostics = React.lazy(() => import('./pages/Diagnostics'));
+const Pallium = React.lazy(() => import('./components/Pallium'));
+const AgentLeeDBCenter = React.lazy(() => import('./pages/DatabaseHub'));
+const AgentLeeCodeStudio = React.lazy(() => import('./cortices/creative/CodeStudio'));
+const AgentLeeCreatorsStudio = React.lazy(() => import('./cortices/creative/CreatorsStudio'));
+const PermissionsLoading = React.lazy(() => import('./components/AgentLeePermissions-Loading'));
+
+// --- Loading Indicator for Suspense Fallback ---
+function LoadingIndicator() {
+  return <div style={{padding: '2rem', textAlign: 'center'}}>Loading…</div>;
+}
 
 interface SavedVoxel {
   id: string;
@@ -174,10 +183,6 @@ const App: React.FC = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const streamingIdRef = useRef<string | null>(null);
-
-  // ── Voice input ──────────────────────────────────────────────
-  const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
 
   // ── Memory Lake ──────────────────────────────────────────────
   const [savedVoxels, setSavedVoxels] = useState<SavedVoxel[]>([]);
@@ -265,10 +270,21 @@ const App: React.FC = () => {
     LeewayStandardsAgent.initialize();
     void LeewayStandardsAgent.boot();
 
+    // Initialize unified runtime (voice + vision + agent orchestration)
+    logAction('system', '[RUNTIME] Initializing unified Agent Lee runtime with PerceptionBus + ExecutionLayer...');
+    AgentLeeRuntimeBootstrap.getInstance().initialize().then(() => {
+      logAction('system', '[RUNTIME] Agent Lee unified runtime ready - parallel voice+vision+agent system active');
+      setIsSystemInitialized(true);
+    }).catch(err => {
+      logAction('error', `[RUNTIME] Failed to initialize unified runtime: ${String(err)}`);
+      console.error('[BOOTSTRAP ERROR]', err);
+      // System continues with fallback execution paths
+      setIsSystemInitialized(true);
+    });
+
     // Removed initial Agent Lee greeting message per user request
 
-    // Signal app fully loaded → play intro jingle
-    audioOrchestrator.handleEvent('app:loaded');
+    // Removed initial Agent Lee greeting message per user request
 
     MemoryDB.get<SavedVoxel[]>('agent_lee_memory_lake').then(saved => {
       if (saved) setSavedVoxels(saved);
@@ -374,7 +390,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const heartbeat = () => {
-      const selectedModel = localStorage.getItem('al_model') || 'gemini-2.0-flash';
+      const selectedModel = localStorage.getItem('al_model') || 'gemma4:e2b';
       const wiringRaw = localStorage.getItem('agent_lee_component_wiring');
       let wiringReady = false;
       try {
@@ -606,7 +622,7 @@ const App: React.FC = () => {
         setCurrentImage(img);
         
         // Let the specialized Agents within AgentLeeForm handle the voxel build
-        eventBus.emit('voxel:generate', { prompt: message, image: img });
+        eventBus.emit('vm:open', { agent: 'Pixel', task: `Generating: ${message}` });
         
         setTimeout(() => setIsChangingForm(false), 2500);
         fullResponse = `Visual manifestation complete! Your requested voxel object is now in the simulation. 🎨`;
@@ -617,7 +633,6 @@ const App: React.FC = () => {
         fullResponse = result;
 
       } else if (intent.agent === 'Sage') {
-        const { Sage } = await import('./agents/Sage');
         const result = await Sage.summarize(message);
         fullResponse = result;
 
@@ -671,37 +686,6 @@ const App: React.FC = () => {
       }
     }
   }, [isStreaming, ttsEnabled, addMessage, updateStreamingMessage, logAction]);
-
-  // ── Voice input ───────────────────────────────────────────────
-  const startVoice = useCallback(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      addMessage({ role: 'agent', agent: 'Echo', content: 'Voice input is not supported in this browser. Try Chrome or Edge.' });
-      return;
-    }
-    const rec = new SpeechRecognition();
-    rec.continuous = false;
-    rec.interimResults = false;
-    rec.lang = 'en-US';
-    rec.onresult = (e: any) => {
-      const transcript = e.results[0][0].transcript;
-      setIsListening(false);
-      handleSendMessage(transcript);
-    };
-    rec.onerror = () => setIsListening(false);
-    rec.onend = () => setIsListening(false);
-    recognitionRef.current = rec;
-    rec.start();
-    setIsListening(true);
-    audioOrchestrator.setAgentListening(true);
-    idleWatcher.reset();
-  }, [handleSendMessage, addMessage]);
-
-  const stopVoice = useCallback(() => {
-    recognitionRef.current?.stop();
-    setIsListening(false);
-    audioOrchestrator.setAgentListening(false);
-  }, []);
 
   // ── File upload ────────────────────────────────────────────────
   const handleFileUpload = (file: File) => {
@@ -796,8 +780,8 @@ const App: React.FC = () => {
       case 'memory':
         return <Pallium />;
       case 'database': return <AgentLeeDBCenter />;
-      case 'code':     return <AgentLeeCodeStudio />;
-      case 'creators': return <AgentLeeCreatorsStudio />;
+      case 'code':     return <React.Suspense fallback={null}><AgentLeeCodeStudio /></React.Suspense>;
+      case 'creators': return <React.Suspense fallback={null}><AgentLeeCreatorsStudio /></React.Suspense>;
       case 'universe': return <LeeWayUniverse />;
       case 'vm':       return <AgentLeeWorkstation />;
       default:
@@ -817,7 +801,13 @@ const App: React.FC = () => {
   };
 
   if (!isSystemInitialized) {
-    return <PermissionsLoading onComplete={() => setIsSystemInitialized(true)} />;
+    return (
+      <PermissionsLoading
+        onComplete={() => {
+          setIsSystemInitialized(true);
+        }}
+      />
+    );
   }
 
   return (
@@ -832,9 +822,6 @@ const App: React.FC = () => {
         onPageChange={handlePageChange}
         voxelCode={voxelCode}
         isSpeaking={isSpeaking}
-        isListening={isListening}
-        onStartVoice={startVoice}
-        onStopVoice={stopVoice}
         isChangingForm={isChangingForm}
         onSendMessage={handleSendMessage}
         onFileUpload={handleFileUpload}

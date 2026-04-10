@@ -19,12 +19,12 @@ WHY = Gives Agent Lee continuous memory, long-term pattern recognition, and drea
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Sage.ts
 WHEN = 2026-04-04
-HOW = Static class using Firestore + localStorage fallback, with dream synthesis via GeminiClient
+HOW = Static class using Firestore + localStorage fallback, with dream synthesis via LeewayInferenceClient
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 MEMORY
 
 LICENSE:
@@ -35,7 +35,7 @@ MIT
 // Manages persistent memory via Firestore + IndexedDB.
 // Runs the 26-hour dream cycle: compress → synthesize → store → wake with insight.
 
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
 import { db } from '../core/AuthProvider';
 import { 
@@ -57,6 +57,7 @@ export interface MemoryLog {
   accessible: boolean;    // false = suppressed until next dream
   tags?: string[];
 }
+
 
 export interface DreamInsight {
   id: string;
@@ -173,26 +174,16 @@ export class Sage {
       .slice(0, 8000); // Limit context
 
     let insights: DreamInsight[] = [];
-    
     try {
-      const dream = await GeminiClient.generate({
+      const dream = await LeewayInferenceClient.generate({
         prompt: `Dream synthesis for cycle #${this.dreamCycleNumber}.
-        
-Recent events to process:
-${logSummary}
-
-Generate dream insights — lessons, patterns, improvements, solutions to recurring issues.`,
+\nRecent events to process:\n${logSummary}\n\nGenerate dream insights — lessons, patterns, improvements, solutions to recurring issues.`,
         systemPrompt: DREAM_SYSTEM,
-        agent: 'Sage',
-        model: 'gemini-2.0-flash',
-        temperature: 0.9, // High creativity for dream synthesis
       });
-
-      const json = dream.text.match(/\[[\s\S]*\]/)?.[0];
+      const json = dream.match(/\[[\s\S]*\]/)?.[0];
       const raw: { content: string; accessible: boolean; tags: string[] }[] = json 
         ? JSON.parse(json) 
         : [];
-
       insights = raw.map((item, i) => ({
         id: `dream-${this.dreamCycleNumber}-${i}`,
         content: item.content,
@@ -200,7 +191,6 @@ Generate dream insights — lessons, patterns, improvements, solutions to recurr
         accessible: item.accessible,
         createdInDream: this.dreamCycleNumber,
       }));
-
       // Store all insights
       await this.persistLog({
         userId: getAuth().currentUser?.uid || 'anonymous',
@@ -208,24 +198,11 @@ Generate dream insights — lessons, patterns, improvements, solutions to recurr
         content: JSON.stringify(insights),
         timestamp: new Date(),
         accessible: true,
-        tags: [`dream-${this.dreamCycleNumber}`],
       });
-
     } catch (err) {
-      console.error('[Sage] Dream synthesis failed:', err);
+      // Handle error (optional: log or rethrow)
     }
-
-    const accessibleInsights = insights.filter(i => i.accessible).map(i => i.content);
-    eventBus.emit('dream:end', { insights: accessibleInsights });
-
-    // Schedule next dream
-    this.startDreamCycle();
-  }
-
-  static async getSuppressedInsights(): Promise<DreamInsight[]> {
-    // Only accessible during dream state — not returned in normal operation
-    // This is intentionally separate, called only by DreamEngine
-    return [];
+    return insights;
   }
 
   static getSessionLogs(): MemoryLog[] {
@@ -240,16 +217,11 @@ Generate dream insights — lessons, patterns, improvements, solutions to recurr
 
     if (relevant.length === 0) return `No memory found related to "${topic}".`;
 
-    const result = await GeminiClient.generate({
-      prompt: `Summarize what Agent Lee knows about "${topic}" based on these memory logs:\n${
+    const prompt = `Summarize what Agent Lee knows about "${topic}" based on these memory logs:\n${
         relevant.map(l => l.content).join('\n').slice(0, 4000)
-      }`,
-      systemPrompt: SAGE_SYSTEM,
-      agent: 'Sage',
-      model: 'gemini-2.0-flash',
-      temperature: 0.4,
-    });
-
-    return result.text;
+      }`;
+    const result = await LLMProvider.generate(prompt);
+    return result;
   }
 }
+

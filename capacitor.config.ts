@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.leeways.agentlee',
-  appName: 'Agent Lee',
+  appName: 'Agent Lee Agentic Operating System',
   webDir: 'dist',
   bundledWebRuntime: false,
   plugins: {

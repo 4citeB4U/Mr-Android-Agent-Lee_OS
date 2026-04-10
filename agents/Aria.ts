@@ -19,12 +19,12 @@ WHY = Enables Agent Lee to operate in multilingual environments and facilitate c
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/Aria.ts
 WHEN = 2026-04-04
-HOW = Static class using Echo.translate() and GeminiClient for multilingual group conversation facilitation
+HOW = Static class using Echo.translate() and LeewayInferenceClient for multilingual group conversation facilitation
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 ECHO
 
 LICENSE:
@@ -32,7 +32,7 @@ MIT
 */
 
 // agents/Aria.ts — Social & Multi-Language Agent
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
 import { Echo } from './Echo';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
@@ -77,7 +77,7 @@ export class Aria {
     const speakers = Array.from(this.activeSessions.entries());
     const targetLanguages = speakers.map(([, s]) => s.language);
     
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `You are facilitating a multilingual group conversation. 
 Speakers: ${JSON.stringify(speakers)}
 Messages: ${JSON.stringify(messages)}
@@ -85,7 +85,7 @@ Messages: ${JSON.stringify(messages)}
 Summarize the conversation in English and provide translations needed for each speaker.`,
       systemPrompt: ARIA_SYSTEM,
       agent: 'Aria',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.5,
     });
     
@@ -96,3 +96,4 @@ Summarize the conversation in English and provide translations needed for each s
     return this.activeSessions.size;
   }
 }
+

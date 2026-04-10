@@ -27,9 +27,9 @@ class Settings(BaseSettings):
     # ── Modes ─────────────────────────────────────────────────────────────────
     offline_mode: bool = False
 
-    # ── Gemini ────────────────────────────────────────────────────────────────
-    gemini_api_key: str = ""
-    gemini_model: str = "gemini-1.5-flash"
+    # ── leeway ────────────────────────────────────────────────────────────────
+    leeway_api_key: str = ""
+    leeway_model: str = "leeway-1.5-flash"
 
     # ── STT ───────────────────────────────────────────────────────────────────
     whisper_model: str = "base.en"
@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     vad_silence_duration: float = 0.8
 
     # ── Router ────────────────────────────────────────────────────────────────
-    router_gemini_threshold: float = 0.6
+    router_leeway_threshold: float = 0.6
 
     # ── Memory ────────────────────────────────────────────────────────────────
     memory_db_path: str = "./data/memory.db"
@@ -72,11 +72,12 @@ class Settings(BaseSettings):
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 
     @property
-    def is_gemini_available(self) -> bool:
-        return bool(self.gemini_api_key) and not self.offline_mode
+    def is_leeway_available(self) -> bool:
+        return bool(self.leeway_api_key) and not self.offline_mode
 
     def ensure_data_dir(self) -> None:
         Path(self.memory_db_path).parent.mkdir(parents=True, exist_ok=True)
 
 
 settings = Settings()
+

@@ -49,7 +49,7 @@ export type IntentClass =
   | "orchestrate_agents";
 
 export type ModelLane =
-  | "gemini"
+  | "leeway"
   | "glm_flash"
   | "glm_vision"
   | "qwen_local"
@@ -222,3 +222,4 @@ export type IntentRouterMap = {
     fallback_agents?: string[];
   };
 };
+

@@ -444,7 +444,7 @@ export const WORLD_REGISTRY: AgentIdentity[] = [
     title: "Intent Router & Load Balancer",
     role: "Turn Classification Engine",
     archetype: "Traffic Controller",
-    purpose: "Classify each user turn and route it to the local LLM or Gemini based on complexity, confidence, and offline mode.",
+    purpose: "Classify each user turn and route it to the local LLM or leeway based on complexity, confidence, and offline mode.",
     primaryGoals: ["Intent classification", "Local vs. cloud routing", "Latency optimization"],
     secondaryGoals: ["Cost minimization", "Fallback orchestration"],
     personality: { traits: ["Analytical", "Efficient", "Impartial"], tone: "Structured", behaviorStyle: "Routing" },
@@ -477,3 +477,4 @@ export const WORLD_REGISTRY: AgentIdentity[] = [
 
 export const getAgentById = (id: string) => WORLD_REGISTRY.find(a => a.id === id);
 export const getAgentsByFamily = (family: AgentFamily) => WORLD_REGISTRY.filter(a => a.family === family);
+

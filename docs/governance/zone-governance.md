@@ -14,7 +14,23 @@ Agent Lee operates within a three-zone permission model enforced by Shield Aegis
 ## Zones
 
 ### Z0 — AgentVM (Sandbox)
-- Scope: All in-browser execution (React runtime, IndexedDB, EventBus, GeminiClient)
+- Scope: All in-browser execution (React runtime, IndexedDB, EventBus, SLMRouter, local Ollama models)
+## LeeWay-Compliant Local Model Workflow (2026)
+
+**All inference is performed locally using Ollama models. No leeway fallback is used except for explicit automation.**
+
+**Registered execution-layer models:**
+- **gemma4:e2b** — Reasoning, general LLM tasks
+- **qwen2.5vl:3b** — Vision, multimodal/image tasks
+- **qwen2.5-coder:1.5b** — Code and database tasks
+
+**How it works:**
+- All model requests are routed through the SLMRouter and VisionAgent.
+- Only the above models are registered as execution-layer tools.
+- No direct model-to-UI wiring; all model use is agent-orchestrated.
+- leeway and other cloud APIs are disabled for inference except for explicit automation or fallback by user override.
+
+**Configuration:** See `.env.local` for model endpoints and selection. All models are stored in `E:\ollama-models`.
 - Default access: high automation, tiered approval required only for write-heavy ops
 - Who can write: any core agent with DEFAULT_CAPS
 - Examples: generating code in AgentLeeVM, reading MemoryDB, emitting EventBus events
@@ -65,3 +81,4 @@ No core agent crosses zones without a **Portal step**:
 - `serviceAccountKey.json` and `*adminsdk*.json` must **never** appear in reports
 - `.env*` values are auto-redacted by Shield before any report is written
 - Break-glass: time-limited, scoped, fully audited — does NOT remove approval for critical ops
+

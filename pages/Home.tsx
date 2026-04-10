@@ -65,6 +65,7 @@ import { AgentLee } from '../components/AgentLee';
 import { ChatInterface } from '../components/ChatInterface';
 import { motion } from 'framer-motion';
 import { pushDiagnosticsReport } from '../core/diagnostics_bridge';
+import { audioOrchestrator } from '../utils/audioOrchestrator';
 
 const SHAPE_STORAGE_KEY = 'agent_lee_enabled_shapes';
 const ALL_SHAPES = [
@@ -116,24 +117,15 @@ export const Home: React.FC<HomeProps> = ({
     return () => window.removeEventListener('agent-lee:shapes', handler);
   }, []);
 
-  // For progress bar and shape name
-  const [currentShape, setCurrentShape] = useState(enabledShapes[0] || '');
-  const [progress, setProgress] = useState(0);
+  // Cinematic Reveal: Trigger app:loaded after a short delay to ensure welcome screen fade is done
   useEffect(() => {
-    setCurrentShape(enabledShapes[0] || '');
-  }, [enabledShapes]);
+    const timer = setTimeout(() => {
+      audioOrchestrator.handleEvent('app:loaded');
+    }, 1200); // Wait for most of the 1.5s exit animation
+    return () => clearTimeout(timer);
+  }, []);
 
-  // Animate progress bar (auto-morph every 2s)
-  useEffect(() => {
-    setProgress(0);
-    if (enabledShapes.length < 2) return;
-    let pct = 0;
-    const interval = setInterval(() => {
-      pct += 5;
-      setProgress(Math.min(100, pct));
-    }, 100);
-    return () => clearInterval(interval);
-  }, [currentShape, enabledShapes]);
+  // Animate progress bar (Removed - handled internally in AgentLeeForm 20s cycle)
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center relative overflow-hidden bg-black">
@@ -153,18 +145,9 @@ export const Home: React.FC<HomeProps> = ({
             className="w-full h-full max-w-none"
             backgroundImage={backgroundImage}
             enabledShapes={enabledShapes}
-            onShapeChange={setCurrentShape}
           />
         </div>
-        {/* Shape name and progress bar - REMOVED */}
-        <div className="absolute bottom-0 left-0 w-full flex flex-col items-center pb-8 pointer-events-none hidden">
-          <div className="text-xs md:text-base font-bold uppercase tracking-[0.2em] text-[#00f2ff] drop-shadow-[0_0_10px_rgba(0,242,255,0.7)] mb-2">
-            {currentShape}
-          </div>
-          <div className="w-64 max-w-[80vw] h-2 bg-[#08101e] rounded-full overflow-hidden">
-            <div className="h-full bg-[#00f2ff] transition-all duration-200" style={{ width: `${progress}%` }} />
-          </div>
-        </div>
+        {/* Progress indicators removed for clean UI parity */}
       </motion.div>
     </div>
   );

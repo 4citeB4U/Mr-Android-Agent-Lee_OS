@@ -47,11 +47,11 @@ class TestProsodyAgentPace:
         assert plan.pace == 1.0
 
 
-class TestProsodyAgentGeminiTags:
-    def test_gemini_tags_override_heuristics(self, agent):
+class TestProsodyAgentleewayTags:
+    def test_leeway_tags_override_heuristics(self, agent):
         plan = agent.plan(
             "The sky is blue!",
-            gemini_tags={"emotion": "calm", "pace": 0.8, "pitch": 1.0, "volume": 1.2},
+            leeway_tags={"emotion": "calm", "pace": 0.8, "pitch": 1.0, "volume": 1.2},
         )
         assert plan.emotion == "calm"
         assert plan.pace == 0.8
@@ -75,3 +75,4 @@ class TestProsodyAgentSSML:
         assert "<speak>" in ssml
         assert "</speak>" in ssml
         assert "prosody" in ssml
+

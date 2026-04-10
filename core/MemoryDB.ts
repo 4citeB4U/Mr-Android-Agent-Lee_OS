@@ -31,21 +31,30 @@ PROPRIETARY
 */
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 
+
 interface LeeDB extends DBSchema {
   kv: {
     key: string;
     value: any;
   };
+  fileIndex: {
+    key: string; // fileId
+    value: import('./fileOps').FileMeta & { history: import('./fileOps').FileEvent[] };
+  };
 }
+
 
 let dbPromise: Promise<IDBPDatabase<LeeDB>> | null = null;
 
 function getDb() {
   if (!dbPromise) {
-    dbPromise = openDB<LeeDB>('agent_lee_db', 1, {
-      upgrade(db) {
+    dbPromise = openDB<LeeDB>('agent_lee_db', 2, {
+      upgrade(db, oldVersion) {
         if (!db.objectStoreNames.contains('kv')) {
           db.createObjectStore('kv');
+        }
+        if (oldVersion < 2 && !db.objectStoreNames.contains('fileIndex')) {
+          db.createObjectStore('fileIndex');
         }
       },
     });
@@ -66,5 +75,23 @@ export const MemoryDB = {
   async remove(key: string): Promise<void> {
     const db = await getDb();
     await db.delete('kv', key);
+  },
+
+  // FileIndex utilities
+  async getFileMeta(fileId: string) {
+    const db = await getDb();
+    return db.get('fileIndex', fileId);
+  },
+  async setFileMeta(fileId: string, meta: import('./fileOps').FileMeta & { history: import('./fileOps').FileEvent[] }) {
+    const db = await getDb();
+    await db.put('fileIndex', meta, fileId);
+  },
+  async removeFileMeta(fileId: string) {
+    const db = await getDb();
+    await db.delete('fileIndex', fileId);
+  },
+  async listFileMetas() {
+    const db = await getDb();
+    return db.getAll('fileIndex');
   }
 };

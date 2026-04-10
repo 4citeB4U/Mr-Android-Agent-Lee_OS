@@ -24,7 +24,7 @@ HOW = React + framer-motion UI overlay
 AGENTS:
 AZR
 PHI3
-GEMINI
+leeway
 QWEN
 LLAMA
 ECHO
@@ -34,8 +34,8 @@ MIT
 */
 
 import { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import * as THREE from 'three';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // --- Types & Enums ---
@@ -433,6 +433,7 @@ export class VoxelEngine {
     this.animate = this.animate.bind(this);
     this.animate();
   }
+  // VoxelEngine class moved to cortices/visual/VoxelEngine.ts
 
   public loadInitialModel(data: VoxelData[]) {
     const poolSize = Math.max(data.length, 1000);
@@ -702,6 +703,7 @@ function LoadingView({ progress }: LoadingViewProps) {
     };
   }, []);
 
+
   useEffect(() => {
     const morphInterval = setInterval(() => {
       if (!engineRef.current || state !== AppState.STABLE) return;
@@ -866,7 +868,7 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
   }, [progress, isLoaded, onComplete]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black font-mono text-white shadow-[inset_0_0_120px_rgba(0,242,255,0.05)] transition-shadow duration-1000">
+    <div data-testid="permissions-loading-root" className="relative w-full h-screen overflow-hidden bg-black font-mono text-white shadow-[inset_0_0_120px_rgba(0,242,255,0.05)] transition-shadow duration-1000">
       <AnimatePresence mode="wait">
         {!permissionsGranted ? (
           <motion.div
@@ -883,20 +885,37 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
               backgroundSize: '60px 60px'
             }} />
 
-            <div className="relative z-10 w-full max-w-sm space-y-8">
+            <div className="relative z-10 w-full max-w-5xl flex flex-col md:flex-row items-center justify-center gap-12 p-6">
+              
+              {/* Left Side: Banner Image */}
+              <motion.div
+                initial={{ x: -40, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                className="w-full md:w-1/2 flex justify-center md:justify-end"
+              >
+                <img 
+                  src="/images/agent-lee-banner.png" 
+                  alt="Agent Lee Banner" 
+                  className="w-full max-w-[320px] lg:max-w-[400px] rounded-xl shadow-[0_0_30px_rgba(0,242,255,0.25)] border border-[rgba(0,242,255,0.15)]" 
+                />
+              </motion.div>
+
+              {/* Right Side: Permissions content */}
+              <div className="w-full md:w-1/2 max-w-sm space-y-8">
 
               {/* Title */}
               <motion.div
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.6 }}
-                className="text-center space-y-3"
+                className="text-center md:text-left space-y-3"
               >
                 <h2 className="text-2xl font-black uppercase tracking-[0.35em] text-white"
                   style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.35em' }}>
                   System Access
                 </h2>
-                <p className="text-[10px] text-slate-400 uppercase tracking-[0.18em] leading-relaxed max-w-xs mx-auto">
+                <p className="text-[10px] text-slate-400 uppercase tracking-[0.18em] leading-relaxed max-w-xs mx-auto md:mx-0">
                   Agent Lee requires authorization to access hardware subsystems for optimal performance.
                 </p>
               </motion.div>
@@ -1002,6 +1021,7 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
               >
                 Authorizing System...
               </motion.div>
+              </div>
             </div>
           </motion.div>
         ) : !isLoaded ? (
@@ -1041,3 +1061,4 @@ export default function PermissionsLoading({ onComplete }: { onComplete: () => v
     </div>
   );
 }
+

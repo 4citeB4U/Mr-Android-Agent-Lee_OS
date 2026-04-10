@@ -27,7 +27,7 @@
         "cd C:\\\\Tools\\\\vscode-mcp-tooling; node src\\\\tool.js insforge"
       ]
     },
-    "LeewayGeminiStitch": {
+    "LeewayleewayStitch": {
       "command": "powershell.exe",
       "args": [
         "-NoProfile",
@@ -38,3 +38,4 @@
     }
   }
 }
+

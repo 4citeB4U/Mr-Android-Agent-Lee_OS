@@ -36,7 +36,7 @@ MIT
 
 import { ReportWriter } from '../core/ReportWriter';
 import { eventBus } from '../core/EventBus';
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 
 const AGENT_ID = 'Scribe_Archive';
@@ -123,11 +123,11 @@ export class ScribeArchive {
   static async narrativeSummary(events: string[]): Promise<string> {
     eventBus.emit('agent:active', { agent: 'ScribeArchive', task: 'Narrative summary generation' });
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `The following events occurred in Agent Lee's system:\n\n${events.join('\n')}\n\nWrite a clear, objective narrative chronicle of what happened. Use past tense. Be accurate and precise.`,
       systemPrompt: SCRIBE_SYSTEM,
       agent: 'ScribeArchive',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.3,
     });
 

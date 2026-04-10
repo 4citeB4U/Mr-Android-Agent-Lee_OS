@@ -39,7 +39,7 @@ export async function chooseAgent(
   const intent = String(args["intent"] ?? "") as IntentClass;
   const route = INTENT_ROUTER_MAP[intent];
   if (!route) {
-    return { agent: "agent-lee-core", model_lane: "gemini", fallbacks: [] };
+    return { agent: "agent-lee-core", model_lane: "leeway", fallbacks: [] };
   }
   return {
     agent: route.primary_agent,
@@ -47,3 +47,4 @@ export async function chooseAgent(
     fallbacks: route.fallback_agents ?? [],
   };
 }
+

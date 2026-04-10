@@ -28,7 +28,23 @@ Brain Sentinel enforces the "many tasks queued, few executing" law on a resource
 | Lane | Type | Concurrency |
 |---|---|---|
 | A | Light (routing, summaries, logs) | up to budget |
-| B | Heavy (deep reasoning, Gemini calls) | max 1 at a time |
+| B | Heavy (deep reasoning, local Ollama model calls) | max 1 at a time |
+## LeeWay-Compliant Local Model Workflow (2026)
+
+**All inference is performed locally using Ollama models. No leeway fallback is used except for explicit automation.**
+
+**Registered execution-layer models:**
+- **gemma4:e2b** — Reasoning, general LLM tasks
+- **qwen2.5vl:3b** — Vision, multimodal/image tasks
+- **qwen2.5-coder:1.5b** — Code and database tasks
+
+**How it works:**
+- All model requests are routed through the SLMRouter and VisionAgent.
+- Only the above models are registered as execution-layer tools.
+- No direct model-to-UI wiring; all model use is agent-orchestrated.
+- leeway and other cloud APIs are disabled for inference except for explicit automation or fallback by user override.
+
+**Configuration:** See `.env.local` for model endpoints and selection. All models are stored in `E:\ollama-models`.
 | C | Write / Portal (deterministic, serialized) | max 1, serialized with checkpoints |
 
 ## Mode Change Rules
@@ -56,3 +72,4 @@ Brain Sentinel watches for abnormal reporting volume:
 All budget changes are written to:
 - `system_reports/system/runtime/brain_sentinel.ndjson` (SYSTEM class)
 - EventBus `brain:budget_changed` event
+

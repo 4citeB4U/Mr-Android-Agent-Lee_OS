@@ -35,7 +35,7 @@ import type { IntentRouterMap } from "./agent-contracts";
 export const INTENT_ROUTER_MAP: IntentRouterMap = {
   converse: {
     primary_agent: "agent-lee-core",
-    model_lane: "gemini",
+    model_lane: "leeway",
     fallback_agents: ["memory-agent-mcp"],
   },
   plan_task: {
@@ -80,7 +80,7 @@ export const INTENT_ROUTER_MAP: IntentRouterMap = {
   },
   translate_language: {
     primary_agent: "agent-lee-core",
-    model_lane: "gemini",
+    model_lane: "leeway",
     fallback_agents: [],
   },
   test_system: {
@@ -90,12 +90,12 @@ export const INTENT_ROUTER_MAP: IntentRouterMap = {
   },
   design_ui: {
     primary_agent: "stitch-agent-mcp",
-    model_lane: "gemini",
+    model_lane: "leeway",
     fallback_agents: ["agent-lee-core"],
   },
   speak_voice: {
     primary_agent: "voice-agent-mcp",
-    model_lane: "gemini",
+    model_lane: "leeway",
     fallback_agents: ["agent-lee-core"],
   },
   orchestrate_agents: {
@@ -104,3 +104,4 @@ export const INTENT_ROUTER_MAP: IntentRouterMap = {
     fallback_agents: ["agent-lee-core"],
   },
 };
+

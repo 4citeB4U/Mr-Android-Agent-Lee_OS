@@ -1,3 +1,19 @@
+## LeeWay-Compliant Local Model Workflow (2026)
+
+**All inference is performed locally using Ollama models. No leeway fallback is used except for explicit automation.**
+
+**Registered execution-layer models:**
+- **gemma4:e2b** — Reasoning, general LLM tasks
+- **qwen2.5vl:3b** — Vision, multimodal/image tasks
+- **qwen2.5-coder:1.5b** — Code and database tasks
+
+**How it works:**
+- All model requests are routed through the SLMRouter and VisionAgent.
+- Only the above models are registered as execution-layer tools.
+- No direct model-to-UI wiring; all model use is agent-orchestrated.
+- leeway and other cloud APIs are disabled for inference except for explicit automation or fallback by user override.
+
+**Configuration:** See `.env.local` for model endpoints and selection. All models are stored in `E:\ollama-models`.
 <!--
 DOC_CLASS: OPERATIONS
 DOC_ID: operations.sitrep.2026-04-04
@@ -19,7 +35,7 @@ LAST_UPDATED: 2026-04-04
 
 **Milestone achieved: Local Voice Pipeline fully integrated.**
 
-The Agent Lee Voxel OS has reached its Phase 8 milestone — the Local Voice Pipeline is live. Six new agents have been commissioned and are now fully operational within the 20-agent civilization.
+The Agent Lee Agentic Operating System has reached its Phase 8 milestone — the Local Voice Pipeline is live. Six new agents have been commissioned and are now fully operational within the 20-agent civilization.
 
 ### Accomplishments This Cycle
 
@@ -29,7 +45,7 @@ The Agent Lee Voxel OS has reached its Phase 8 milestone — the Local Voice Pip
 | 2 | EventBus extended with 11 new voice+governance events | AgentLee |
 | 3 | WorldRegistry updated — 6 new AgentIdentity entries registered | MarshalVerify |
 | 4 | AgentRouter WORKFLOW_MAP extended with VOICE workflow | AgentLee |
-| 5 | GeminiClient AgentName union extended — all 20 agents recognized | Nova |
+| 5 | leewayClient AgentName union extended — all 20 agents recognized | Nova |
 | 6 | VoiceSession.ts React adapter created (voice/ directory) | NovaForge |
 | 7 | GitHub repository pushed to Mr-Android-Agent-Lee_OS | Nexus |
 | 8 | GitHub Actions CI/CD + GitHub Pages deploy workflows active | Nexus |
@@ -84,7 +100,7 @@ Status STANDBY = commissioned and ready; voice server not currently running.
 | Component | Status |
 |---|---|
 | Firebase Auth | ACTIVE |
-| Gemini 2.0 Flash API | ACTIVE (via Cloud Function) |
+| leeway 2.0 Flash API | ACTIVE (via Cloud Function) |
 | IndexedDB (MemoryDB) | ACTIVE |
 | NDJSON audit ledger | ACTIVE |
 | Local Voice Server (FastAPI :8765) | STANDBY |
@@ -104,3 +120,4 @@ Status STANDBY = commissioned and ready; voice server not currently running.
 *Authored by: Sage Archive + Scribe*
 *Certified by: MarshalVerify*
 *Date: 2026-04-04*
+

@@ -23,7 +23,7 @@ WHEN = 2026-04-04
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 NOVA
 
 LICENSE:
@@ -32,9 +32,9 @@ MIT
 
 // agents/Nova.ts — Code Writer & Debugger
 // Writes, tests, debugs, and executes code inside the Agent VM sandbox.
-// Uses Gemini Code Execution to safely run in isolated environment.
+// Uses leeway Code Execution to safely run in isolated environment.
 
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 
@@ -64,7 +64,7 @@ export class Nova {
     eventBus.emit('vm:open', { agent: 'Nova', task });
     eventBus.emit('agent:active', { agent: 'Nova', task: `Coding: ${task}` });
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `Write complete, working ${language} code for: ${task}
 
 Include:
@@ -85,7 +85,7 @@ EXPLANATION: ...
 \`\`\``,
       systemPrompt: NOVA_SYSTEM,
       agent: 'Nova',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       tools: ['code_execution'],
       temperature: 0.3,
     });
@@ -115,70 +115,51 @@ EXPLANATION: ...
   static async debug(code: string, error: string): Promise<{ fixedCode: string; explanation: string }> {
     eventBus.emit('agent:active', { agent: 'Nova', task: 'Debugging...' });
 
-    const result = await GeminiClient.generate({
-      prompt: `Debug this code. Error: ${error}
+      const prompt = `Debug this code. Error: ${error}
 
-CODE:
-${code}
+  CODE:
+  ${code}
 
-Find the root cause, fix it, and explain what went wrong.`,
-      systemPrompt: NOVA_SYSTEM,
-      agent: 'Nova',
-      model: 'gemini-2.0-flash',
-      temperature: 0.2,
-    });
-
-    const codeBlocks = [...result.text.matchAll(/```[\w]*\n([\s\S]*?)```/g)];
-    const fixedCode = codeBlocks[0]?.[1] || code;
-
-    eventBus.emit('agent:done', { agent: 'Nova', result: 'Debug complete' });
-    return { fixedCode, explanation: result.text };
+  Find the root cause, fix it, and explain what went wrong.`;
+      const result = await LLMProvider.generate(prompt);
+      const codeBlocks = [...result.matchAll(/```[\w]*\n([\s\S]*?)```/g)];
+      const fixedCode = codeBlocks[0]?.[1] || code;
+      eventBus.emit('agent:done', { agent: 'Nova', result: 'Debug complete' });
+      return { fixedCode, explanation: result };
   }
 
   static async buildApp(description: string): Promise<string> {
     eventBus.emit('vm:open', { agent: 'Nova', task: `Building app: ${description}` });
 
-    const result = await GeminiClient.generate({
-      prompt: `Build a complete, self-contained single-file HTML/JS/CSS web application for:
-${description}
+      const prompt = `Build a complete, self-contained single-file HTML/JS/CSS web application for:
+  ${description}
 
-Requirements:
-- Must work in an iframe from data URL (no external dependencies except CDN)
-- Must be visually polished and modern
-- Must include interactivity
-- Must work on first load
+  Requirements:
+  - Must work in an iframe from data URL (no external dependencies except CDN)
+  - Must be visually polished and modern
+  - Must include interactivity
+  - Must work on first load
 
-Return ONLY the complete HTML file content.`,
-      systemPrompt: NOVA_SYSTEM,
-      agent: 'Nova',
-      model: 'gemini-2.0-flash',
-      tools: ['code_execution'],
-      temperature: 0.5,
-    });
-
-    const htmlMatch = result.text.match(/<!DOCTYPE html>[\s\S]*<\/html>/i);
-    const htmlCode = htmlMatch?.[0] || result.text;
-
-    eventBus.emit('vm:result', {
-      code: htmlCode,
-      language: 'html',
-      tested: true,
-    });
-
-    return htmlCode;
+  Return ONLY the complete HTML file content.`;
+      const result = await LLMProvider.generate(prompt);
+      const htmlMatch = result.match(/<!DOCTYPE html>[\s\S]*<\/html>/i);
+      const htmlCode = htmlMatch?.[0] || result;
+      eventBus.emit('vm:result', {
+        code: htmlCode,
+        language: 'html',
+        tested: true,
+      });
+      return htmlCode;
   }
 
   private static async selfReview(code: string, task: string): Promise<boolean> {
     try {
-      const review = await GeminiClient.generate({
-        prompt: `Quick review — does this code correctly solve "${task}"? Reply with just "PASS" or "FAIL: <reason>".\n\n${code}`,
-        agent: 'Nova',
-        model: 'gemini-2.0-flash',
-        temperature: 0.1,
-      });
-      return review.text.trim().startsWith('PASS');
+        const prompt = `Quick review — does this code correctly solve "${task}"? Reply with just "PASS" or "FAIL: <reason>".\n\n${code}`;
+        const review = await LLMProvider.generate(prompt);
+        return review.trim().startsWith('PASS');
     } catch {
       return true; // Optimistic if review unavailable
     }
   }
 }
+

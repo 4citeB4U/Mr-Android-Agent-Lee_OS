@@ -23,15 +23,30 @@ HOW = React component with fixed absolute positioning and CSS overrides
 
 AGENTS:
 AZR
-GEMINI
+leeway
 
 LICENSE:
 MIT
 */
 
-import React from "react";
+import React, { useEffect } from "react";
 
 export const LeewayWatermark = () => {
+  useEffect(() => {
+    try {
+      const existingLogs = JSON.parse(localStorage.getItem("agent_lee_logs") || "[]");
+      const newLog = {
+        id: Date.now().toString(),
+        type: "branding_event",
+        message: "Watermark 'Powered by Leeway Innovations' loaded.",
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem("agent_lee_logs", JSON.stringify([newLog, ...existingLogs]));
+    } catch (e) {
+      console.error("Failed to log watermark event", e);
+    }
+  }, []);
+
   return (
     <>
       <div
@@ -67,3 +82,4 @@ export const LeewayWatermark = () => {
     </>
   );
 };
+

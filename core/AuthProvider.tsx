@@ -14,26 +14,26 @@ family=lucide
 glyph=lock
 
 5WH:
-WHAT = Google OAuth authentication provider using Firebase Auth — the user's identity layer for the whole OS
-WHY = Enforces user-owned OAuth flow so Gemini API billing goes to the authenticated user, not the developer
+WHAT = leeway OAuth authentication provider using Firebase Auth — the user's identity layer for the whole OS
+WHY = Enforces user-owned OAuth flow so leeway API billing goes to the authenticated user, not the developer
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = core/AuthProvider.tsx
 WHEN = 2026
-HOW = React Context + Firebase Auth with GoogleAuthProvider, storing OAuth access token in sessionStorage
+HOW = React Context + Firebase Auth with leewayAuthProvider, storing OAuth access token in sessionStorage
 
 AGENTS:
 ASSESS
 AUDIT
 SECURITY
-GEMINI
+leeway
 
 LICENSE:
 MIT
 */
 
 // core/AuthProvider.tsx
-// Google OAuth via Firebase Auth.
-// Users sign in with their Google account only — no API key input ever.
+// leeway OAuth via Firebase Auth.
+// Users sign in with their leeway account only — no API key input ever.
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { initializeApp, getApps } from 'firebase/app';
@@ -66,18 +66,18 @@ export const firebaseApp = getApps().length === 0
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);
 
-const googleProvider = new GoogleAuthProvider();
-googleProvider.addScope('profile');
-googleProvider.addScope('email');
-// Request access to the user's own Gemini API quota:
+const leewayProvider = new GoogleAuthProvider();
+leewayProvider.addScope('profile');
+leewayProvider.addScope('email');
+// Request access to the user's own leeway API quota:
 // Temporarily disabled to prevent OAuth Consent verification errors!
-// googleProvider.addScope('https://www.googleapis.com/auth/generative-language');
+// leewayProvider.addScope('https://www.leewayapis.com/auth/generative-language');
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   accessToken: string | null;
-  signInWithGoogle: () => Promise<void>;
+  signInWithleeway: () => Promise<void>;
   signOutUser: () => Promise<void>;
   getIdToken: () => Promise<string>;
 }
@@ -99,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       photoURL: null,
     } as any);
     setAccessToken('dev-access-token');
-    // Ensure GeminiClient (reads sessionStorage) also sees the dev token
+    // Ensure LeewayInferenceClient (reads sessionStorage) also sees the dev token
     sessionStorage.setItem('agent_lee_access_token', 'dev-access-token');
     setLoading(false);
     return;
@@ -120,18 +120,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return unsubscribe;
   }, []);
 
-  const signInWithGoogle = async () => {
+  const signInWithleeway = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, leewayProvider);
       
-      // Get the OAuth access token to call Google APIs directly on behalf of the user
+      // Get the OAuth access token to call leeway APIs directly on behalf of the user
       const credential = GoogleAuthProvider.credentialFromResult(result);
       if (credential?.accessToken) {
         setAccessToken(credential.accessToken);
         sessionStorage.setItem('agent_lee_access_token', credential.accessToken);
       }
     } catch (error: any) {
-      console.error('Google sign-in failed:', error);
+      console.error('leeway sign-in failed:', error);
       alert(`Login failed: ${error.message || 'Unknown error'}. Please check your Firebase Console setup.`);
       throw error;
     }
@@ -149,7 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, accessToken, signInWithGoogle, signOutUser, getIdToken }}>
+    <AuthContext.Provider value={{ user, loading, accessToken, signInWithleeway, signOutUser, getIdToken }}>
       {children}
     </AuthContext.Provider>
   );
@@ -160,3 +160,4 @@ export function useAuth() {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 }
+

@@ -24,7 +24,7 @@ WHEN = 2026-04-04
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 SHIELD
 
 LICENSE:
@@ -273,7 +273,7 @@ export class MarshalVerify {
     };
   }
 
-  /** Run a quick governance-only check (no Gemini calls). For BATTERY mode. */
+  /** Run a quick governance-only check (no leeway calls). For BATTERY mode. */
   static async quickCheck(): Promise<{ zoneOk: boolean; budgetOk: boolean; busOk: boolean; injectionOk: boolean }> {
     const budget = TaskGraph.getBudget();
     const active = TaskGraph.countByState('RUNNING');
@@ -342,3 +342,4 @@ export class MarshalVerify {
     return `${warnings.length} warning(s). Review before deployment: ${warnings.slice(0, 2).join('; ')}.`;
   }
 }
+

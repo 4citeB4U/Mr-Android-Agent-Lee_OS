@@ -156,25 +156,6 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </div>
         </div>
 
-        <button
-          type="button"
-          className={cn(
-            "relative p-1 md:p-2 rounded-2xl hover:bg-white/[0.07] transition-all flex-shrink-0 cursor-pointer group hidden",
-            isListening && "animate-pulse"
-          )}
-          title="Voice Input (AgentleeMic Footer)"
-          disabled
-          style={{ opacity: 0.5, cursor: 'not-allowed', display: 'none' }}
-        >
-          {isListening && (
-            <span className="absolute inset-0 rounded-full border-2 border-red-400 animate-ping opacity-60 pointer-events-none" />
-          )}
-          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4" />
-          </svg>
-          <span className="text-xs text-gray-400 mt-1">Use Footer Mic</span>
-        </button>
-
         <input
           ref={fileInputRef}
           type="file"

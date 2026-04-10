@@ -25,7 +25,7 @@ AGENTS:
 ASSESS
 AUDIT
 ALIGN
-GEMINI
+leeway
 
 LICENSE:
 MIT
@@ -111,3 +111,4 @@ export function logIdentityLoad(): void {
   }
   console.log(`[Agent Lee OS] Identity loaded — ${AGENT_LEE_IDENTITY_MANIFEST.systemTitle} v${AGENT_LEE_IDENTITY_MANIFEST.version}`);
 }
+

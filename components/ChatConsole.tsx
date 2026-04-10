@@ -15,7 +15,7 @@ glyph=message-circle
 
 5WH:
 WHAT = Persistent streaming chat console — displays the full conversation thread with Agent Lee and all sub-agents
-WHY = Without this, all Gemini responses were lost silently; this is the primary user feedback surface
+WHY = Without this, all leeway responses were lost silently; this is the primary user feedback surface
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = components/ChatConsole.tsx
 WHEN = 2026
@@ -24,7 +24,7 @@ HOW = React component subscribing to conversation state, streaming tokens in rea
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 
 LICENSE:
 MIT
@@ -176,10 +176,15 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-scroll to bottom on new messages
+  // Auto-scroll to bottom on new messages + Play sound on incoming
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+    // Only play sound if last message is an agent message (not initial load)
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg && lastMsg.role === 'agent' && !lastMsg.streaming) {
+      audioOrchestrator.handleEvent('chat:received');
     }
   }, [messages]);
 
@@ -187,6 +192,7 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
     e.preventDefault();
     const trimmed = input.trim();
     if (!trimmed || isStreaming) return;
+    audioOrchestrator.handleEvent('chat:sent');
     onSendMessage(trimmed);
     setInput('');
     inputRef.current?.focus();
@@ -280,21 +286,6 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
                 )}
               />
 
-              {/* Voice button - Disabled, use footer AgentleeMic instead */}
-              <button
-                type="button"
-                className={cn(
-                  'p-1.5 rounded-xl transition-all shrink-0 bg-transparent hover:bg-white/5',
-                  'opacity-50 cursor-not-allowed'
-                )}
-                title="Use footer AgentleeMic instead"
-                disabled
-              >
-                <svg className="w-[18px] h-[18px] text-gray-400 object-contain" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4" />
-                </svg>
-              </button>
-
               <button
                 type="submit"
                 disabled={!input.trim() || isStreaming}
@@ -315,3 +306,4 @@ export const ChatConsole: React.FC<ChatConsoleProps> = ({
 };
 
 export default ChatConsole;
+

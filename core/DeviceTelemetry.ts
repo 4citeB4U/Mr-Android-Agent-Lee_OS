@@ -82,7 +82,7 @@ export interface DeviceStatus {
     hardwareConcurrency: number;
     deviceMemory: number; // GB
     maxTouchPoints: number;
-    vendor: 'Apple' | 'Google' | 'Microsoft' | 'Unknown';
+    vendor: 'Apple' | 'leeway' | 'Microsoft' | 'Unknown';
   };
 }
 
@@ -263,12 +263,12 @@ class DeviceTelemetryClass {
    */
   private monitorPlatform(): void {
     const ua = navigator.userAgent;
-    let vendor: 'Apple' | 'Google' | 'Microsoft' | 'Unknown' = 'Unknown';
+    let vendor: 'Apple' | 'leeway' | 'Microsoft' | 'Unknown' = 'Unknown';
 
     if (ua.includes('iPhone') || ua.includes('iPad') || ua.includes('MacOS')) {
       vendor = 'Apple';
     } else if (ua.includes('Android')) {
-      vendor = 'Google';
+      vendor = 'leeway';
     } else if (ua.includes('Windows') || ua.includes('MSIE') || ua.includes('Trident')) {
       vendor = 'Microsoft';
     }
@@ -475,3 +475,4 @@ class DeviceTelemetryClass {
 // ── Singleton Export ───────────────────────────────────────────────────────
 
 export const DeviceTelemetry = DeviceTelemetryClass.getInstance();
+

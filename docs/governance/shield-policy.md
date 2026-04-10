@@ -29,7 +29,7 @@ Shield will **never** allow these to appear in any report log or chat output:
 - `serviceAccountKey.json` contents
 - `*adminsdk*.json` contents
 - `.env*` values
-- Any string matching `/AIzaSy[A-Za-z0-9_-]{35}/` (Google API keys)
+- Any string matching `/AIzaSy[A-Za-z0-9_-]{35}/` (leeway API keys)
 - Any string matching `/sk-[A-Za-z0-9]{48}/` (OpenAI keys)
 - Any string matching `/ghp_[A-Za-z0-9]{36}/` (GitHub PATs)
 
@@ -54,7 +54,7 @@ Activation: `/breakglass.on --caps "..." --ttl "..." --scope "..." --reason "...
 
 1. Error detected (global handler or agent report)
 2. Incident created → `status: investigating`
-3. Gemini diagnosis: `patch | isolate | delete`
+3. leeway diagnosis: `patch | isolate | delete`
 4. Resolution logged → Sage memory + ARCHIVE
 5. `heal:complete` event emitted
 
@@ -63,3 +63,4 @@ Activation: `/breakglass.on --caps "..." --ttl "..." --scope "..." --reason "...
 All Shield events are written to:
 - `system_reports/system/governance/security_events.ndjson` (SECURITY_EVENT class)
 - `system_reports/agents/AEGIS/Shield_Aegis.ndjson` (AGENT class)
+

@@ -24,7 +24,7 @@ HOW = TypeScript const object used by TTS router, voice handler, and Echo agent
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 ECHO
 
 LICENSE:
@@ -44,7 +44,7 @@ export const AGENT_LEE_VOICE_PROFILE = {
     style: "deep, calm, steady, natural",
     pacing: "medium-fast with clarity",
     primaryEngine: "local_or_edge_tts",
-    presentationEngine: "gemini_tts_presentation_only",
+    presentationEngine: "leeway_tts_presentation_only",
   },
 
   rules: [
@@ -61,3 +61,4 @@ export const AGENT_LEE_VOICE_PROFILE = {
     "respectful and composed",
   ],
 } as const;
+

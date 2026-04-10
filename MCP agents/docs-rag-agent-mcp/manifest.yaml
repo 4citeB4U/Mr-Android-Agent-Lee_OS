@@ -7,17 +7,17 @@ mission: >
   indexes, Markdown/YAML knowledge bases, and external API docs.
   Always returns grounded, ranked passages — never hallucinated text.
 
+
 layer: interaction
-model_lane: notebooklm
-fallback_model_lane: glm_flash
-deployment_location: vercel
+model_lane: none
+fallback_model_lane: none
+deployment_location: cerebral
 transport: sse
 runtime: node
 
 authority_boundaries: >
-  MAY: read indexed docs, call embedding/search APIs, return ranked passages.
-  MAY NOT: write files, call external services beyond approved doc sources,
-  modify docs index.
+  MAY: read indexed docs, perform local keyword/semantic search, return ranked passages.
+  MAY NOT: write files, call any external services, or modify docs index beyond local scope.
 
 memory_scope: session
 
@@ -94,9 +94,7 @@ tools:
 health_check: fetch_doc_snippet
 
 fallback_behavior: >
-  If NotebookLM is offline, fall back to GLM-Flash for passage retrieval
-  with simpler keyword matching. If both offline, search local file index
-  directly without embedding ranking.
+  If local index is empty, search local file index directly with keyword and basic semantic matching. No cloud or remote fallback.
 
 escalation_rules:
   - "Never return unsourced text — always include source attribution"

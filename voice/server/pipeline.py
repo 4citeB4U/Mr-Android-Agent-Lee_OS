@@ -6,7 +6,7 @@ The pipeline runs per WebSocket connection and coordinates:
   Inbound audio  →  VADAgent  →  (speech_start triggers barge-in check)
                              →  STTAgent  →  transcript
   transcript     →  RouterAgent  →  route decision
-  route          →  LocalBrainAgent | GeminiHeavyBrainAgent  →  text tokens
+  route          →  LocalBrainAgent | leewayHeavyBrainAgent  →  text tokens
   text tokens    →  ProsodyAgent  →  ProsodyPlan
                  →  TTSAgent  →  PCM audio chunks  →  WebSocket to client
 
@@ -25,7 +25,7 @@ import asyncio
 import logging
 from typing import Any, Callable, Coroutine, Optional
 
-from agent_core.gemini_heavy_brain_agent import GeminiHeavyBrainAgent
+from agent_core.leeway_heavy_brain_agent import leewayHeavyBrainAgent
 from agent_core.local_brain_agent import LocalBrainAgent
 from agent_core.memory_agent import MemoryAgent
 from agent_core.prosody_agent import ProsodyAgent
@@ -103,16 +103,16 @@ class VoicePipeline:
             local_llm = self.local_brain.llm if self.local_brain else None
 
         self.router = RouterAgent(
-            gemini_threshold=settings.router_gemini_threshold,
+            leeway_threshold=settings.router_leeway_threshold,
             offline_mode=settings.offline_mode,
             llama_model=local_llm,
         )
 
-        self.gemini: Optional[GeminiHeavyBrainAgent] = None
-        if settings.is_gemini_available:
-            self.gemini = GeminiHeavyBrainAgent(
-                api_key=settings.gemini_api_key,
-                model=settings.gemini_model,
+        self.leeway: Optional[leewayHeavyBrainAgent] = None
+        if settings.is_leeway_available:
+            self.leeway = leewayHeavyBrainAgent(
+                api_key=settings.leeway_api_key,
+                model=settings.leeway_model,
             )
 
     # ── Startup ──────────────────────────────────────────────────────────────
@@ -127,8 +127,8 @@ class VoicePipeline:
 
         self.memory.load()
 
-        if self.gemini:
-            self.gemini.load()
+        if self.leeway:
+            self.leeway.load()
 
         asyncio.get_event_loop().run_in_executor(None, self._preload_local_llm_async)
 
@@ -262,9 +262,9 @@ class VoicePipeline:
         token_idx = 0
 
         try:
-            if decision.mode == "gemini" and self.gemini and self.gemini.is_available:
-                route_mode = RouteMode.GEMINI
-                gen = self.gemini.generate_stream(
+            if decision.mode == "leeway" and self.leeway and self.leeway.is_available:
+                route_mode = RouteMode.leeway
+                gen = self.leeway.generate_stream(
                     transcript,
                     context=context,
                     history=self._history[-6:],
@@ -358,3 +358,4 @@ class VoicePipeline:
         """Clean up on disconnect."""
         self._interrupt.set()
         self.memory.close()
+

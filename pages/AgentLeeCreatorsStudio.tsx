@@ -1,88 +1,32 @@
-﻿import React, { useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useContext, createContext, useMemo } from 'react';
 import { 
-  Bot, User, Terminal, Send, Zap, Upload, Mic, ArrowRight, 
-  Home, Activity, Rocket, Code, Database, Settings, Menu, X, 
-  TrendingUp, Palette, Megaphone, BookOpen, Search, Video, 
-  Globe, RefreshCw, Save, Share2, Layout as LayoutIcon, PenTool, 
-  Image as ImageIcon, Layers, Cpu, ShieldCheck, 
-  ChevronRight, ChevronLeft, ChevronDown, Trash2, Plus, Download, Filter, Box,
-  AlertTriangle, CheckCircle2, Radio, Sparkles, Clipboard, 
-  Mail, FileText, MousePointer2, Clock, BarChart3, Network,
-  Maximize2, Play, Pause, Square, SkipBack, SkipForward, MoreVertical, Music, MoreHorizontal,
-  Calendar, Users, Target, DollarSign, Heart, MessageCircle,
-  Maximize, Settings2, Eye, EyeOff, Lock, Unlock, Info,
-  PlusCircle, MinusCircle, PlayCircle, PauseCircle,
-  Volume1, Volume2, VolumeX,
-  FastForward, Rewind,
-  List, Grid,
-  Monitor, Smartphone, Tablet,
-  Cloud, Wifi, WifiOff,
-  AlertCircle, CheckCircle,
-  Clock3, History,
-  Hand,
-  Scissors, Copy,
-  Type, Image as LucideImage,
-  Triangle,
-  Hash, Link as LinkIcon,
-  Phone, MapPin, GitBranch,
-  Wand2, Flame, ExternalLink, Film, Rss, ArrowDown, Layers3
+  Palette, Activity, Rocket, Code, Database, Network, Settings, Home,
+  ImageIcon, PenTool, Radio, Video, Megaphone, Layers, User,
+  ChevronLeft, ChevronRight, Sparkles, Wand2, MousePointer2, TrendingUp,
+  Cpu, Zap, ShieldCheck, FileText, Search, Plus, Volume2, 
+  MoreHorizontal, Download, Copy, Share2, Play, GitBranch, 
+  Bot, Eye, BarChart3, Clock, Calendar, Globe, Menu, X, Clipboard, Link as LinkIcon, Hash,
+  ChevronDown, Monitor, Box, Layout as LayoutIcon
 } from 'lucide-react';
-import { 
-  LineChart, Line, AreaChart, Area, 
-  BarChart, Bar, PieChart, Pie, 
-  XAxis, YAxis, CartesianGrid, Tooltip, 
-  ResponsiveContainer, Cell, Legend
-} from 'recharts';
-// Tone.js and @xyflow/react are loaded dynamically at runtime
-import { GoogleGenAI } from "@google/genai";
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { motion, AnimatePresence } from 'framer-motion';
+import { StudioExecutionController, CREATIVE_PROFILE } from '../core/execution/StudioExecutionController';
 
-// --- UTILS ---
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+// --- Types ---
+export type GlobalPageId = 'home' | 'studio' | 'diagnostic' | 'deployment' | 'code' | 'memory' | 'database' | 'settings';
+export type SubPageId = 'artist' | 'writer' | 'music' | 'video' | 'marketing' | 'thumbnail' | 'cta' | 'growth' | 'projects' | 'account';
 
-// --- AI SERVICE ---
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
-
-// --- AGENT ARCHITECTURE TYPES ---
-
-type AgentRole = 'MASTER' | 'WRITER' | 'DESIGNER' | 'MARKETER' | 'ANALYST' | 'SECURITY' | 'MUSICIAN' | 'EDITOR';
-
-type SubPageId = 'artist' | 'writer' | 'music' | 'video' | 'marketing' | 'thumbnail' | 'cta' | 'growth' | 'projects' | 'account';
-type GlobalPageId = 'home' | 'studio' | 'diagnostic' | 'deployment' | 'code' | 'memory' | 'database' | 'settings';
-
-interface Agent {
-  id: string;
-  name: string;
-  role: AgentRole;
-  description: string;
-  icon: any;
-  color: string;
-  capabilities: string[];
-}
-
-interface NotepadEntry {
+export interface Task {
   id: string;
   title: string;
-  content: string;
-  timestamp: number;
-}
-
-interface Task {
-  id: string;
-  title: string;
-  type: 'STORY' | 'EMAIL' | 'THUMBNAIL' | 'DOC' | 'SEO' | 'GENERAL';
-  status: 'IDLE' | 'QUEUED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+  type: 'STORY' | 'EMAIL' | 'THUMBNAIL' | 'DOC' | 'GENERAL' | 'SEO';
+  status: 'QUEUED' | 'PROCESSING' | 'COMPLETED';
   input: string;
   output?: string;
   agentId: string;
   timestamp: number;
 }
 
-interface Message {
+export interface Message {
   id: string;
   role: 'user' | 'assistant' | 'system';
   content: string;
@@ -90,99 +34,38 @@ interface Message {
   timestamp: number;
 }
 
-// --- CONSTANTS ---
-
-const AGENTS: Agent[] = [
-  {
-    id: 'LEE',
-    name: 'Lee',
-    role: 'MASTER',
-    description: 'Master Controller & Orchestrator',
-    icon: Cpu,
-    color: 'accent-blue',
-    capabilities: ['Task Delegation', 'System Governance', 'Context Management', 'Autonomous Optimization']
-  },
-  {
-    id: 'SCRIBBLE',
-    name: 'Scribble',
-    role: 'WRITER',
-    description: 'Creative Writing & Scripting Specialist',
-    icon: PenTool,
-    color: 'accent-purple',
-    capabilities: ['Storytelling', 'Scriptwriting', 'Copywriting', 'Narrative Architecture']
-  },
-  {
-    id: 'ARTIE',
-    name: 'Artie',
-    role: 'DESIGNER',
-    description: 'Visual Arts & Thumbnail Designer',
-    icon: Palette,
-    color: 'accent-pink',
-    capabilities: ['Image Generation', 'Layout Design', 'Visual Branding', 'Neural Rendering']
-  },
-  {
-    id: 'MELODY',
-    name: 'Melody',
-    role: 'MUSICIAN',
-    description: 'Audio Composition & Sound Design',
-    icon: Music,
-    color: 'accent-blue',
-    capabilities: ['Melody Generation', 'Harmony Engine', 'Sound Synthesis', 'Mastering']
-  },
-  {
-    id: 'DIRECTOR',
-    name: 'Director',
-    role: 'EDITOR',
-    description: 'Video Production & Motion Graphics',
-    icon: Video,
-    color: 'accent-red',
-    capabilities: ['Video Editing', 'Motion Tracking', 'Color Grading', 'Scene Assembly']
-  },
-  {
-    id: 'MAILER',
-    name: 'Mailer',
-    role: 'MARKETER',
-    description: 'Email Campaign & SEO Strategist',
-    icon: Mail,
-    color: 'accent-green',
-    capabilities: ['Email Automation', 'SEO Optimization', 'Ad Copy', 'Campaign Analytics']
-  },
-  {
-    id: 'SARAH',
-    name: 'Sarah',
-    role: 'SECURITY',
-    description: 'Security & Authentication Guard',
-    icon: ShieldCheck,
-    color: 'accent-orange',
-    capabilities: ['Auth Verification', 'Data Integrity', 'Signal Encryption', 'Threat Detection']
-  },
-  {
-    id: 'INSIGHT',
-    name: 'Insight',
-    role: 'ANALYST',
-    description: 'Data Intelligence & Market Insights',
-    icon: BarChart3,
-    color: 'accent-purple',
-    capabilities: ['Market Research', 'Trend Analysis', 'Data Visualization', 'Predictive Modeling']
-  }
-];
-
-// --- CONTEXT ---
-
-interface Project {
+export interface NotepadEntry {
   id: string;
-  name: string;
-  status: 'ACTIVE' | 'ARCHIVED' | 'COMPLETED';
-  lastModified: string;
-  icon: any;
+  title: string;
+  content: string;
+  timestamp: number;
 }
 
+export interface Agent {
+  id: string;
+  name: string;
+  role: string;
+  icon: any;
+  color: string;
+}
+
+// --- Constants ---
+const AGENTS: Agent[] = [
+  { id: 'LEE', name: 'Agent Lee', role: 'Master Orchestrator', icon: Zap, color: 'accent-blue' },
+  { id: 'SCRIBBLE', name: 'Scribble', role: 'Creative Writer', icon: PenTool, color: 'accent-purple' },
+  { id: 'ARTIE', name: 'Artie', role: 'Visual Designer', icon: Palette, color: 'accent-pink' },
+  { id: 'MAILER', name: 'Mailer', role: 'Growth Marketer', icon: Megaphone, color: 'accent-green' },
+];
+
+const cn = (...inputs: any[]) => inputs.filter(Boolean).join(' ');
+
+// --- Context ---
 interface StudioContextType {
   agents: Agent[];
   activeAgent: Agent;
   setActiveAgent: (a: Agent) => void;
   tasks: Task[];
-  addTask: (t: Omit<Task, 'id' | 'timestamp'>) => void;
+  addTask: (t: Omit<Task, 'id' | 'timestamp'>) => string;
   updateTask: (id: string, updates: Partial<Task>) => void;
   messages: Message[];
   addMessage: (m: Omit<Message, 'id' | 'timestamp'>) => void;
@@ -207,65 +90,47 @@ interface StudioContextType {
   setIsAutoOptimized: (b: boolean) => void;
   isHandsFree: boolean;
   setIsHandsFree: (b: boolean) => void;
-  executePlan: () => void;
-  projects: Project[];
-  setProjects: React.Dispatch<React.SetStateAction<Project[]>>;
-  studioContent: Record<SubPageId, string>;
+  executePlan: () => Promise<void>;
+  projects: any[];
+  setProjects: (p: any[]) => void;
+  studioContent: Record<string, string>;
   setStudioContent: (page: SubPageId, content: string) => void;
 }
 
-const StudioContext = createContext<StudioContextType | undefined>(undefined);
+const StudioContext = createContext<StudioContextType | null>(null);
 
-const useStudio = () => {
+export const useStudio = () => {
   const context = useContext(StudioContext);
-  if (!context) throw new Error('useStudio must be used within StudioProvider');
+  if (!context) throw new Error('useStudio must be used within a StudioProvider');
   return context;
 };
 
-// --- AI LOGIC ---
-
-const performAIAction = async (prompt: string, systemInstruction: string, model: string = "gemini-3-flash-preview") => {
-  try {
-    const response = await ai.models.generateContent({
-      model,
-      contents: [{ parts: [{ text: prompt }] }],
-      config: { systemInstruction },
-    });
-    return response.text || "";
-  } catch (error) {
-    console.error("AI Action failed:", error);
-    throw error;
-  }
+// --- Mock AI / Actions Shim ---
+const performAIAction = async (prompt: string, config?: any) => {
+  console.log('[AI Action]', prompt);
+  await new Promise(r => setTimeout(r, 2000));
+  return `Agent Lee has synthesized the creative output for: "${prompt.substring(0, 30)}..."\n\nGenerated patterns are stable and ready for deployment.`;
 };
 
 const generateImage = async (prompt: string) => {
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-image",
-      contents: [{ parts: [{ text: prompt }] }],
-    });
-    const imagePart = (response.candidates?.[0]?.content?.parts ?? []).find(p => p.inlineData);
-    return imagePart?.inlineData ? `data:image/png;base64,${imagePart.inlineData.data}` : null;
-  } catch (error) {
-    console.error("Image generation failed:", error);
-    return null;
-  }
+  console.log('[Image Gen]', prompt);
+  await new Promise(r => setTimeout(r, 3000));
+  return 'https://picsum.photos/800/600';
 };
 
-// --- COMPONENTS ---
-
-const GlassCard = ({ children, className, neonColor = 'blue', ...props }: { children: React.ReactNode, className?: string, neonColor?: string, [key: string]: any }) => (
-  <div {...props} className={cn(
-    "bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-[32px] relative overflow-hidden group transition-all duration-500",
+const GlassCard = ({ children, className, neonColor }: { children: React.ReactNode, className?: string, neonColor?: string }) => (
+  <div className={cn(
+    "relative bg-white/[0.03] border border-white/[0.08] rounded-3xl backdrop-blur-xl overflow-hidden shadow-2xl transition-all hover:border-white/[0.15]",
+    neonColor === 'blue' ? "hover:shadow-[0_0_30px_rgba(0,188,212,0.15)]" : 
+    neonColor === 'purple' ? "hover:shadow-[0_0_30px_rgba(156,39,176,0.15)]" : 
+    neonColor === 'pink' ? "hover:shadow-[0_0_30px_rgba(233,30,99,0.15)]" : 
+    neonColor === 'green' ? "hover:shadow-[0_0_30px_rgba(76,175,80,0.15)]" : "",
     className
   )}>
-    <div className={cn(
-      "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-[0.03] transition-opacity duration-700 pointer-events-none",
-      `from-accent-${neonColor}`
-    )} />
     {children}
   </div>
 );
+
 
 const TaskBoard = () => {
   const { tasks } = useStudio();
@@ -513,270 +378,9 @@ const AgentNotepad = () => {
     <GlassCard neonColor="blue" className="p-8 backdrop-blur-2xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue">
-            <Clipboard size={20} />
-          </div>
-          <div>
-            <h3 className="text-lg font-black uppercase tracking-tight text-white/80">Agent Notepad</h3>
-            <p className="text-[9px] font-mono text-white/30 uppercase tracking-widest">Master Orchestration Plan</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          {isProcessing && (
-            <div className="flex items-center gap-2 px-4 py-2 bg-accent-blue/10 text-accent-blue rounded-xl text-[10px] font-black uppercase tracking-widest">
-              <RefreshCw size={12} className="animate-spin" />
-              Neural Sync Active
-            </div>
-          )}
-        </div>
-      </div>
-      
-      <div className="relative">
-        <div className="w-full min-h-[200px] bg-white/[0.03] border border-white/[0.08] rounded-3xl p-8 text-lg font-serif leading-relaxed text-white/70 whitespace-pre-wrap italic">
-          {entry?.content || "Awaiting creative directives..."}
-        </div>
-        <div className="absolute bottom-4 right-8 flex items-center gap-2 text-[8px] font-mono text-white/20 uppercase tracking-widest">
-          <Clock size={10} />
-          Neural State: {isProcessing ? 'PROCESSING' : 'IDLE'}
-        </div>
-      </div>
-    </GlassCard>
-  );
-};
-
-// --- SHARED STUDIO PRIMITIVES ---
-
-/** Reusable circular SVG gauge (matches image KPI dials) */
-const CircularGauge = ({ value, label, color, size = 88 }: { value: string; label: string; color: string; size?: number }) => {
-  const pct = 72;
-  return (
-    <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
-      <svg className="w-full h-full" style={{ transform: 'rotate(-90deg)' }} viewBox="0 0 36 36">
-        <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="2.8" />
-        <circle cx="18" cy="18" r="15.9" fill="none" stroke={color} strokeWidth="2.8"
-          strokeDasharray={`${pct} ${100 - pct}`} strokeLinecap="round" />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-black text-white leading-none" style={{ fontSize: size > 76 ? 13 : 10 }}>{value}</span>
-        <span className="text-white/40 text-center leading-tight mt-0.5" style={{ fontSize: 6 }}>{label}</span>
-      </div>
-    </div>
-  );
-};
-
-/** Reusable Agent Tools sidebar panel */
-const AgentToolsPanel = ({ tools }: { tools: { name: string; tool: string; Icon: any; color: string }[] }) => (
-  <div className="flex flex-col gap-2.5 p-3 bg-black/25 rounded-xl border border-white/8">
-    <span className="text-[8px] font-black text-white/40 uppercase tracking-[0.2em]">Agent Tools:</span>
-    {tools.map(t => (
-      <div key={t.name} className="flex items-start gap-2">
-        <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-          style={{ background: `${t.color}22`, border: `1.5px solid ${t.color}55` }}>
-          <t.Icon size={11} style={{ color: t.color }} />
-        </div>
-        <div>
-          <div className="text-[9px] font-bold text-white/85 leading-tight">{t.name}</div>
-          <div className="text-[7px] text-white/35">{t.tool}</div>
-        </div>
-      </div>
-    ))}
-  </div>
-);
-
-// --- SPECIALIZED STUDIO COMPONENTS ---
-
-const ArtistStudio = ({ content }: { content?: string }) => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'media'>('dashboard');
-  const stats = [
-    { label: 'Monthly Listeners', value: '1.2M', trend: '+15%', color: 'text-accent-blue' },
-    { label: 'Followers', value: '450k', trend: '+8%', color: 'text-accent-purple' },
-    { label: 'Total Streams', value: '45M', trend: '+22%', color: 'text-accent-pink' },
-  ];
-
-  const agentTools = [
-    { name: 'ProfileAgent', tool: 'GalleryAgent · ImageTool', Icon: Users, color: '#5B8FF9' },
-    { name: 'StructureAgent', tool: 'GenTool · BioAgent', Icon: Cpu, color: '#C06EF5' },
-  ];
-
-  const mediaItems = [
-    { label: 'New Single', sub: 'Released Apr 2026', icon: Music },
-    { label: 'Photo Shoot', sub: 'Studio Session', icon: ImageIcon },
-    { label: 'Tour Dates', sub: '12 cities confirmed', icon: MapPin },
-  ];
-
-  return (
-    <div className="flex flex-col h-full bg-[#0f0f1e] rounded-2xl overflow-hidden text-white border border-white/8 shadow-2xl">
-      {/* ── Header ── */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-[#16162a] border-b border-white/6">
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-[8px] font-black">S</div>
-          <span className="text-[11px] font-bold tracking-wide">Solar Harmonics</span>
-        </div>
-        <div className="flex gap-3 text-white/30">
-          <Grid size={13} /><Maximize2 size={13} /><Settings2 size={13} />
-        </div>
-      </div>
-
-      {/* ── Main Content ── */}
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        {/* Left: KPI gauges + media */}
-        <div className="flex-1 p-4 flex flex-col gap-4 overflow-y-auto no-scrollbar">
-          {/* KPI row */}
-          <div className="flex items-center gap-4 flex-wrap">
-            <CircularGauge value="125K" label={"Monthly\nListeners"} color="#5B8FF9" size={88} />
-            <div className="flex gap-3">
-              <CircularGauge value="80K" label="Followers" color="#C06EF5" size={64} />
-              <CircularGauge value="80K" label="Streams" color="#F5A623" size={64} />
-            </div>
-          </div>
-          {/* Media grid */}
-          <div className="grid grid-cols-4 gap-2 flex-1">
-            <div className="col-span-1 row-span-2 bg-[#1e1e35] rounded-xl overflow-hidden relative min-h-[80px]">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70" />
-              <User size={36} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/10" />
-            </div>
-            {mediaItems.map(m => (
-              <div key={m.label} className="col-span-1 bg-[#1e1e35] rounded-xl p-2.5 flex flex-col justify-between min-h-[48px]">
-                <m.icon size={12} className="text-white/40 mb-1" />
-                <div>
-                  <div className="text-[9px] font-bold text-white/80 leading-tight">{m.label}</div>
-                  <div className="text-[7px] text-white/35">{m.sub}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: Agent Tools */}
-        <div className="w-40 border-l border-white/6 p-3 flex flex-col gap-2 bg-[#13132a]/50 shrink-0">
-          <AgentToolsPanel tools={agentTools} />
-          <div className="mt-auto space-y-1">
-            {stats.map(s => (
-              <div key={s.label} className="px-2 py-1 bg-white/4 rounded-lg">
-                <div className="text-[7px] text-white/30">{s.label}</div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-[10px] font-black text-white/80">{s.value}</span>
-                  <span className="text-[7px] text-emerald-400">{s.trend}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Bottom nav ── */}
-      <div className="flex items-center gap-4 px-4 py-2 border-t border-white/6 bg-[#16162a]">
-        {(['dashboard', 'media'] as const).map(tab => (
-          <button key={tab} onClick={() => setActiveTab(tab)}
-            className={cn('flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wide transition-colors',
-              activeTab === tab ? 'text-white' : 'text-white/35 hover:text-white/60')}>
-            {tab === 'media' ? <Grid size={9} /> : <LayoutIcon size={9} />}
-            {tab}
-          </button>
-        ))}
-        <div className="ml-auto flex gap-2 text-white/30">
-          <Plus size={12} /><TrendingUp size={12} /><Share2 size={12} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const WriterStudio = ({ content }: { content?: string }) => {
-  const BLOCKS = [
-    { id: '1', label: 'Verse 1', color: '#22c55e', bg: '#052e16', x: 0, y: 0 },
-    { id: '2', label: 'Chorus', color: '#f59e0b', bg: '#2d1a00', x: 160, y: 70 },
-    { id: '3', label: 'Bridge', color: '#a855f7', bg: '#1e0a2e', x: 0, y: 140 },
-    { id: '4', label: 'New Hook', color: '#38bdf8', bg: '#001e30', x: 160, y: 200 },
-  ];
-  const CONNECTIONS = [
-    { from: '1', to: '2' }, { from: '2', to: '3' }, { from: '1', to: '3' }, { from: '3', to: '4' }
-  ];
-  const agentTools = [
-    { name: 'RhymeAgent', tool: 'RhymeTool', Icon: Hash, color: '#5B8FF9' },
-    { name: 'StructureAgent', tool: 'GenTool', Icon: Network, color: '#C06EF5' },
-  ];
-
-  const lyric = content || "Walking in the dark, feel the night ignite…\nYears gone like a backprint center of candles and the related lights,\nAs the fire hits the stems, online Phonics collision, feel the ignites.";
-
-  return (
-    <div className="flex flex-col h-full bg-[#0f0f1e] rounded-2xl overflow-hidden border border-white/[0.08]">
-      {/* ── Header ── */}
-      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-white/[0.06] bg-[#16162a]">
-        <div className="flex gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-          <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-          <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-        </div>
-        <div className="flex gap-3 ml-2 text-[10px] text-white/40 font-medium">
-          <span>≡</span><span>Edit</span><span>Find</span><span>DNx</span>
-        </div>
-        <div className="ml-auto flex gap-2 text-white/30">
-          <Cloud size={12} /><Lock size={12} /><Monitor size={12} />
-          <Save size={12} />
-        </div>
-      </div>
-
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        {/* ── Block Canvas ── */}
-        <div className="flex-1 relative overflow-hidden bg-[#0a0a1a] p-4">
-          {/* SVG edges */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-            {CONNECTIONS.map((c, i) => {
-              const from = BLOCKS.find(b => b.id === c.from)!;
-              const to = BLOCKS.find(b => b.id === c.to)!;
-              const fx = from.x + 90, fy = from.y + 22, tx = to.x, ty = to.y + 22;
-              const mx = (fx + tx) / 2;
-              return (
-                <path key={i} d={`M${fx},${fy} C${mx},${fy} ${mx},${ty} ${tx},${ty}`}
-                  fill="none" stroke="#cbd5e1" strokeWidth="1.8" strokeDasharray="4 3" />
-              );
-            })}
-          </svg>
-          {/* Block cards */}
-          <div className="relative" style={{ height: 260 }}>
-            {BLOCKS.map(b => (
-              <div key={b.id}
-                className="absolute rounded-lg px-3 py-2 cursor-pointer select-none shadow-sm border"
-                style={{ left: b.x + 24, top: b.y + 8, width: 112, background: b.bg, borderColor: b.color + '55' }}>
-                <div className="text-[10px] font-bold" style={{ color: b.color }}>{b.label}</div>
-                <div className="text-[7px] text-white/30 mt-1 leading-relaxed">Topic: key notes – of details,<br/>Density pattern control, clarity ref.</div>
-              </div>
-            ))}
-          </div>
-          {/* Lyric text area */}
-          <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
-            <div className="text-[9px] text-slate-400 font-bold mb-1">Verse 1: <span className="italic font-normal text-slate-600">{lyric.split('\n')[0]}</span></div>
-            <div className="text-[8px] text-slate-400 italic leading-relaxed line-clamp-2">{lyric.split('\n').slice(1).join(' ')}</div>
-          </div>
-        </div>
-
-        {/* ── Right: Agent Tools ── */}
-        <div className="w-44 border-l border-white/[0.06] bg-[#13132a]/70 p-3 flex flex-col gap-3 shrink-0">
-          <div className="space-y-2">
-            {agentTools.map(t => (
-              <div key={t.name} className="flex items-start gap-2 p-2 rounded-lg bg-white/[0.04] border border-white/[0.06]">
-                <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                  style={{ background: t.color + '22', border: `1.5px solid ${t.color}55` }}>
-                  <t.Icon size={11} style={{ color: t.color }} />
-                </div>
-                <div>
-                  <div className="text-[9px] font-bold text-slate-200">{t.name}</div>
-                  <div className="text-[7px] text-slate-400">{t.tool}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-auto space-y-2">
-            <div className="text-[7px] text-slate-400 uppercase tracking-wide font-bold">WASM Engine</div>
-            <div className="px-2 py-1.5 bg-violet-500/10 border border-violet-500/30 rounded-lg">
-              <div className="text-[7px] font-bold text-violet-300">Transformers.js</div>
-              <div className="text-[6px] text-violet-400">On-device rhyme matching</div>
-            </div>
-            <div className="px-2 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-              <div className="text-[7px] font-bold text-blue-300">SQLite WASM</div>
-              <div className="text-[6px] text-blue-400">1M-word rhyme corpus</div>
-            </div>
+          <div className="px-2 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+            <div className="text-[7px] font-bold text-blue-300">SQLite WASM</div>
+            <div className="text-[6px] text-blue-400">1M-word rhyme corpus</div>
           </div>
         </div>
       </div>
@@ -791,7 +395,7 @@ const WriterStudio = ({ content }: { content?: string }) => {
           <AlignLeft size={12} /><Save size={12} /><Share2 size={12} />
         </div>
       </div>
-    </div>
+    </GlassCard>
   );
 };
 
@@ -2458,34 +2062,26 @@ const StudioWorkspace = () => {
   );
 };
 
-// --- MAIN APP ---
 
-export default function AgentLeeCreatorsStudio() {
+export const AgentLeeCreatorsStudio: React.FC = () => {
   const [activeAgent, setActiveAgent] = useState<Agent>(AGENTS[0]);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [messages, setMessages] = useState<Message[]>([
-    { id: '1', role: 'assistant', content: 'EDGE NODE INITIALIZED. Master Agent LEE online. Awaiting creative directives.', agentId: 'LEE', timestamp: Date.now() }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeGlobalPage, setActiveGlobalPage] = useState<GlobalPageId>('studio');
-  const [activeSubPage, setActiveSubPage] = useState<SubPageId>('writer');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isNotepadOpen, setIsNotepadOpen] = useState(false);
+  const [activeSubPage, setActiveSubPage] = useState<SubPageId>('artist');
+  const [notepad, setNotepad] = useState<NotepadEntry[]>([
+    { id: '1', title: 'Creative Roadmap', content: 'Define the core vision for the next-gen agentic interface.', timestamp: Date.now() }
+  ]);
   const [isToolPanelCollapsed, setIsToolPanelCollapsed] = useState(false);
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
+  const [isNotepadOpen, setIsNotepadOpen] = useState(false);
   const [isAutonomous, setIsAutonomous] = useState(true);
   const [isAutoOptimized, setIsAutoOptimized] = useState(true);
-  const [isHandsFree, setIsHandsFree] = useState(true);
-  const [projects, setProjects] = useState<Project[]>([
-    { id: '1', name: 'Cyberpunk Novel', status: 'ACTIVE', lastModified: '2026-04-01', icon: BookOpen },
-    { id: '2', name: 'Neural Marketing', status: 'ACTIVE', lastModified: '2026-03-30', icon: Megaphone },
-    { id: '3', name: 'AI Art Series', status: 'COMPLETED', lastModified: '2026-03-25', icon: ImageIcon },
-    { id: '4', name: 'Synthwave Album', status: 'ACTIVE', lastModified: '2026-03-28', icon: Radio },
-  ]);
-  const [notepad, setNotepad] = useState<NotepadEntry[]>([
-    { id: '1', title: 'Daily Plan', content: '1. Write a short story about a robot.\n2. Generate a thumbnail for it.\n3. Draft a marketing email.', timestamp: Date.now() }
-  ]);
-  const [studioContent, setStudioContentState] = useState<Record<SubPageId, string>>({
+  const [isHandsFree, setIsHandsFree] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [projects, setProjects] = useState<any[]>([]);
+  const [studioContent, setStudioContentState] = useState<Record<string, string>>({
     artist: '',
     writer: '',
     music: '',
@@ -2493,10 +2089,15 @@ export default function AgentLeeCreatorsStudio() {
     marketing: '',
     thumbnail: '',
     cta: '',
-    growth: '',
-    projects: '',
-    account: ''
+    growth: ''
   });
+
+  const controller = useMemo(() => {
+    const c = new StudioExecutionController();
+    c.init(CREATIVE_PROFILE);
+    return c;
+  }, []);
+
 
   const setStudioContent = (page: SubPageId, content: string) => {
     setStudioContentState(prev => ({ ...prev, [page]: content }));
@@ -2754,4 +2355,6 @@ export default function AgentLeeCreatorsStudio() {
       </div>
     </StudioContext.Provider>
   );
-}
+};
+
+export default AgentLeeCreatorsStudio;

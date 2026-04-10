@@ -104,7 +104,7 @@ export function hasLeewayTag(content: string): boolean {
 /** Scan content for hardcoded secret patterns (conservative). */
 export function hasSecretPattern(content: string): boolean {
   const patterns = [
-    /['"]AIza[0-9A-Za-z_-]{35}['"]/,              // Google API key
+    /['"]AIza[0-9A-Za-z_-]{35}['"]/,              // leeway API key
     /['"]sk-[a-zA-Z0-9]{32,}['"]/,                // OpenAI key
     /password\s*=\s*['"][^'"]{6,}['"]/i,
     /secret\s*=\s*['"][^'"]{8,}['"]/i,
@@ -353,3 +353,4 @@ export class LeewayStandardsAgent {
     });
   }
 }
+

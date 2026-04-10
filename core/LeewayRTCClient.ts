@@ -71,6 +71,7 @@ export class LeewayRTCClient {
   private localStream: MediaStream | null = null;
   private speechRecognition: any = null;
   private isListening = false;
+  private isAwake = false; // Adding wake mode state
   private onStateChange: ((state: RTCState) => void) | null = null;
   private peerId: string = '';
   private peers: Map<string, RTCPeerInfo> = new Map();
@@ -214,7 +215,28 @@ export class LeewayRTCClient {
   stopListening(): void { this.isListening = false; this.speechRecognition?.stop(); }
 
   private async handleUserSpeech(t: string): Promise<void> {
-    if (!t.trim()) return;
+    const text = t.trim().toLowerCase();
+    if (!text) return;
+
+    const isWakeWord = text.includes('agent lee') || text.includes('wake up');
+    const isSleepWord = text.includes('go to sleep') || text.includes('stop listening');
+
+    if (!this.isAwake) {
+      if (isWakeWord) {
+        this.isAwake = true;
+        this.setState(RTCState.THINKING);
+        await this.speak("Agent Lee online. How can I assist you?");
+      }
+      return; 
+    }
+
+    if (isSleepWord) {
+      this.isAwake = false;
+      await this.speak("Entering standby mode.");
+      this.setState(RTCState.IDLE);
+      return;
+    }
+
     this.setState(RTCState.THINKING);
     eventBus.emit('leeway-rtc:user-said', { text: t });
     const result = await this.router.generateResponse(t);
@@ -224,6 +246,17 @@ export class LeewayRTCClient {
   async speak(text: string): Promise<void> {
     return new Promise((res) => {
       const u = new SpeechSynthesisUtterance(text);
+      
+      // Enforce Deep African-American Male Voice constraints (approximate via matching preferred System Voices)
+      const voices = window.speechSynthesis.getVoices();
+      // Look for a deep english male voice.
+      const preferredVoices = voices.filter(v => v.lang.startsWith('en') && (v.name.includes('Male') || v.name.includes('Google UK English Male') || v.name.includes('Microsoft David')));
+      if (preferredVoices.length > 0) {
+        u.voice = preferredVoices[0];
+      }
+      u.pitch = 0.5; // Deep pitch
+      u.rate = 0.9;  // Deliberate and calm
+      
       u.onstart = () => this.setState(RTCState.SPEAKING);
       u.onend = () => { this.setState(RTCState.LISTENING); res(); };
       window.speechSynthesis.speak(u);

@@ -79,7 +79,7 @@ export interface VoiceSessionCallbacks {
   /** Streamed LLM token(s) */
   onToken?: (text: string, tokenIndex: number) => void;
   /** Full final LLM response + which model handled it */
-  onResponse?: (text: string, route: 'local' | 'gemini') => void;
+  onResponse?: (text: string, route: 'local' | 'leeway') => void;
   /** Session ID returned by the server after hello_ack */
   onSessionId?: (id: string) => void;
   /** Any error from server or mic */
@@ -224,3 +224,4 @@ export class VoiceSession {
   get isRunning(): boolean { return this._running; }
   get isServerConnected(): boolean { return this.socket.isConnected; }
 }
+

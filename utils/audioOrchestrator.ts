@@ -64,7 +64,8 @@ export const audioOrchestrator = {
    *  settings:open
    *  diagnostics:open | diagnostics:close
    *  idle:start | idle:end
-   *  agent:speaking | agent:done
+   *  chat:sent | chat:received
+   *  agent:speaking | agent:done | agent:thinking
    *  agent:listening | agent:listening:stop
    */
   handleEvent(eventType: string) {
@@ -131,8 +132,24 @@ export const audioOrchestrator = {
       case 'idle:end':
         audioManager.stop('idle');
         break;
+      
+      case 'chat:sent':
+        audioManager.play('buttonClick');
+        break;
+
+      case 'chat:received':
+        audioManager.play('chatReceived');
+        break;
 
       // ── Agent voice priority (ducking system) ────────────────
+      case 'agent:thinking':
+        audioManager.playLoop('pulse', 0.2); // Low vol loopy hum
+        break;
+      
+      case 'agent:thinking:stop':
+        audioManager.stop('pulse');
+        break;
+
       case 'agent:speaking':
         _agentSpeaking = true;
         duckAllAmbient();

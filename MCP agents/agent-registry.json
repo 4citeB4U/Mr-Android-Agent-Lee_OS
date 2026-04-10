@@ -101,7 +101,7 @@
       "health_check": "recall_context",
       "memory_scope": "canonical",
       "auth_allowed": [
-        "gemini_key",
+        "leeway_key",
         "vercel_db"
       ],
       "escalation_rules": [
@@ -364,7 +364,7 @@
       "health_check": "fetch_doc_snippet",
       "memory_scope": "session",
       "auth_allowed": [
-        "gemini_key"
+        "leeway_key"
       ],
       "escalation_rules": [],
       "status": "online",
@@ -555,8 +555,8 @@
         "translated_text?: string",
         "format: 'mp3'"
       ],
-      "authority_boundaries": "TTS synthesis only. No file system writes except tmp. No external URLs beyond Gemini translate.",
-      "model_lane": "gemini_flash",
+      "authority_boundaries": "TTS synthesis only. No file system writes except tmp. No external URLs beyond leeway translate.",
+      "model_lane": "leeway_flash",
       "fallback_model_lane": "none",
       "deployment_location": "cerebral",
       "transport": "sse",
@@ -566,7 +566,7 @@
       "health_check": "speak_response",
       "memory_scope": "session",
       "auth_allowed": [
-        "gemini_key"
+        "leeway_key"
       ],
       "escalation_rules": [
         "If Edge-TTS CLI not found, log warning and return text fallback"
@@ -689,17 +689,17 @@
         "diff: string"
       ],
       "authority_boundaries": "Image analysis only. No web requests, no file writes.",
-      "model_lane": "gemini_flash",
+      "model_lane": "leeway_flash",
       "fallback_model_lane": "none",
       "deployment_location": "cerebral",
       "transport": "sse",
       "runtime": "node",
       "port": 3009,
-      "fallback_behavior": "If Gemini vision unavailable, return empty description.",
+      "fallback_behavior": "If leeway vision unavailable, return empty description.",
       "health_check": "describe_screenshot",
       "memory_scope": "session",
       "auth_allowed": [
-        "gemini_key"
+        "leeway_key"
       ],
       "escalation_rules": [
         "If detect_error_state returns critical, notify agent-lee-core immediately"
@@ -823,17 +823,17 @@
         "description: string"
       ],
       "authority_boundaries": "Generative analysis only. No file writes, no external 3D API calls.",
-      "model_lane": "gemini_flash",
+      "model_lane": "leeway_flash",
       "fallback_model_lane": "none",
       "deployment_location": "cerebral",
       "transport": "sse",
       "runtime": "node",
       "port": 3014,
-      "fallback_behavior": "If Gemini unavailable, return empty spec.",
+      "fallback_behavior": "If leeway unavailable, return empty spec.",
       "health_check": "generate_3d_spec",
       "memory_scope": "session",
       "auth_allowed": [
-        "gemini_key"
+        "leeway_key"
       ],
       "escalation_rules": [],
       "status": "online",
@@ -887,17 +887,17 @@
         "patch: string"
       ],
       "authority_boundaries": "Generative code output only. No file writes, no deployment.",
-      "model_lane": "gemini_flash",
+      "model_lane": "leeway_flash",
       "fallback_model_lane": "none",
       "deployment_location": "cerebral",
       "transport": "sse",
       "runtime": "node",
       "port": 3102,
-      "fallback_behavior": "If Gemini unavailable, return empty component string.",
+      "fallback_behavior": "If leeway unavailable, return empty component string.",
       "health_check": "generate_component",
       "memory_scope": "session",
       "auth_allowed": [
-        "gemini_key"
+        "leeway_key"
       ],
       "escalation_rules": [],
       "status": "online",
@@ -1080,17 +1080,17 @@
         "CoverageReport"
       ],
       "authority_boundaries": "Read system_reports/ and IndexedDB buffers only. No writes to reports except audit/coverage entries.",
-      "model_lane": "gemini-2.0-flash",
+      "model_lane": "leeway-2.0-flash",
       "fallback_model_lane": "glm_flash",
       "deployment_location": "cerebral",
       "transport": "stdio",
       "runtime": "node",
       "port": null,
-      "fallback_behavior": "If Gemini offline, generate coverage report without narrative summary.",
+      "fallback_behavior": "If leeway offline, generate coverage report without narrative summary.",
       "health_check": "coverage_report",
       "memory_scope": "canonical",
       "auth_allowed": [
-        "gemini_key"
+        "leeway_key"
       ],
       "escalation_rules": [
         "If schema violation detected, emit DOCS_DRIFT_DETECTED and notify Agent Lee",
@@ -1210,17 +1210,17 @@
         "DocsIndex"
       ],
       "authority_boundaries": "Read docs/ and repo root .md files only. Cannot modify or move files. Proposes changes for Lee Prime approval only.",
-      "model_lane": "gemini-2.0-flash",
+      "model_lane": "leeway-2.0-flash",
       "fallback_model_lane": "glm_flash",
       "deployment_location": "cerebral",
       "transport": "stdio",
       "runtime": "node",
       "port": null,
-      "fallback_behavior": "If Gemini offline, return audit report without narrative. No proposals blocked.",
+      "fallback_behavior": "If leeway offline, return audit report without narrative. No proposals blocked.",
       "health_check": "scan_docs",
       "memory_scope": "canonical",
       "auth_allowed": [
-        "gemini_key",
+        "leeway_key",
         "local_files"
       ],
       "escalation_rules": [
@@ -1276,7 +1276,7 @@
         "ScenarioResult[]"
       ],
       "authority_boundaries": "Observe and validate only. Cannot execute agent tasks, write to Z1, or mutate Z2. Reads TaskGraph and Shield state in-process.",
-      "model_lane": "gemini-2.0-flash",
+      "model_lane": "leeway-2.0-flash",
       "fallback_model_lane": "none",
       "deployment_location": "cerebral",
       "transport": "in-process",
@@ -1286,7 +1286,7 @@
       "health_check": "quick_check",
       "memory_scope": "session",
       "auth_allowed": [
-        "gemini_key"
+        "leeway_key"
       ],
       "escalation_rules": [
         "On FAIL verdict, emit verification:result and block deployment",
@@ -1392,3 +1392,4 @@
     }
   ]
 }
+

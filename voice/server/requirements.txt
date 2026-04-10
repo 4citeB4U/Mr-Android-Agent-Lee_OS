@@ -17,8 +17,8 @@ faster-whisper==1.0.3
 # See docs/SETUP.md for Piper installation
 piper-phonemize==1.1.0
 
-# Gemini
-google-generativeai==0.7.2
+# leeway
+leeway-generativeai==0.7.2
 
 # Local LLM (llama-cpp-python – CPU build)
 llama-cpp-python==0.2.77
@@ -35,3 +35,4 @@ pytest-asyncio==0.23.7
 
 # Linting (dev)
 ruff==0.5.0
+

@@ -24,13 +24,13 @@ All other agents are **optional** — missing agents are logged and the kernel r
 
 ```
 FAST PATH   ── converse / speak_voice / translate_language
-               → Gemini Flash direct (no memory, no Neural Router)
+               → leeway Flash direct (no memory, no Neural Router)
                → Sub-100ms target latency
-               → GLM-Flash as backup if Gemini is down
+               → GLM-Flash as backup if leeway is down
 
 SMART PATH  ── plan_task / orchestrate_agents / design_ui / generate_3d / test_system / schedule
                → GLM-4-Flash (reasoning/planning)
-               → Gemini Flash narration if GLM-Flash unreachable
+               → leeway Flash narration if GLM-Flash unreachable
                → Target: < 3s end-to-end
 
 ACTION PATH ── analyze_visual / recall_memory / write_memory /
@@ -39,7 +39,7 @@ ACTION PATH ── analyze_visual / recall_memory / write_memory /
                → Memory: NotebookLM → InsForge cache (7-day) → session store
                → Terminal/Browser: Neural Router → Desktop/Playwright MCP
                → requires_verification=TRUE for terminal + browser (host mutations)
-               → Gemini / GLM-Flash as final fallback
+               → leeway / GLM-Flash as final fallback
 ```
 
 ### `requires_verification` Flag
@@ -54,7 +54,7 @@ intents carry this flag — conversational queries never trigger validation over
 
 | Lane         | Model               | Responsibilities                               |
 | ------------ | ------------------- | ---------------------------------------------- |
-| `gemini`     | Gemini 1.5 Flash    | Fast path voice/conversation/multilingual      |
+| `leeway`     | leeway 1.5 Flash    | Fast path voice/conversation/multilingual      |
 | `glm_flash`  | GLM-4-Flash         | Smart path planning, routing, reasoning        |
 | `glm_vision` | GLM-4V-Flash        | Action path screenshot / image analysis        |
 | `notebooklm` | NotebookLM API      | Layer-3 grounded long-term memory recall       |
@@ -94,7 +94,7 @@ indicating which layer served the response (`session | insforge | notebooklm | e
 | Smart        | `plan_task`        | planner-agent-mcp           | glm_flash  | No      |
 | Smart        | `plan_task`        | scheduling-agent-mcp        | glm_flash  | No      |
 | Smart        | `orchestrate`      | planner-agent-mcp           | glm_flash  | No      |
-| Smart        | `design_ui`        | stitch-agent-mcp            | gemini     | No      |
+| Smart        | `design_ui`        | stitch-agent-mcp            | leeway     | No      |
 | Smart        | `generate_3d`      | spline-agent-mcp            | qwen_3d    | No      |
 | Smart        | `test_system`      | testsprite-agent-mcp        | qwen_local | No      |
 | Action       | `recall_memory`    | memory-agent-mcp            | notebooklm | No      |
@@ -102,9 +102,9 @@ indicating which layer served the response (`session | insforge | notebooklm | e
 | Action       | `analyze_visual`   | vision-agent-mcp            | glm_vision | No      |
 | Action       | `execute_terminal` | desktop-commander-agent-mcp | qwen_local | **Yes** |
 | Action       | `automate_browser` | playwright-agent-mcp        | qwen_local | **Yes** |
-| Fast         | `speak_voice`      | voice-agent-mcp             | gemini     | No      |
-| Fast         | `translate`        | voice-agent-mcp             | gemini     | No      |
-| Fast         | `converse`         | backend/ai.ts               | gemini     | No      |
+| Fast         | `speak_voice`      | voice-agent-mcp             | leeway     | No      |
+| Fast         | `translate`        | voice-agent-mcp             | leeway     | No      |
+| Fast         | `converse`         | backend/ai.ts               | leeway     | No      |
 | Backbone     | `validate_agent`   | validation-agent-mcp        | glm_flash  | —       |
 | Backbone     | `health_check`     | health-agent-mcp            | none       | —       |
 | Backbone     | `doc_lookup`       | docs-rag-agent-mcp          | notebooklm | —       |
@@ -120,7 +120,7 @@ indicating which layer served the response (`session | insforge | notebooklm | e
 en, es, fr, de, pt, it, ja, ko, zh, ar, hi, ru, nl, pl, tr, sv, en-gb
 ```
 
-Flow: `translate_and_speak { text, target_language }` → Gemini translates → matching Edge-TTS voice synthesizes.
+Flow: `translate_and_speak { text, target_language }` → leeway translates → matching Edge-TTS voice synthesizes.
 Use `list_supported_languages` to get the full voice map.
 
 ---
@@ -204,7 +204,7 @@ npm run build && node dist/index.js
 ```
 
 - Transport: **SSE**
-- Env: `GEMINI_API_KEY`, optional `STITCH_BASE_URL`
+- Env: `leeway_API_KEY`, optional `STITCH_BASE_URL`
 
 ### TestSpriteAgent
 
@@ -266,10 +266,10 @@ npm run build && node dist/index.js
 ```
 
 - Transport: **SSE** (phone/remote)
-- Env: `GEMINI_API_KEY`, `EDGE_TTS_VOICE` (default: en-US-GuyNeural)
+- Env: `leeway_API_KEY`, `EDGE_TTS_VOICE` (default: en-US-GuyNeural)
 - Requires: `edge-tts` Python package (`pip install edge-tts`)
 - **v2.0 — Multilingual**: 17 languages supported via `translate_and_speak { text, target_language }`
-- Flow: Gemini 1.5 Flash translates text → matching Edge-TTS neural voice synthesizes audio
+- Flow: leeway 1.5 Flash translates text → matching Edge-TTS neural voice synthesizes audio
 - Languages: `en es fr de pt it ja ko zh ar hi ru nl pl tr sv en-gb`
 - Use `list_supported_languages` to retrieve full language → voice-id map
 
@@ -318,7 +318,7 @@ npm run build && node dist/index.js
 ```
 
 - Transport: **SSE** (Vercel)
-- Env: `GEMINI_API_KEY`, `DOCS_ROOT` (default: workspace root), `DOCS_INDEX_PATH`
+- Env: `leeway_API_KEY`, `DOCS_ROOT` (default: workspace root), `DOCS_INDEX_PATH`
 - **Role**: Full-text retrieval from local `mcps/` docs. NotebookLM primary, local keyword search fallback.
 - Run `index_local_docs` once after any schema or manifest change.
 
@@ -415,8 +415,8 @@ Create `mcps/.env` or add to root `.env.local`:
 ```env
 # Model Keys
 ZAI_API_KEY=              # GLM-4-Flash, GLM-4.6V-Flash (Z.ai/Zhipu)
-GEMINI_API_KEY=           # Gemini 1.5 Flash/Pro
-NOTEBOOKLM_API_KEY=       # NotebookLM query API (Google)
+leeway_API_KEY=           # leeway 1.5 Flash/Pro
+NOTEBOOKLM_API_KEY=       # NotebookLM query API (leeway)
 NOTEBOOKLM_NOTEBOOK_ID=   # Notebook to query for memory
 
 # Deployment
@@ -452,7 +452,7 @@ Expected response includes:
     "intent_router": "active (18 intent classes → 14 MCP agents)",
     "model_lanes": [
       "glm_flash",
-      "gemini",
+      "leeway",
       "notebooklm",
       "qwen_local",
       "glm_vision",
@@ -473,3 +473,4 @@ Agent registry status is at `mcps/agent-registry.json` — status fields are upd
 3. **InsForgeAgent** — only writes to `agentlee_*` prefixed tables; no DELETE without approval
 4. **VisionAgent** — rejects images > 10 MB before any API call
 5. **All agents** — use `envRequired()` from `agents/shared/env.ts` for mandatory keys; fail fast on startup if missing
+

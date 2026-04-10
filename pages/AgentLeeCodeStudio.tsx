@@ -19,18 +19,24 @@ WHY = The primary VM-first coding environment where Agent Lee autonomously build
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = pages/CodeStudio.tsx
 WHEN = 2026
-HOW = Zustand state store + Monaco editor + xterm.js terminal + live iframe preview + Agent Lee Gemini integration
+HOW = Zustand state store + Monaco editor + xterm.js terminal + live iframe preview + Agent Lee leeway integration
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 NOVA
 
 LICENSE:
 MIT
 */
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { AgentLeeMic } from '../components/AgentleeMic';
+import { LeewayWatermark } from '../components/LeewayWatermark';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
+import { Terminal as XTerm } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
+import 'xterm/css/xterm.css';
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
 import {
@@ -49,11 +55,8 @@ import { eventBus } from '../core/EventBus';
 import { palliumClient } from '../core/launchpad/memoryLakeClient';
 import { pushDiagnosticsReport } from '../core/diagnostics_bridge';
 import type { LaunchRecord, DeployableBundle } from '../core/launchpad/types';
-import Editor from '@monaco-editor/react';
 import ReactMarkdown from 'react-markdown';
-import { Terminal as XTerm } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
-import 'xterm/css/xterm.css';
+const BuildCortex = React.lazy(() => import('../cortices/build/BuildCortex'));
 
 // --- Types ---
 export interface FileNode {
@@ -104,7 +107,7 @@ export interface AgentState {
   color: string;
 }
 
-export interface MemoryLakeEntry {
+export interface PalliumEntry {
   id: string;
   timestamp: string;
   agentId: string;
@@ -130,7 +133,7 @@ export interface AppState {
   activePanel: 'explorer' | 'search' | 'preview' | 'terminal' | 'scm' | 'agent' | 'core' | 'writer' | 'writing' | 'extensions' | null;
   commandPaletteVisible: boolean;
   agents: AgentState[];
-  memoryLake: MemoryLakeEntry[];
+  pallium: PalliumEntry[];
   isThinking: boolean;
   todos: { id: string, text: string, completed: boolean }[];
   notes: string;
@@ -219,7 +222,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
     { id: 'deployer', name: 'Agent Deployer', role: 'Deployment', status: 'idle', health: 100, color: '#8b5cf6', lastAction: 'roles: [role:publisher]; caps: [cap:deploy.web.static]' },
     { id: 'nexus', name: 'Agent Nexus', role: 'MCP Integration', status: 'idle', health: 100, color: '#ec4899', lastAction: 'roles: [role:monitor]; caps: [cap:memory.read]' },
   ],
-  memoryLake: [
+  pallium: [
     { id: '1', timestamp: new Date().toISOString(), agentId: 'lee', agentName: 'Agent Lee', action: 'System Boot', details: 'Agent Lee online. Memory Lake initialized.', impact: 'low' }
   ],
   isThinking: false,
@@ -306,22 +309,18 @@ export const useAppStore = create<AppStore>((set, get) => ({
     terminals: state.terminals.map(t => t.id === id ? { ...t, output: [...t.output, text] } : t)
   })),
   sendMessage: async (content) => {
-    const { files, agents, memoryLake, todos } = get();
+    const { files, agents, pallium, todos } = get();
     set((state) => ({
       isThinking: true,
       agents: state.agents.map(a => a.id === 'lee' ? { ...a, status: 'thinking', currentTask: content } : a),
-      memoryLake: [...state.memoryLake, { id: nanoid(), timestamp: new Date().toISOString(), agentId: 'lee', agentName: 'Agent Lee', action: 'Task Received', details: content, impact: 'medium' }]
+      pallium: [...state.pallium, { id: nanoid(), timestamp: new Date().toISOString(), agentId: 'lee', agentName: 'Agent Lee', action: 'Task Received', details: content, impact: 'medium' }]
     }));
     try {
-      const { GoogleGenAI, Type } = await import('@google/genai');
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
       const systemPrompt = `You are Agent Lee, the Orchestrator of an autonomous coding swarm.
         Current files: ${JSON.stringify(Object.values(files).map(f => ({ id: f.id, path: f.path, name: f.name })))}
         Respond with a JSON object: { "message": "Direct response to user", "actions": [ ...list of actions ] }`;
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: [{ role: 'user', parts: [{ text: systemPrompt + "\n\nTask: " + content }] }],
-        config: { responseMimeType: 'application/json' }
+      const response = await LeewayInferenceClient.generate({
+        prompt: systemPrompt + "\n\nTask: " + content
       });
       const data = JSON.parse(response.text || '{}');
       if (data.actions) {
@@ -333,7 +332,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
       set((state) => ({
         isThinking: false,
         agents: state.agents.map(a => a.id === 'lee' ? { ...a, status: 'idle', currentTask: undefined } : a),
-        memoryLake: [...state.memoryLake, { id: nanoid(), timestamp: new Date().toISOString(), agentId: 'lee', agentName: 'Agent Lee', action: 'Task Completed', details: data.message || 'Finished.', impact: 'high' }]
+        pallium: [...state.pallium, { id: nanoid(), timestamp: new Date().toISOString(), agentId: 'lee', agentName: 'Agent Lee', action: 'Task Completed', details: data.message || 'Finished.', impact: 'high' }]
       }));
     } catch (error) {
       set((state) => ({ isThinking: false, agents: state.agents.map(a => ({ ...a, status: 'error' })) }));
@@ -556,52 +555,7 @@ const CommandPalette = () => {
   );
 };
 
-const EditorStage = () => {
-  const { editor, files, setActiveFile, closeFile, updateFileContent, settings, updateEditorState } = useAppStore();
-  const activeFile = editor.activeFileId ? files[editor.activeFileId] : null;
-  useEffect(() => {
-    if (activeFile?.content) {
-      const words = activeFile.content.split(/\s+/).filter(Boolean).length;
-      updateEditorState({ wordCount: words, readingTime: Math.ceil(words / 200) });
-    }
-  }, [activeFile?.content, updateEditorState]);
-  if (!activeFile) return <div className="flex-1 bg-bg-primary flex items-center justify-center text-text-secondary flex-col gap-4"><div className="text-4xl opacity-20 font-bold tracking-tighter text-text-primary">CODE STUDIO</div><div className="text-sm opacity-50">Select a file from the explorer to start editing</div></div>;
-  const isMarkdown = activeFile.name.endsWith('.md') || activeFile.name.endsWith('.txt');
-  return (
-    <div className="flex-1 flex flex-col bg-bg-primary overflow-hidden">
-      <div className="flex h-9 bg-bg-secondary overflow-x-auto no-scrollbar items-center justify-between border-b border-bg-primary">
-        <div className="flex h-full">
-          {editor.openFileIds.map(id => (
-            <div key={id} className={cn("flex items-center px-3 min-w-[120px] max-w-[200px] border-r border-bg-primary cursor-pointer group h-full transition-colors", editor.activeFileId === id ? "bg-bg-primary text-text-primary" : "bg-bg-tertiary text-text-secondary hover:bg-bg-secondary")} onClick={() => setActiveFile(id)}>
-              <span className="text-xs truncate flex-1">{files[id]?.name}</span>
-              <button className={cn("ml-2 p-0.5 rounded hover:bg-bg-tertiary transition-opacity", editor.activeFileId === id ? "opacity-100" : "opacity-0 group-hover:opacity-100")} onClick={(e) => { e.stopPropagation(); closeFile(id); }}><X size={14} /></button>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="h-10 px-4 flex items-center justify-between bg-bg-secondary border-b border-white/5 select-none">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-text-secondary"><FileText size={14} /><span className="text-[11px] font-bold uppercase tracking-widest truncate max-w-[120px]">{activeFile.name}</span></div>
-          {isMarkdown && (
-            <div className="flex items-center gap-1 border-l border-white/10 pl-4">
-              <button onClick={() => updateEditorState({ isMarkdownPreview: !editor.isMarkdownPreview })} className={cn("p-1.5 rounded hover:bg-white/5 transition-all flex items-center gap-2", editor.isMarkdownPreview ? "text-accent bg-accent/10" : "text-text-secondary")}>{editor.isMarkdownPreview ? <EyeOff size={14} /> : <Eye size={14} />}<span className="text-[10px] font-bold uppercase tracking-tighter">Preview</span></button>
-            </div>
-          )}
-        </div>
-        <div className="flex items-center gap-4">
-          {isMarkdown && <div className="flex items-center gap-3 text-text-secondary border-r border-white/10 pr-4"><div className="flex items-center gap-1"><FileText size={12} /> <span className="text-[10px] font-bold">{editor.wordCount}</span></div><div className="flex items-center gap-1"><Clock size={12} /> <span className="text-[10px] font-bold">{editor.readingTime}m</span></div></div>}
-          <div className="flex items-center gap-2">{settings.autoSave !== 'off' && <div className="flex items-center gap-1 text-[10px] text-green-500/70 font-bold uppercase tracking-tighter"><CheckCircle2 size={10} /><span>Auto-saved</span></div>}<button className="p-1.5 hover:bg-white/5 text-text-secondary rounded"><MoreHorizontal size={16} /></button></div>
-        </div>
-      </div>
-      <div className="flex-1 flex overflow-hidden relative">
-        <div className={cn("flex-1 transition-all duration-300", editor.isMarkdownPreview && isMarkdown ? "w-1/2" : "w-full")}>
-          <Editor height="100%" theme={settings.theme === 'dark' ? 'vs-dark' : 'light'} path={activeFile.path} defaultLanguage={activeFile.name.endsWith('.tsx') ? 'typescript' : activeFile.name.endsWith('.md') ? 'markdown' : 'css'} value={activeFile.content} onChange={(value) => updateFileContent(activeFile.id, value || '')} options={{ minimap: { enabled: false }, fontSize: settings.fontSize, fontFamily: "'JetBrains Mono', monospace", automaticLayout: true, padding: { top: 10 }, scrollBeyondLastLine: false, lineNumbers: 'on', wordWrap: settings.wordWrap ? 'on' : 'off' }} />
-        </div>
-        {editor.isMarkdownPreview && isMarkdown && <div className="w-1/2 bg-[#1e1e1e] text-slate-100 overflow-y-auto p-8 prose prose-sm prose-invert max-w-none border-l border-white/[0.08]"><ReactMarkdown>{activeFile.content || ''}</ReactMarkdown></div>}
-      </div>
-    </div>
-  );
-};
+// EditorStage is now handled by BuildCortex
 
 const Panel = () => {
   const { terminals, activeTerminalId, setActiveTerminal, addTerminal, files, togglePanel, settings } = useAppStore();
@@ -744,18 +698,20 @@ export const AgentLeeCodeStudio = () => {
           <div className="flex-1 flex overflow-hidden relative min-h-0 w-full">
             <AnimatePresence mode="wait">{sidebarVisible && <motion.div initial={{ x: -312 }} animate={{ x: 0 }} exit={{ x: -312 }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute left-0 top-0 bottom-0 z-40 w-[312px] shadow-2xl bg-bg-secondary border-r border-border"><Sidebar /></motion.div>}</AnimatePresence>
             <div className="flex-1 flex flex-col overflow-hidden relative min-h-0">
-              <div className="flex-1 flex overflow-hidden min-h-0">
-                <div className="flex-1 flex flex-col overflow-hidden min-h-0"><EditorStage /></div>
-                <AnimatePresence>{editor.showPreview && <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 300 }} className="absolute inset-y-0 right-0 z-30 w-full md:relative md:w-1/2 lg:w-1/3 border-l border-border bg-white overflow-hidden shadow-2xl md:shadow-none"><div className="absolute top-2 left-2 z-50 md:hidden"><button onClick={() => setPreview(false)} className="p-2 bg-black/20 hover:bg-black/30 rounded-full text-white shadow-lg backdrop-blur-sm"><X size={20} /></button></div><LivePreview /></motion.div>}</AnimatePresence>
-                <AnimatePresence>{writerPanelVisible && <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute right-0 top-0 bottom-0 z-40 shadow-2xl"><WriterPanel /></motion.div>}</AnimatePresence>
-              </div>
-              <AnimatePresence>{panelVisible && <motion.div initial={{ y: 300 }} animate={{ y: 0 }} exit={{ y: 300 }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute bottom-0 left-0 right-0 z-30 h-64 shadow-2xl bg-bg-primary border-t border-border"><Panel /></motion.div>}</AnimatePresence>
+              <React.Suspense fallback={<div className="flex-1 flex items-center justify-center text-text-secondary">Loading Code Studio...</div>}>
+                <BuildCortex />
+              </React.Suspense>
             </div>
           </div>
         );
       case 'To-Do': return <TodoManager />;
       case 'Preview': return <LivePreview />;
-      default: return <EditorStage />;
+      default:
+        return (
+          <div className="flex-1 flex items-center justify-center text-red-500 font-bold text-lg">
+            Editor unavailable. Please select a valid tab or check your build.
+          </div>
+        );
     }
   };
 
@@ -763,16 +719,23 @@ export const AgentLeeCodeStudio = () => {
     <div className="h-full w-full flex flex-col bg-bg-primary text-text-primary font-sans overflow-hidden select-none">
       <TopBar />
       <CommandPalette />
+      {/* Always render AgentLeeMic and LeewayWatermark at root level for reliability */}
+      <AgentLeeMic className="fixed bottom-16 right-8 z-[1000] w-32 h-32" />
+      <LeewayWatermark />
       {!sidebarVisible && <motion.button initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} onClick={() => toggleSidebar(true)} className="absolute left-0 top-1/2 -translate-y-1/2 z-50 w-6 h-24 bg-accent/20 hover:bg-accent/40 backdrop-blur-md border-r border-y border-accent/30 rounded-r-2xl flex items-center justify-center text-accent transition-all group"><ChevronRight size={18} className="group-hover:translate-x-0.5 transition-transform" /></motion.button>}
       {!navPanelVisible && !writerPanelVisible && <motion.button initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} onClick={() => toggleNavPanel(true)} className="absolute right-0 top-1/2 -translate-y-1/2 z-50 w-6 h-24 bg-accent/20 hover:bg-accent/40 backdrop-blur-md border-l border-y border-accent/30 rounded-l-2xl flex items-center justify-center text-accent transition-all group"><ChevronLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" /></motion.button>}
       <motion.div onPanEnd={handleSwipe} className="flex-1 flex flex-row overflow-hidden relative min-h-0">
         <AnimatePresence mode="wait"><motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.15 }} className="flex-1 flex flex-col overflow-hidden min-h-0">{renderTabContent()}</motion.div></AnimatePresence>
         <AnimatePresence>{navPanelVisible && <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute right-0 top-0 bottom-0 z-40 w-[280px] shadow-2xl"><NavigationPanel /></motion.div>}</AnimatePresence>
         {(sidebarVisible || navPanelVisible || writerPanelVisible) && <div className="absolute inset-0 bg-black/50 z-30 backdrop-blur-sm transition-all" onClick={() => { toggleSidebar(false); toggleNavPanel(false); toggleWriterPanel(false); }} />}
-        <AnimatePresence>{notification && <motion.div initial={{ opacity: 0, y: 50, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 50, scale: 0.9 }} className={cn("absolute bottom-8 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-2xl shadow-2xl border flex items-center gap-3 backdrop-blur-md min-w-[280px]", notification.type === 'success' ? "bg-green-500/90 border-green-400 text-white" : notification.type === 'error' ? "bg-red-500/90 border-red-400 text-white" : "bg-accent/90 border-accent/50 text-white")}><div className="w-2 h-2 rounded-full bg-white animate-pulse" /><span className="text-sm font-bold tracking-wide">{notification.message}</span></motion.div>}</AnimatePresence>
+        <AnimatePresence>{notification && <motion.div initial={{ opacity: 0, y: 50, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 50, scale: 0.9 }} className={cn("absolute bottom-8 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded-2xl shadow-2xl border flex items-center gap-3 backdrop-blur-md min-w-[280px]", notification.type === 'success' ? "bg-green-500/90 border-green-400 text-white" : notification.type === 'error' ? "bg-red-500/90 border-red-400 text-white" : "bg-accent/90 border-accent/50 text-white")}>{<div className="w-2 h-2 rounded-full bg-white animate-pulse" />}<span className="text-sm font-bold tracking-wide">{notification.message}</span></motion.div>}</AnimatePresence>
       </motion.div>
     </div>
   );
 };
 
-export default AgentLeeCodeStudio;
+// DEPRECATED: Code Studio logic migrated to cortices/creative/CodeStudio.tsx
+// Use dynamic import('cortices/creative/CodeStudio') for all new references.
+
+export * from '../cortices/creative/CodeStudio';
+

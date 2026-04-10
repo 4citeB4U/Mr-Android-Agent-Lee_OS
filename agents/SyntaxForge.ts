@@ -19,7 +19,7 @@ WHY = Nova generates fast; Syntax Forge ensures what is generated is maintainabl
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/SyntaxForge.ts
 WHEN = 2026-04-04
-HOW = Static class using GeminiClient with architecture-focused prompting; reviews code structure, naming, imports, and design patterns
+HOW = Static class using LeewayInferenceClient with architecture-focused prompting; reviews code structure, naming, imports, and design patterns
 
 AGENTS:
 ASSESS
@@ -34,7 +34,7 @@ MIT
 // Code architecture reviewer and structural designer.
 // Reviews Nova's output for maintainability, pattern correctness, and LeeWay header compliance.
 
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 import { ReportWriter } from '../core/ReportWriter';
@@ -84,7 +84,7 @@ export class SyntaxForge {
   static async review(code: string, filename?: string): Promise<ArchitectureReview> {
     eventBus.emit('agent:active', { agent: 'SyntaxForge', task: `Code review: ${filename ?? 'unnamed file'}` });
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `
 Review the following code${filename ? ` (file: ${filename})` : ''} for architectural quality:
 
@@ -106,7 +106,7 @@ RECOMMENDATION: [how to fix it]
 ---`,
       systemPrompt: SYNTAX_SYSTEM,
       agent: 'SyntaxForge',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.2,
     });
 
@@ -159,11 +159,11 @@ RECOMMENDATION: [how to fix it]
   static async design(requirement: string): Promise<string> {
     eventBus.emit('agent:active', { agent: 'SyntaxForge', task: `Architecture design: ${requirement.slice(0, 60)}` });
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `Design the architecture for: "${requirement}"\n\nOutput:\n1. File structure (relative paths)\n2. Class/interface names and responsibilities\n3. Key method signatures\n4. Data flow diagram (ASCII)\n5. Dependency notes`,
       systemPrompt: SYNTAX_SYSTEM,
       agent: 'SyntaxForge',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.3,
     });
 

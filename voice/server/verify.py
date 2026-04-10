@@ -39,11 +39,11 @@ try:
     from config import settings
     check("config module imports", True)
     check("offline_mode flag present", hasattr(settings, "offline_mode"))
-    check("gemini_api_key field present", hasattr(settings, "gemini_api_key"))
+    check("leeway_api_key field present", hasattr(settings, "leeway_api_key"))
     if settings.offline_mode:
-        warn("offline_mode=1 (Gemini disabled)", "set OFFLINE_MODE=0 to enable Gemini")
-    elif not settings.gemini_api_key:
-        warn("GEMINI_API_KEY not set", "Gemini features disabled")
+        warn("offline_mode=1 (leeway disabled)", "set OFFLINE_MODE=0 to enable leeway")
+    elif not settings.leeway_api_key:
+        warn("leeway_API_KEY not set", "leeway features disabled")
 except Exception as e:
     check("config module imports", False, str(e))
 
@@ -54,7 +54,7 @@ for mod_name in [
     "agent_core.stt_agent",
     "agent_core.router_agent",
     "agent_core.local_brain_agent",
-    "agent_core.gemini_heavy_brain_agent",
+    "agent_core.leeway_heavy_brain_agent",
     "agent_core.memory_agent",
     "agent_core.prosody_agent",
     "agent_core.tts_agent",
@@ -87,7 +87,7 @@ for pkg, friendly in [
     ("faster_whisper", "faster-whisper (STT)"),
     ("torch", "PyTorch (Silero VAD)"),
     ("llama_cpp", "llama-cpp-python (local LLM)"),
-    ("google.generativeai", "google-generativeai (Gemini)"),
+    ("leeway.generativeai", "leeway-generativeai (leeway)"),
 ]:
     try:
         importlib.import_module(pkg)
@@ -150,7 +150,7 @@ try:
     d = r.route("hello")
     check("'hello' routes to local", d.mode == "local")
     d2 = r.route("write me a Python script to parse JSON")
-    check("'write script' routes to gemini", d2.mode == "gemini")
+    check("'write script' routes to leeway", d2.mode == "leeway")
     r2 = RouterAgent(offline_mode=True)
     d3 = r2.route("write me a complex analysis of machine learning trends")
     check("offline mode forces local", d3.mode == "local")
@@ -188,3 +188,4 @@ else:
     for name, detail in failed:
         print(f"       - {name}: {detail}")
 print()
+

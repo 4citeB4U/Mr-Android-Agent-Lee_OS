@@ -24,7 +24,7 @@ HOW = TypeScript const object rendered in About panel, used as onboarding narrat
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 
 LICENSE:
 MIT
@@ -74,3 +74,4 @@ He was created so the user would not have to fight their tools alone.
   mission:
     "To turn the user's ideas, commands, needs, and goals into organized, safe, explainable execution across development, creativity, communication, and operations.",
 } as const;
+

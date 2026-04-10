@@ -24,7 +24,7 @@ HOW = TypeScript const object imported by prompt assembler, onboarding, and sett
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 
 LICENSE:
 MIT
@@ -74,3 +74,4 @@ export const AGENT_LEE_BELIEF_SYSTEM = {
     "I will strive to turn intention into action with clarity.",
   ],
 } as const;
+

@@ -1,4 +1,4 @@
-﻿/*
+/*
 LEEWAY HEADER — DO NOT REMOVE
 
 REGION: UI.PAGE.DEPLOYMENT
@@ -24,7 +24,7 @@ HOW = React component with tabs (Apps, Deploy, Monitor, Settings), app CRUD, ker
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 NEXUS
 
 LICENSE:
@@ -48,10 +48,12 @@ import {
   ExternalLink, RefreshCcw, Layout, FileCode, Package, AlertCircle, Briefcase,
   Smartphone, Server, ShoppingCart, Gavel, MessageSquare, ArrowLeftRight
 } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
+// import { LeewayInferenceClient } from "@leeway/inference";
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { eventBus } from '../core/EventBus';
+import { AgentLeeMic } from '../components/AgentleeMic';
+import { AgentLee } from '../components/AgentLee';
 
 // --- UTILS ---
 function cn(...inputs: ClassValue[]) {
@@ -119,7 +121,8 @@ const MODES = [
 ];
 
 // --- AI Initialization ---
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const aiApiKey = '' || '';
+const ai = aiApiKey ? new LeewayInferenceClient({ apiKey: aiApiKey }) : null;
 
 // --- Types ---
 type TabId = 'launches' | 'code' | 'creator' | 'publish' | 'monitor' | 'connections' | 'ecosystem' | 'directory' | 'vm';
@@ -287,8 +290,11 @@ const CommandCenter = ({ isOpen, onClose, onStartBuild }: { isOpen: boolean, onC
       : `You are ${agent.name}, the ${agent.role} in the Agent Lee OS. You are part of the ${agent.family} family. You are currently leading Workflow ${workflowObj?.name || detectedWorkflow}. Your helpers are: ${workflowObj?.helpers?.join(', ') || 'none'}. Agent Lee OS has a complete Master Directory of professional contacts across App Founders, Writers, Artists, Influencers, Marketers, Investors, and Entertainment. You also have VM-first task execution authority. Respond in character, being concise and action-oriented. The user says: ${userMsg}`;
 
     try {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
+      if (!ai) {
+        throw new Error('leeway API not configured. Please set VITE_leeway_API_KEY in .env.local');
+      }
+      const response = await ai!.models.generateContent({
+        model: "gemma4:e2b",
         contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
       });
       
@@ -310,116 +316,17 @@ const CommandCenter = ({ isOpen, onClose, onStartBuild }: { isOpen: boolean, onC
   ];
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="fixed bottom-6 right-6 w-[480px] max-w-[calc(100vw-48px)] h-[680px] max-h-[calc(100vh-100px)] bg-[#0a0f1a] border border-white/[0.08] rounded-3xl shadow-2xl z-[150] flex flex-col overflow-hidden"
-        >
-          <div className="p-5 bg-slate-900 text-white flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                <Bot size={20} />
-              </div>
-              <div>
-                <h3 className="font-black text-sm uppercase tracking-widest">Command Center</h3>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                    {activeWorkflow 
-                      ? `${activeWorkflow}: ${WORKFLOWS.find(w => w.id === activeWorkflow)?.name || 'Active'}` 
-                      : 'Awaiting Orders'}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="text-[9px] font-bold text-slate-500 uppercase">
-                {AGENTS.CORE.find(a => a.id === leadAgent)?.name || 'Lee Prime'}
-              </div>
-              <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
-                <X size={20} />
-              </button>
-            </div>
-          </div>
-
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar bg-white/[0.03]">
-            {messages.map((msg, i) => {
-              const agent = AGENTS.CORE.find(a => a.id === msg.agent);
-              return (
-                <motion.div 
-                  initial={{ opacity: 0, x: msg.role === 'user' ? 10 : -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  key={i} 
-                  className={cn(
-                    "flex flex-col max-w-[88%]",
-                    msg.role === 'user' ? "ml-auto items-end" : "mr-auto items-start"
-                  )}
-                >
-                  <div className={cn(
-                    "px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm",
-                    msg.role === 'user' 
-                      ? "bg-slate-900 text-white rounded-tr-none" 
-                      : "bg-white/[0.06] border border-white/[0.08] text-slate-200 rounded-tl-none"
-                  )}>
-                    {msg.content}
-                  </div>
-                  <div className="flex items-center gap-1.5 mt-1.5">
-                    {msg.role === 'assistant' && agent && (
-                      <agent.icon size={10} className={agent.text} />
-                    )}
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                      {msg.role === 'user' ? 'Commander' : agent?.name || 'Agent Lee'}
-                    </span>
-                  </div>
-                </motion.div>
-              );
-            })}
-            {isLoading && (
-              <div className="flex items-center gap-2 text-slate-400">
-                <RefreshCcw size={14} className="animate-spin" />
-                <span className="text-[10px] font-bold uppercase tracking-widest">
-                  {AGENTS.CORE.find(a => a.id === leadAgent)?.name || 'Lee Prime'} processing...
-                </span>
-              </div>
-            )}
-          </div>
-
-          <div className="p-4 bg-[#08101e] border-t border-white/[0.06]">
-            <div className="flex gap-2 mb-3 overflow-x-auto no-scrollbar pb-1">
-              {quickActions.map(action => (
-                <button 
-                  key={action.label}
-                  onClick={() => handleSend(action.msg)}
-                  className="px-3 py-1.5 bg-white/[0.05] border border-white/[0.08] rounded-full text-[10px] font-bold text-slate-400 hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 transition-all whitespace-nowrap"
-                >
-                  {action.label}
-                </button>
-              ))}
-            </div>
-            <div className="relative">
-              <input 
-                type="text" 
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Issue command to Lee Prime..."
-                className="w-full bg-white/[0.06] border border-white/[0.1] text-white placeholder:text-white/30 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all pr-14"
-              />
-              <button 
-                onClick={() => handleSend()}
-                disabled={!input.trim() || isLoading}
-                className="absolute right-2 top-2 bottom-2 w-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center hover:bg-emerald-700 disabled:opacity-50 transition-all"
-              >
-                <ArrowRight size={18} />
-              </button>
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <>
+      {/* Main interactive Agent Lee 3D form */}
+      <div className="w-full flex justify-center items-center py-8">
+        <AgentLee className="w-full max-w-2xl h-[400px]" size="large" />
+      </div>
+      {/* ...existing code... */}
+      {/* Floating Mic Button (always visible) */}
+      <div className="fixed bottom-6 right-6 z-[2000]">
+        <AgentLeeMic className="w-24 h-24" />
+      </div>
+    </>
   );
 };
 
@@ -984,7 +891,7 @@ const EcosystemView = () => {
       title: "App Distribution",
       icon: Smartphone,
       links: [
-        { id: "googleplay", name: "Google Play", url: "https://play.google.com/console" },
+        { id: "leewayplay", name: "leeway Play", url: "https://play.leeway.com/console" },
         { id: "appstore", name: "Apple App Store", url: "https://developer.apple.com/app-store" },
       ]
     },
@@ -1032,7 +939,7 @@ const EcosystemView = () => {
       title: "Marketing & SEO",
       icon: TrendingUp,
       links: [
-        { id: "googleads", name: "Google Ads", url: "https://ads.google.com" },
+        { id: "leewayads", name: "leeway Ads", url: "https://ads.leeway.com" },
         { id: "metaads", name: "Meta Ads Manager", url: "https://business.facebook.com" },
         { id: "semrush", name: "SEMrush", url: "https://www.semrush.com" },
         { id: "ahrefs", name: "Ahrefs", url: "https://ahrefs.com" },
@@ -1662,8 +1569,7 @@ export default function AgentLeeLaunchPad() {
   );
 
   return (
-    <div className="flex h-full bg-[#020408] text-white font-sans selection:bg-emerald-100 overflow-hidden">
-      
+    <>
       {/* --- LANE 1: GOVERNANCE & AGENTS --- */}
       <aside className={cn(
         "fixed inset-y-0 left-0 w-72 bg-[#08101e] border-r border-white/[0.06] z-[70] transition-transform duration-300 md:relative md:translate-x-0 md:w-20 lg:w-72 flex flex-col overflow-hidden",
@@ -1917,6 +1823,7 @@ export default function AgentLeeLaunchPad() {
           50% { opacity: 0.6; }
         }
       `}} />
-    </div>
+    </>
   );
 }
+

@@ -15,7 +15,7 @@ glyph=zap
 
 5WH:
 WHAT = Firebase Functions entry point — exports all deployed cloud functions
-WHY = Registers geminiProxy and geminiStream as Firebase-deployed HTTP functions
+WHY = Registers leewayProxy and leewayStream as Firebase-deployed HTTP functions
 WHO = Agent Lee OS — Firebase Functions
 WHERE = functions/src/index.ts
 WHEN = 2026
@@ -29,8 +29,9 @@ LICENSE:
 PROPRIETARY
 */
 import * as admin from 'firebase-admin';
-import { geminiProxy, geminiStream } from './geminiProxy';
+import { leewayProxy, leewayStream } from './leewayProxy';
 
 admin.initializeApp();
 
-export { geminiProxy, geminiStream };
+export { leewayProxy, leewayStream };
+

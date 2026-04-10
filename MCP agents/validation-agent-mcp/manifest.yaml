@@ -6,9 +6,10 @@ mission: >
   for each (health check → basic task → complex task → verification → memory
   write), and update the agent registry with readiness status. No agent is
   considered production-ready without passing all 5 levels.
+
 layer: backbone
-model_lane: glm_flash
-fallback_model_lane: qwen_local
+model_lane: none
+fallback_model_lane: none
 deployment_location: cerebral
 transport: stdio
 runtime: node
@@ -159,9 +160,7 @@ tools:
           default: false
 health_check: discover_agents
 fallback_behavior: >
-  If an individual agent fails L1 (startup), mark as 'failed' and continue to
-  the next agent. If memory-agent-mcp is unavailable, write validation results
-  to data/validation_cache.jsonl as fallback.
+  If an individual agent fails L1 (startup), mark as 'failed' and continue to the next agent. If memory-agent-mcp is unavailable, write validation results to data/validation_cache.jsonl as fallback. No cloud or remote fallback.
 escalation_rules:
   - If an agent crashes during L1 (process dies), mark as quarantined
   - If all backbone agents fail, escalate to agent-lee-core immediately

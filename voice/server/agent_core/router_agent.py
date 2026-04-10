@@ -1,17 +1,17 @@
 """
-router_agent.py – Decides whether to use the local LLM or escalate to Gemini.
+router_agent.py – Decides whether to use the local LLM or escalate to leeway.
 
 Input:  transcript text + conversation state
-Output: RouteDecision {mode: "local"|"gemini", reason, confidence}
+Output: RouteDecision {mode: "local"|"leeway", reason, confidence}
 
 Design notes
 ------------
 * Stage 1 – Rule-based fast path (always runs, O(1)):
-    Keywords/patterns that definitely belong to local or Gemini.
+    Keywords/patterns that definitely belong to local or leeway.
 * Stage 2 – llama.cpp classification prompt (runs when rules are ambiguous):
     A tiny single-sentence prompt → binary classification.
-* The agent NEVER calls Gemini in offline mode.
-* Confidence < threshold → escalate to Gemini (when online).
+* The agent NEVER calls leeway in offline mode.
+* Confidence < threshold → escalate to leeway (when online).
 """
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class RouteDecision:
-    mode: str  # "local" | "gemini"
+    mode: str  # "local" | "leeway"
     reason: str
     confidence: float  # 0.0 – 1.0
 
@@ -43,7 +43,7 @@ _LOCAL_PATTERNS = [
     r"\bremind me\b",
 ]
 
-_GEMINI_PATTERNS = [
+_leeway_PATTERNS = [
     r"\b(write|draft|generate|create|compose)\b.{10,}",  # creative / long
     r"\b(explain|summarize|analyse|analyze|research)\b.{15,}",
     r"\b(code|program|script|function|class|algorithm)\b",
@@ -52,19 +52,19 @@ _GEMINI_PATTERNS = [
 ]
 
 _LOCAL_RE = [re.compile(p, re.IGNORECASE) for p in _LOCAL_PATTERNS]
-_GEMINI_RE = [re.compile(p, re.IGNORECASE) for p in _GEMINI_PATTERNS]
+_leeway_RE = [re.compile(p, re.IGNORECASE) for p in _leeway_PATTERNS]
 
 
 class RouterAgent:
-    """Fast routing agent that keeps Gemini usage minimal."""
+    """Fast routing agent that keeps leeway usage minimal."""
 
     def __init__(
         self,
-        gemini_threshold: float = 0.6,
+        leeway_threshold: float = 0.6,
         offline_mode: bool = False,
         llama_model=None,  # optional Llama instance
     ) -> None:
-        self.gemini_threshold = gemini_threshold
+        self.leeway_threshold = leeway_threshold
         self.offline_mode = offline_mode
         self._llama = llama_model
 
@@ -97,11 +97,11 @@ class RouterAgent:
                 )
 
         if not self.offline_mode:
-            for pat in _GEMINI_RE:
+            for pat in _leeway_RE:
                 if pat.search(text):
                     return RouteDecision(
-                        mode="gemini",
-                        reason="rule_gemini_match",
+                        mode="leeway",
+                        reason="rule_leeway_match",
                         confidence=0.85,
                     )
 
@@ -127,9 +127,9 @@ class RouterAgent:
                 confidence=1.0,
             )
 
-        # Long, unmatched query → Gemini
+        # Long, unmatched query → leeway
         return RouteDecision(
-            mode="gemini",
+            mode="leeway",
             reason="heuristic_complex_query",
             confidence=0.65,
         )
@@ -140,9 +140,9 @@ class RouterAgent:
         Returns None on failure (fallback to heuristics).
         """
         prompt = (
-            "Classify if this request needs a powerful AI (gemini) or can be answered locally (local).\n"
+            "Classify if this request needs a powerful AI (leeway) or can be answered locally (local).\n"
             f'Query: "{text}"\n'
-            "Answer with one word only – local or gemini:\n"
+            "Answer with one word only – local or leeway:\n"
         )
         try:
             output = self._llama(
@@ -152,9 +152,9 @@ class RouterAgent:
                 stop=["\n", " "],
             )
             answer = output["choices"][0]["text"].strip().lower()
-            if "gemini" in answer and not self.offline_mode:
+            if "leeway" in answer and not self.offline_mode:
                 return RouteDecision(
-                    mode="gemini",
+                    mode="leeway",
                     reason="llama_classifier",
                     confidence=0.78,
                 )
@@ -166,3 +166,4 @@ class RouterAgent:
         except Exception as exc:
             logger.debug("Llama router classify failed: %s", exc)
             return None
+

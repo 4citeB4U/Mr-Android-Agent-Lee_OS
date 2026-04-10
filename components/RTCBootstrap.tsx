@@ -110,72 +110,40 @@ export const RTCBootstrap: React.FC<RTCBootstrapProps> = ({ onReady, onError }) 
     };
   }, [onReady, onError]);
 
-  if (status === 'ready') {
-    return null; // Hide when ready
-  }
+  const [dismissed, setDismissed] = useState(false);
 
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
-    >
-      <div className="text-center max-w-md mx-auto">
-        {/* Logo */}
-        <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="mb-6"
-        >
-          <div className="w-20 h-20 mx-auto bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center">
-            <span className="text-3xl">🧠</span>
-          </div>
-        </motion.div>
+  if (dismissed) return null;
 
-        {/* Status */}
-        <h2 className="text-2xl font-bold text-white mb-2">Agent Lee</h2>
-        <p className="text-cyan-300 text-sm mb-6">{message}</p>
+  const statusConfig = {
+    initializing: {
+      bg: 'rgba(0,30,60,0.85)',
+      border: 'rgba(0,255,255,0.3)',
+      glow: '0 0 12px rgba(0,255,255,0.15)',
+      dotColor: '#22d3ee',
+      textColor: '#67e8f9',
+      labelColor: '#a5f3fc',
+    },
+    ready: {
+      bg: 'rgba(0,40,20,0.85)',
+      border: 'rgba(16,185,129,0.4)',
+      glow: '0 0 12px rgba(16,185,129,0.15)',
+      dotColor: '#10b981',
+      textColor: '#6ee7b7',
+      labelColor: '#a7f3d0',
+    },
+    error: {
+      bg: 'rgba(60,10,10,0.9)',
+      border: 'rgba(239,68,68,0.4)',
+      glow: '0 0 12px rgba(239,68,68,0.15)',
+      dotColor: '#ef4444',
+      textColor: '#fca5a5',
+      labelColor: '#fecaca',
+    },
+  };
 
-        {/* Progress indicator */}
-        {status === 'initializing' && (
-          <div className="flex justify-center gap-2 mb-6">
-            {[0, 1, 2].map(i => (
-              <motion.div
-                key={i}
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 0.6, delay: i * 0.1, repeat: Infinity }}
-                className="w-2 h-2 bg-cyan-400 rounded-full"
-              />
-            ))}
-          </div>
-        )}
+  const cfg = statusConfig[status];
 
-        {/* Error display */}
-        {status === 'error' && (
-          <div className="bg-red-900/50 border border-red-500 rounded p-4 mb-4 text-sm">
-            <p className="text-red-200 font-mono">{error}</p>
-            <div className="mt-4 space-y-2 text-xs text-red-300">
-              <p>💡 Troubleshooting:</p>
-              <ul className="list-disc list-inside">
-                <li>Check if RTC server is running (port 3000)</li>
-                <li>Verify .env.local has VITE_API_KEY set</li>
-                <li>Allow microphone/camera permissions</li>
-                <li>Check browser console for details</li>
-              </ul>
-            </div>
-          </div>
-        )}
-
-        {/* System requirements */}
-        <div className="text-xs text-gray-400 space-y-1">
-          <p>✓ Voice: WebRTC Audio</p>
-          <p>✓ Vision: Camera Stream</p>
-          <p>✓ API Key: Configured</p>
-        </div>
-      </div>
-    </motion.div>
-  );
+  return null;
 };
 
 export default RTCBootstrap;

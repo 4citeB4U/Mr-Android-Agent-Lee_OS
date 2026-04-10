@@ -114,7 +114,7 @@ HOW = React + Tailwind component
 AGENTS:
 AZR
 PHI3
-GEMINI
+leeway
 QWEN
 LLAMA
 ECHO
@@ -322,3 +322,4 @@ LeeWay-Standards/
 ## License
 
 MIT © Rapid Web Development
+

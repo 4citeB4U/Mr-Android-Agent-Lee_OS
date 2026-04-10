@@ -1,3 +1,10 @@
+export enum AgentState {
+  IDLE = "IDLE",
+  LISTENING = "LISTENING",
+  THINKING = "THINKING",
+  SPEAKING = "SPEAKING",
+  ERROR = "ERROR"
+}
 /*
 LEEWAY HEADER — DO NOT REMOVE
 

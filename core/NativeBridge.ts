@@ -238,7 +238,7 @@ class NativeBridgeClass {
   }
 
   /**
-   * Request app review/rating (iOS App Store, Google Play)
+   * Request app review/rating (iOS App Store, leeway Play)
    */
   async requestAppReview(): Promise<boolean> {
     if (!this.isNative()) {
@@ -300,3 +300,4 @@ class NativeBridgeClass {
 // ── Singleton Export ───────────────────────────────────────────────────────
 
 export const NativeBridge = NativeBridgeClass.getInstance();
+

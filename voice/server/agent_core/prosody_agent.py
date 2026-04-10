@@ -7,8 +7,8 @@ Output: ProsodyPlan dict with pace, emphasis words, emotion tag
 The prosody plan is consumed by TTSAgent to adjust Piper's synthesis
 or to generate SSML-like markup.
 
-This runs locally and fast (pure Python heuristics + optional Gemini tags).
-If Gemini was used for the response and returned prosody tags in a
+This runs locally and fast (pure Python heuristics + optional leeway tags).
+If leeway was used for the response and returned prosody tags in a
 structured way, those take priority.
 """
 from __future__ import annotations
@@ -66,19 +66,19 @@ class ProsodyAgent:
     def __init__(self) -> None:
         pass
 
-    def plan(self, text: str, gemini_tags: Optional[dict] = None) -> ProsodyPlan:
+    def plan(self, text: str, leeway_tags: Optional[dict] = None) -> ProsodyPlan:
         """
         Build a ProsodyPlan for the given response text.
-        gemini_tags: optional dict from Gemini (e.g. {"emotion": "warm", "pace": 0.9})
+        leeway_tags: optional dict from leeway (e.g. {"emotion": "warm", "pace": 0.9})
         """
         plan = ProsodyPlan()
 
-        # If Gemini provided structured tags, use them (online only)
-        if gemini_tags:
-            plan.emotion = gemini_tags.get("emotion", "neutral")
-            plan.pace = float(gemini_tags.get("pace", 1.0))
-            plan.pitch = float(gemini_tags.get("pitch", 0.0))
-            plan.volume = float(gemini_tags.get("volume", 1.0))
+        # If leeway provided structured tags, use them (online only)
+        if leeway_tags:
+            plan.emotion = leeway_tags.get("emotion", "neutral")
+            plan.pace = float(leeway_tags.get("pace", 1.0))
+            plan.pitch = float(leeway_tags.get("pitch", 0.0))
+            plan.volume = float(leeway_tags.get("volume", 1.0))
             return plan
 
         # Heuristic analysis
@@ -137,7 +137,7 @@ class ProsodyAgent:
         """
         Render a basic SSML string using the prosody plan.
         Piper does not currently support SSML; this is reserved for future use
-        or Gemini-driven TTS alternatives.
+        or leeway-driven TTS alternatives.
         """
         rate_pct = f"{int(plan.pace * 100)}%"
         pitch_st = f"{plan.pitch:+.1f}st" if plan.pitch != 0 else "0st"
@@ -147,3 +147,4 @@ class ProsodyAgent:
             f"{clean}"
             f"</prosody></speak>"
         )
+

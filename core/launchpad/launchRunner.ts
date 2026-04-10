@@ -16,7 +16,7 @@ LICENSE: MIT
 */
 
 import { eventBus } from '../EventBus';
-import { palliumClient } from './memoryLakeClient';
+import { palliumClient } from './palliumClient';
 import { getProvider } from './providers';
 import type {
   LaunchJob, LaunchRecord, DeployableBundle,

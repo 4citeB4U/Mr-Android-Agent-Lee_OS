@@ -45,12 +45,12 @@ WHY = Renders the Agent Lee avatar in a Three.js 3D frame with full chat, voice,
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = components/AgentLeeForm.tsx
 WHEN = 2026
-HOW = React component with Three.js scene, GeminiClient integration, EventBus bindings, and Lucide icons for all UI controls
+HOW = React component with Three.js scene, LeewayInferenceClient integration, EventBus bindings, and Lucide icons for all UI controls
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 AGENT_LEE
 
 LICENSE:
@@ -62,7 +62,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Mic, Send, Share2, Image as ImageIcon, Loader2, Volume2, VolumeX, FolderHeart, Download } from 'lucide-react';
 import { eventBus } from '../core/EventBus';
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 import { sendTTS } from '../core/ttsBridge';
 
@@ -292,13 +292,19 @@ class VoxelEngine {
     this.container = container;
     this.onStateChange = onStateChange;
     this.onCountChange = onCountChange;
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000000); // Set background to black
-    this.scene.fog = new THREE.Fog(0x000000, 60, 140);
     const w = container.clientWidth || 800;
     const h = container.clientHeight || 600;
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(0x000000); // Set background to black
     this.camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
-    this.camera.position.set(30, 30, 60);
+    // Adjust camera for small mode (tighter, closer, centered)
+    if (w < 200) {
+      this.camera.position.set(0, 10, 65); // Closer
+      this.scene.fog = null; // No fog in small mode for clarity
+    } else {
+      this.camera.position.set(30, 30, 60);
+      this.scene.fog = new THREE.Fog(0x000000, 60, 140);
+    }
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(w, h);
@@ -318,12 +324,18 @@ class VoxelEngine {
     dirLight.shadow.mapSize.width = 2048;
     dirLight.shadow.mapSize.height = 2048;
     this.scene.add(dirLight);
-    const planeMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 1 }); // Floor darker
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), planeMat);
-    floor.rotation.x = -Math.PI / 2;
-    floor.position.y = CONFIG.FLOOR_Y;
-    floor.receiveShadow = true;
-    this.scene.add(floor);
+    this.scene.add(dirLight);
+    
+    // Only show floor in large mode
+    if (w >= 200) {
+      const planeMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 1 }); // Floor darker
+      const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), planeMat);
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.y = CONFIG.FLOOR_Y;
+      floor.receiveShadow = true;
+      this.scene.add(floor);
+    }
+    
     this.animate = this.animate.bind(this);
     this.animate();
   }
@@ -490,6 +502,7 @@ export interface AgentLeeFormProps {
   backgroundImage?: string | null;
   enabledShapes?: string[];
   onShapeChange?: (name: string) => void;
+  onClick?: () => void;
 }
 
 export default function AgentLeeForm({
@@ -500,8 +513,9 @@ export default function AgentLeeForm({
   size = 'large',
   className,
   backgroundImage,
-  enabledShapes,
-  onShapeChange
+  enabledShapes = [],
+  onShapeChange,
+  onClick
 }: AgentLeeFormProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<VoxelEngine | null>(null);
@@ -535,17 +549,15 @@ export default function AgentLeeForm({
     window.addEventListener('agentlee:cameraTrigger', handleTrigger as EventListener);
     return () => window.removeEventListener('agentlee:cameraTrigger', handleTrigger as EventListener);
   }, []);
-  // Dynamic registry for all available shapes
   const [dynamicShapeKeys, setDynamicShapeKeys] = useState<string[]>(Object.keys(Generators));
   useEffect(() => {
-    // Poll or listen for new shapes added to Generators
-    const interval = setInterval(() => {
-      const keys = Object.keys(Generators);
-      setDynamicShapeKeys(keys);
-    }, 1000); // check every second for new shapes
-    return () => clearInterval(interval);
-  }, []);
-  const allowedShapeKeys = enabledShapes && enabledShapes.length > 0 ? enabledShapes : dynamicShapeKeys;
+    const keys = Object.keys(Generators);
+    setDynamicShapeKeys(keys);
+  }, []); // Only once on mount or when Generators (static) is stable
+
+  // Filter allowed keys to only those that exist in our Generators registry
+  const rawAllowedKeys = enabledShapes && enabledShapes.length > 0 ? enabledShapes : dynamicShapeKeys;
+  const allowedShapeKeys = rawAllowedKeys.filter(key => key in Generators);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rotationQueue, setRotationQueue] = useState<VoxelData[][]>([Generators[allowedShapeKeys[0] as keyof typeof Generators]()]);
 
@@ -572,27 +584,6 @@ export default function AgentLeeForm({
     }
   }, [isMuted]);
 
-  const toggleMic = useCallback(() => {
-    if (isListening) recognitionRef.current?.stop();
-    else {
-      try {
-        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitRecognition;
-        if (!SpeechRecognition) { speak("Voice recognition is not supported in this browser."); return; }
-        const recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.onstart = () => setIsListening(true);
-        recognition.onend = () => setIsListening(false);
-        recognition.onresult = (event: any) => {
-          const transcript = event.results[0][0].transcript;
-          handleSendMessage(transcript);
-        };
-        recognition.start();
-        recognitionRef.current = recognition;
-      } catch (e) { console.error(e); setIsListening(false); }
-    }
-  }, [isListening, speak]);
-
   useEffect(() => {
     if (containerRef.current && !engineRef.current) {
       engineRef.current = new VoxelEngine(containerRef.current, setAppState, setVoxelCount);
@@ -612,7 +603,7 @@ export default function AgentLeeForm({
 
   // Instant and dynamic shape cycling logic
   const cycleToShape = useCallback((shapeKey: string) => {
-    if (!engineRef.current) return;
+    if (!engineRef.current || !Generators[shapeKey as keyof typeof Generators]) return;
     const data = Generators[shapeKey as keyof typeof Generators]();
     engineRef.current.dismantle();
     setTimeout(() => {
@@ -622,16 +613,26 @@ export default function AgentLeeForm({
     setCurrentIndex(allowedShapeKeys.indexOf(shapeKey));
   }, [allowedShapeKeys, onShapeChange]);
 
-  // Listen for a global event to cycle instantly (for voice/manual control)
+  // Auto-morphing logic: cycle every 20 seconds
   useEffect(() => {
-    const handler = (e: CustomEvent) => {
-      if (e.detail && typeof e.detail.shapeKey === 'string') {
-        cycleToShape(e.detail.shapeKey);
-      }
-    };
-    window.addEventListener('agentlee:cycleShape', handler as EventListener);
-    return () => window.removeEventListener('agentlee:cycleShape', handler as EventListener);
-  }, [cycleToShape]);
+    if (!allowedShapeKeys.length || allowedShapeKeys.length < 2) return;
+    
+    const interval = setInterval(() => {
+      // Don't morph if agent is busy (speaking or generating)
+      if (isSpeaking || isGenerating) return;
+
+      setCurrentIndex(prev => {
+        const next = (prev + 1) % allowedShapeKeys.length;
+        const nextShape = allowedShapeKeys[next];
+        cycleToShape(nextShape);
+        return next;
+      });
+    }, 20000);
+
+    return () => clearInterval(interval);
+  }, [allowedShapeKeys, isSpeaking, isGenerating, cycleToShape]);
+
+  // Listen for a global event to cycle instantly (for voice/manual control)
 
   // Shape selection buttons removed for side panel migration
 
@@ -664,7 +665,7 @@ export default function AgentLeeForm({
     `;
 
     try {
-      const response = await GeminiClient.generate({
+      const response = await LeewayInferenceClient.generate({
         prompt: `Request: ${prompt}`,
         systemPrompt: `${CORE_SYSTEM}\n\nSPECIALIST VOXEL MANIFESTATION:\n${voxelPrompt}`,
         agent: 'Pixel',
@@ -693,7 +694,7 @@ export default function AgentLeeForm({
               utt.rate = 0.95;
               utt.pitch = 0.8;
               const voices = window.speechSynthesis.getVoices();
-              const preferred = voices.find(v => /Google US English|Samantha|Microsoft David/i.test(v.name));
+              const preferred = voices.find(v => /leeway US English|Samantha|Microsoft David/i.test(v.name));
               if (preferred) utt.voice = preferred;
               window.speechSynthesis.speak(utt);
             }
@@ -747,8 +748,11 @@ export default function AgentLeeForm({
   }, [isSpeaking]);
 
   return (
-    <div className={`relative overflow-hidden transition-all duration-300 w-full h-full bg-black ${className || ''}`}>
-      {/* THREE.js canvas mount point */}
+    <div 
+      onClick={onClick}
+      className={`relative overflow-hidden transition-all duration-300 w-full h-full bg-black cursor-pointer ${className || ''}`}
+    >
+      {/* THREE.js canvas mount point - pointer events enabled for interactivity */}
       <div ref={containerRef} className="absolute inset-0" />
 
       {/* Camera popup (movable, only when triggered) */}
@@ -761,16 +765,19 @@ export default function AgentLeeForm({
           {isSpeaking && (
             <div className="absolute inset-0 z-0 pointer-events-none border-4 border-cyan-400/40 rounded-3xl animate-pulse" />
           )}
-
-          {/* Control buttons and model library removed for auto-cycling and clean UI */}
-
         </>
       )}
 
-      {/* ── SMALL (MINIMIZED) MODE — speaking ring ── */}
-      {size === 'small' && isSpeaking && (
-        <div className="absolute inset-0 rounded-full border-2 border-cyan-400 animate-pulse pointer-events-none z-10" />
+      {/* ── SMALL (MINIMIZED) MODE — show Agent Lee model and speaking ring ── */}
+      {size === 'small' && (
+        <>
+          <div className="absolute inset-0" />
+          {isSpeaking && (
+            <div className="absolute inset-0 rounded-full border-2 border-cyan-400 animate-pulse pointer-events-none z-10" />
+          )}
+        </>
       )}
     </div>
   );
 }
+

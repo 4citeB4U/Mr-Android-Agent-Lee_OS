@@ -70,7 +70,7 @@ The Voice Pipeline runs entirely on-device:
 The cloud is an option. The device is sovereign.
 
 ### V. THE FLAG IS RAISED
-This document serves as the official chronicle of the **Agent Lee Voxel OS** — a 20-agent civilization running on browser, voice server, and an MCP portal network of 17 capability portals.
+This document serves as the official chronicle of the **Agent Lee Agentic Operating System** — a 20-agent civilization running on browser, voice server, and an MCP portal network of 17 capability portals.
 
 We invite the world to witness the transition from **Software as a Tool** to **Software as a Civilization**.
 

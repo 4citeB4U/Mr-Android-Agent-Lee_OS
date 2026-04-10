@@ -24,7 +24,7 @@ HOW = React functional component with Tailwind CSS styling and accessibility sup
 AGENTS:
 AZR
 PHI3
-GEMINI
+leeway
 QWEN
 LLAMA
 ECHO
@@ -88,3 +88,4 @@ export function NexusButton({
     </button>
   );
 }
+

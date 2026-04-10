@@ -19,12 +19,12 @@ WHY = Provides dedicated high-precision reasoning so Agent Lee can tackle mathem
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/LilyCortex.ts
 WHEN = 2026-04-04
-HOW = Static class using GeminiClient with chain-of-thought prompting and step-by-step decomposition
+HOW = Static class using LeewayInferenceClient with chain-of-thought prompting and step-by-step decomposition
 
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 CORTEX
 
 LICENSE:
@@ -35,7 +35,7 @@ MIT
 // Handles complex multi-step reasoning, analytical synthesis, and logical problem solving.
 // Activated when a task requires deep structured thought rather than action execution.
 
-import { GeminiClient } from '../core/GeminiClient';
+import { LeewayInferenceClient } from '../core/LeewayInferenceClient';
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 import { ReportWriter } from '../core/ReportWriter';
@@ -76,7 +76,7 @@ export class LilyCortex {
   static async reason(problem: string): Promise<ReasoningResult> {
     eventBus.emit('agent:active', { agent: 'LilyCortex', task: `Reasoning: ${problem.slice(0, 80)}` });
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `
 Reason through the following problem step by step:
 
@@ -97,7 +97,7 @@ CONCLUSION:
 CONFIDENCE: [0-100]%`,
       systemPrompt: LILY_SYSTEM,
       agent: 'LilyCortex',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.3,
     });
 
@@ -146,11 +146,11 @@ CONFIDENCE: [0-100]%`,
 
     const sourceBlock = sources.map((s, i) => `Source ${i + 1}:\n${s}`).join('\n\n---\n\n');
 
-    const result = await GeminiClient.generate({
+    const result = await LeewayInferenceClient.generate({
       prompt: `Synthesize the following sources on the topic: "${topic}"\n\n${sourceBlock}\n\nProvide a unified, accurate, contradiction-free synthesis.`,
       systemPrompt: LILY_SYSTEM,
       agent: 'LilyCortex',
-      model: 'gemini-2.0-flash',
+      model: 'gemma4:e2b',
       temperature: 0.2,
     });
 
@@ -158,3 +158,4 @@ CONFIDENCE: [0-100]%`,
     return result.text;
   }
 }
+

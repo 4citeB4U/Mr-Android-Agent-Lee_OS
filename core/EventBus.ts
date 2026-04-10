@@ -20,7 +20,7 @@ type EventMap = {
   'vision:screen_text': { text: string; confidence: number };
   'vision:scene_summary': { summary: string };
   'vision:ui_hints': { hints: string[] };
-  'router:intent': { intent: string; mode: 'local' | 'gemini'; confidence: number; reason: string };
+  'router:intent': { intent: string; mode: 'local' | 'leeway'; confidence: number; reason: string };
   'redaction:applied': { originalLength: number; redactedLength: number; categories: string[] };
   'file:event': import('./fileOps').FileEvent;
   'governance:file_operation': import('./governanceEnforcer').FileGovernanceLog;
@@ -196,5 +196,6 @@ class EventBusClass {
 }
 
 export const eventBus = new EventBusClass();
+
 
 

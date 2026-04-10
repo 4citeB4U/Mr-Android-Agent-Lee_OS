@@ -32,12 +32,12 @@ Agent Lee Agentic OS is a 20-agent multi-family civilization running across thre
 | Layer | Technology | Purpose |
 |---|---|---|
 | Frontend | React 19, TypeScript 5.8, Vite 6, Tailwind CSS v4 | UI + App shell |
-| AI / LLM (cloud) | Google Gemini 2.0 Flash + Gemini Live (WebSocket audio) | Cloud inference |
+| AI / LLM (cloud) | leeway leeway 2.0 Flash + leeway Live (WebSocket audio) | Cloud inference |
 | AI / LLM (local) | llama.cpp (`llama-server`) | Offline inference |
 | STT | faster-whisper + Silero VAD | Local speech-to-text |
 | TTS | Piper TTS + Edge-TTS | Local/cloud text-to-speech |
 | Storage | IndexedDB (`idb`) + NDJSON ledger + Firebase | Memory + audit |
-| Auth | Firebase Auth (Google OAuth) → idToken → Cloud Function | Secure Gemini access |
+| Auth | Firebase Auth (leeway OAuth) → idToken → Cloud Function | Secure leeway access |
 | Voice Server | Python FastAPI, WebSocket, port 8765 | Local voice pipeline |
 | Agents | TypeScript static classes in `agents/` | Core + Governance + Voice |
 | MCP | Node.js MCP servers in `MCP agents/` | Capability portals |
@@ -103,7 +103,7 @@ Agent Lee Agentic OS is a 20-agent multi-family civilization running across thre
 ## Voice Pipeline — Local-First Priority Chain
 
 1. **Local Voice Server** (FastAPI, ws://localhost:8765) — Silero VAD → faster-whisper → llama.cpp → Piper TTS
-2. **Gemini Live** — bidirectional WebSocket audio (cloud fallback)
+2. **leeway Live** — bidirectional WebSocket audio (cloud fallback)
 3. **voice-agent-mcp Edge-TTS** — REST fallback (`http://127.0.0.1:3010/speak`)
 4. **Browser SpeechSynthesis** — last-resort
 
@@ -122,7 +122,7 @@ Agent Lee Agentic OS is a 20-agent multi-family civilization running across thre
 | VoiceService | `core/VoiceService.ts` | 4-tier voice priority chain |
 | VoiceSession | `voice/VoiceSession.ts` | React adapter for voice pipeline |
 | MemoryDB | `core/MemoryDB.ts` | IndexedDB wrapper |
-| GeminiLiveClient | `core/GeminiLiveClient.ts` | Gemini Live API WebSocket client |
+| leewayLiveClient | `core/leewayLiveClient.ts` | leeway Live API WebSocket client |
 | WorldRegistry | `core/WorldRegistry.ts` | All 20 agents + 12 supporting cast |
 | Shield | `agents/Shield.ts` | security, zone enforcement, break-glass |
 | ClerkArchive | `agents/ClerkArchive.ts` | report schema + index maintenance |
@@ -145,3 +145,4 @@ core/                    ← governance + runtime modules
 agents/                  ← agent implementations
 MCP agents/              ← MCP servers
 ```
+

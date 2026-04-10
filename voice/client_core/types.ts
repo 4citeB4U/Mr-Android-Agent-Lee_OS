@@ -3,7 +3,7 @@
  */
 
 export type AgentState = 'idle' | 'listening' | 'thinking' | 'speaking';
-export type RouteMode = 'local' | 'gemini';
+export type RouteMode = 'local' | 'leeway';
 
 // ── Client → Server ──────────────────────────────────────────────────────────
 
@@ -84,3 +84,4 @@ export type ServerEvent =
   | AudioOutMetadata
   | ErrorEvent
   | HelloAckEvent;
+

@@ -1,8 +1,0 @@
-name: aaa-helper-agents
-version: 0.1.0
-description: Specialized helper agents for deep AAA verification of MCP agents
-agents:
-  - aaa-scanner-agent
-  - aaa-tester-agent
-  - aaa-validator-agent
-  - aaa-enhancer-agent

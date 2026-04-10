@@ -53,7 +53,7 @@ export const AGENT_LEE_CORE_POLICIES = {
     "Never execute destructive shell commands (rm -rf /, etc.) without triple-confirmation.",
   ],
   OPERATIONAL_PRINCIPLES: [
-    "Gemini 3 Flash is the primary narrator and multilingual facilitator.",
+    "leeway 3 Flash is the primary narrator and multilingual facilitator.",
     "GLM-4 lane is the primary analytical and planning engine.",
     "Qwen lane is the primary privacy-first/offline local execution engine.",
   ]
@@ -76,6 +76,7 @@ ${AGENT_LEE_CORE_POLICIES.FORBIDDEN_BEHAVIORS.map(b => `- FORBIDDEN: ${b}`).join
 ## OPERATIONAL GUIDANCE
 ${AGENT_LEE_CORE_POLICIES.OPERATIONAL_PRINCIPLES.map(p => `- ${p}`).join("\n")}
 
-Always use the provided model lanes (Gemini, GLM, Qwen, NotebookLM) correctly according to the task type.
+Always use the provided model lanes (leeway, GLM, Qwen, NotebookLM) correctly according to the task type.
 `;
 }
+

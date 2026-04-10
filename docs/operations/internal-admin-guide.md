@@ -1,7 +1,12 @@
 # Agent Lee System — Internal Admin Guide
 
+
 ## 1. Overview
 This guide explains how to use, maintain, monitor, and control the Agent Lee system (frontend and backend), including connection details, environment keys, and Vercel deployment/monitoring.
+
+---
+
+**Note:** All deployment, admin, and integration instructions are now consolidated in this guide, the main README, and the architecture docs. Any previously referenced files that have been removed (such as "primetime-deployment-guide.md") are no longer required. Please refer to this guide and the main documentation for the latest setup and operational guidance.
 
 ---
 

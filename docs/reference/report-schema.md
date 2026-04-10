@@ -130,4 +130,5 @@ Rotation naming:
 Never include in any report line:
 - Contents of `serviceAccountKey.json` or `*adminsdk*.json`
 - `.env*` values
-- API keys matching known patterns (Google, OpenAI, GitHub)
+- API keys matching known patterns (leeway, OpenAI, GitHub)
+

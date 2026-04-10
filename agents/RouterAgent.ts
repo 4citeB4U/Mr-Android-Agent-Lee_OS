@@ -14,8 +14,8 @@ family=lucide
 glyph=git-branch
 
 5WH:
-WHAT = RouterAgent — classifies each user turn and decides local LLM vs Gemini routing
-WHY = Minimises Gemini API spend by handling simple intents locally via llama.cpp
+WHAT = RouterAgent — classifies each user turn and decides local LLM vs leeway routing
+WHY = Minimises leeway API spend by handling simple intents locally via llama.cpp
 WHO = Leeway Innovations / Agent Lee System Engineer
 WHERE = agents/RouterAgent.ts
 WHEN = 2026-04-04
@@ -23,7 +23,7 @@ WHEN = 2026-04-04
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 ROUTER
 
 LICENSE:
@@ -35,7 +35,7 @@ MIT
 // Provides a best-effort client classification for UI pre-rendering hints.
 // The authoritative routing decision is always made server-side.
 
-import { GeminiClient } from '../core/GeminiClient';
+// LeewayInferenceClient import removed (no longer used)
 import { eventBus } from '../core/EventBus';
 import { buildAgentLeeCorePrompt } from '../core/agent_lee_prompt_assembler';
 
@@ -43,17 +43,17 @@ const CORE_SYSTEM = buildAgentLeeCorePrompt();
 const ROUTER_SYSTEM = `${CORE_SYSTEM}
 
 SPECIALIST ROLE — ROUTER AGENT:
-Classify the user's message and decide whether it should be handled locally or by Gemini.
+Classify the user's message and decide whether it should be handled locally or by leeway.
 Respond ONLY with a JSON object:
 {
   "intent": "<short label: e.g. greeting | factual_question | code_help | creative | complex_reasoning | safety_concern>",
-  "mode": "local" | "gemini",
+  "mode": "local" | "leeway",
   "confidence": <0.0–1.0>,
   "reason": "<one sentence>"
 }
 
 Route to "local" for: greetings, simple yes/no, time/date, short factual recall, basic math.
-Route to "gemini" for: multi-step reasoning, code generation, creative writing, ambiguous or complex queries.`;
+Route to "leeway" for: multi-step reasoning, code generation, creative writing, ambiguous or complex queries.`;
 
 // Simple synchronous fast-path rules (no API call needed)
 const LOCAL_PATTERNS: RegExp[] = [
@@ -65,7 +65,7 @@ const LOCAL_PATTERNS: RegExp[] = [
 
 export type RouteDecision = {
   intent: string;
-  mode: 'local' | 'gemini';
+  mode: 'local' | 'leeway';
   confidence: number;
   reason: string;
 };
@@ -73,7 +73,7 @@ export type RouteDecision = {
 export class RouterAgent {
   /**
    * Classify a user message and emit router:intent.
-   * Fast-path rules run synchronously; ambiguous turns are sent to Gemini.
+   * Fast-path rules run synchronously; ambiguous turns are sent to leeway.
    */
   static async classify(userMessage: string): Promise<RouteDecision> {
     // Fast path
@@ -89,36 +89,10 @@ export class RouterAgent {
         return decision;
       }
     }
-
-    // Gemini-assisted classification
-    eventBus.emit('agent:active', { agent: 'Router', task: `Classifying: ${userMessage.slice(0, 60)}` });
-
-    let raw: string;
-    try {
-      const resp = await GeminiClient.generate({
-        prompt: userMessage,
-        systemPrompt: ROUTER_SYSTEM,
-        agent: 'Router',
-        model: 'gemini-2.0-flash',
-        temperature: 0.1,
-      });
-      raw = resp.text;
-    } catch {
-      // Fallback: route to local on API failure
-      const fallback: RouteDecision = { intent: 'unknown', mode: 'local', confidence: 0.5, reason: 'Router API call failed; defaulting to local.' };
-      eventBus.emit('router:intent', fallback);
-      return fallback;
-    }
-
-    try {
-      const decision = JSON.parse(raw.trim()) as RouteDecision;
-      eventBus.emit('router:intent', decision);
-      eventBus.emit('agent:done', { agent: 'Router', result: `${decision.intent} → ${decision.mode}` });
-      return decision;
-    } catch {
-      const fallback: RouteDecision = { intent: 'unknown', mode: 'gemini', confidence: 0.5, reason: 'Could not parse router response.' };
-      eventBus.emit('router:intent', fallback);
-      return fallback;
-    }
+    // No leeway/cloud fallback. Always route to local if not matched.
+    const fallback: RouteDecision = { intent: 'unknown', mode: 'local', confidence: 0.5, reason: 'No leeway/cloud fallback; defaulting to local.' };
+    eventBus.emit('router:intent', fallback);
+    return fallback;
   }
 }
+

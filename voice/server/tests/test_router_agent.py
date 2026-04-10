@@ -12,7 +12,7 @@ from agent_core.router_agent import RouterAgent, RouteDecision
 
 def make_router(offline=False):
     return RouterAgent(
-        gemini_threshold=0.6,
+        leeway_threshold=0.6,
         offline_mode=offline,
         llama_model=None,
     )
@@ -34,15 +34,15 @@ class TestRouterAgentRules:
         decision = r.route("stop")
         assert decision.mode == "local"
 
-    def test_code_routes_gemini(self):
+    def test_code_routes_leeway(self):
         r = make_router()
         decision = r.route("write me a Python script that reads a CSV file")
-        assert decision.mode == "gemini"
+        assert decision.mode == "leeway"
 
-    def test_explain_long_routes_gemini(self):
+    def test_explain_long_routes_leeway(self):
         r = make_router()
         decision = r.route("explain how transformer neural networks work in detail")
-        assert decision.mode == "gemini"
+        assert decision.mode == "leeway"
 
     def test_short_query_heuristic_local(self):
         r = make_router()
@@ -67,7 +67,7 @@ class TestRouterAgentRules:
 
 
 class TestRouterAgentOfflineMode:
-    def test_offline_forces_local_for_gemini_patterns(self):
+    def test_offline_forces_local_for_leeway_patterns(self):
         r = make_router(offline=True)
         # In offline mode even "heavy" queries must go local
         decision = r.route("write me a long essay about machine learning")
@@ -89,6 +89,7 @@ class TestRouteDecision:
         r = make_router()
         d = r.route("hello there")
         assert isinstance(d, RouteDecision)
-        assert d.mode in ("local", "gemini")
+        assert d.mode in ("local", "leeway")
         assert isinstance(d.reason, str)
         assert 0.0 <= d.confidence <= 1.0
+

@@ -79,7 +79,7 @@ import { SystemAwarenessPanel } from '../components/SystemAwarenessPanel';
 import { cn } from '../lib/utils';
 import { eventBus } from '../core/EventBus';
 import { pushDiagnosticsReport } from '../core/diagnostics_bridge';
-import { GEMINI_FREE_TIER_PRIMARY, GEMINI_FREE_TIER_THINKING } from '../core/model_lane_policy';
+
 
 export const Settings: React.FC = () => {
     // Shape selection state
@@ -103,7 +103,7 @@ export const Settings: React.FC = () => {
   const [voxelOpt, setVoxelOpt] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light' | 'neon'>('dark');
   const [voice, setVoice] = useState<'Christopher' | 'Samantha' | 'David'>('Christopher');
-  const [model, setModel] = useState<'gemini-2.0-flash' | 'gemini-2.0-flash-thinking-exp'>(GEMINI_FREE_TIER_PRIMARY);
+  const [model, setModel] = useState<'llama3.2-vision' | 'qwen2.5vl:3b' | 'qwen2.5-coder:1.5b'>('llama3.2-vision');
   const [apiKey, setApiKey] = useState('');
   const [showKey, setShowKey] = useState(false);
 
@@ -129,7 +129,11 @@ export const Settings: React.FC = () => {
     setTheme((localStorage.getItem('al_theme') as any) || 'dark');
     setVoice((localStorage.getItem('al_voice') as any) || 'Christopher');
     const modelLane = localStorage.getItem('al_model');
-    setModel(modelLane === GEMINI_FREE_TIER_THINKING ? GEMINI_FREE_TIER_THINKING : GEMINI_FREE_TIER_PRIMARY);
+    if (modelLane === 'qwen2.5vl:3b' || modelLane === 'qwen2.5-coder:1.5b') {
+      setModel(modelLane);
+    } else {
+      setModel('llama3.2-vision');
+    }
     setApiKey(localStorage.getItem('al_api_key') || '');
 
     reportSettings(
@@ -189,7 +193,7 @@ export const Settings: React.FC = () => {
     localStorage.setItem('al_model', m);
     reportSettings(
       'ok',
-      `Model lane switched to ${m}.`,
+      `Model switched to ${m}.`,
       ['department:settings', 'subsurface:model', 'setting:model', 'contract:strict']
     );
   };
@@ -255,9 +259,8 @@ export const Settings: React.FC = () => {
               <Bot size={24} />
               <h3 className="text-xl font-bold uppercase tracking-widest">Cognitive Engine</h3>
             </div>
-            
             <div className="space-y-3">
-              {([GEMINI_FREE_TIER_PRIMARY, GEMINI_FREE_TIER_THINKING] as const).map(m => (
+              {(['llama3.2-vision', 'qwen2.5vl:3b', 'qwen2.5-coder:1.5b'] as const).map(m => (
                 <button
                   key={m}
                   onClick={() => updateModel(m)}

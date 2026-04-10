@@ -10,7 +10,7 @@ LAST_UPDATED: 2026-04-03
 ## Scope
 - Pages and major surfaces
 - Agent + MCP orchestration paths
-- Gemini model lane and free-tier guardrails
+- leeway model lane and free-tier guardrails
 - Cross-component awareness and diagnostics contract usage
 
 ## Findings (Current State)
@@ -25,14 +25,23 @@ LAST_UPDATED: 2026-04-03
 - Memory Lake: mounted as component and governed by App snapshot/index writes
 - Creators Studio: now has page wrapper in pages/ for consistent architecture and diagnostics lifecycle reporting
 
-### 2) Gemini Model Governance
-- Gemini client wrapper defaults to gemini-2.0-flash
-- Router classification lane uses gemini-2.0-flash
-- Settings model picker now constrained to free-tier lanes:
-  - gemini-2.0-flash
-  - gemini-2.0-flash-thinking-exp
-- Services layer now enforces VITE_GEMINI_API_KEY presence and removed hardcoded key fallback
-- Image and voxel generation now use free-tier-first candidate/fallback strategy from shared model policy
+
+### 2) LeeWay-Compliant Local Model Workflow (2026)
+
+**All inference is performed locally using Ollama models. No leeway fallback is used except for explicit automation.**
+
+**Registered execution-layer models:**
+- **gemma4:e2b** — Reasoning, general LLM tasks
+- **qwen2.5vl:3b** — Vision, multimodal/image tasks
+- **qwen2.5-coder:1.5b** — Code and database tasks
+
+**How it works:**
+- All model requests are routed through the SLMRouter and VisionAgent.
+- Only the above models are registered as execution-layer tools.
+- No direct model-to-UI wiring; all model use is agent-orchestrated.
+- leeway and other cloud APIs are disabled for inference except for explicit automation or fallback by user override.
+
+**Configuration:** See `.env.local` for model endpoints and selection. All models are stored in `E:\ollama-models`.
 
 ### 3) Team/Object Awareness (Living System Behavior)
 - App emits active surface reports and periodic performance heartbeat reports
@@ -49,7 +58,7 @@ LAST_UPDATED: 2026-04-03
 ## Pass/Fail Summary
 - Diagnostics contract propagation: PASS (major surfaces)
 - Creators page architecture discoverability: PASS (wrapper added in pages/)
-- Gemini free-tier guardrails: PASS (policy + settings + service defaults)
+- leeway free-tier guardrails: PASS (policy + settings + service defaults)
 - Cross-system heartbeat telemetry: PASS (periodic App heartbeat)
 - Full pipeline uniform contract test coverage: PARTIAL (manual coverage complete; automated tests pending)
 
@@ -57,8 +66,9 @@ LAST_UPDATED: 2026-04-03
 - Entry-point stale VM mount removed from `index.tsx` (`AgentVM` import and JSX mount) to align with current single-VM architecture.
 - Diagnostics brain now emits its own strict heartbeat (`pages/Diagnostics.tsx`) so it is both consumer and producer in the diagnostics contract.
 - MCP model lanes updated to free-tier-first defaults with env overrides:
-  - `MCP agents/voice-agent-mcp/index.ts`: translate lane now uses `GEMINI_TRANSLATE_MODEL` defaulting to `gemini-2.0-flash`.
-  - `MCP agents/health-agent-mcp/index.ts`: health probe lane now uses `GEMINI_HEALTH_MODEL` defaulting to `gemini-2.0-flash`.
-  - `MCP agents/stitch-agent-mcp/lib/gemini.ts`: stitch lane now uses `GEMINI_STITCH_MODEL` defaulting to `gemini-2.0-flash`.
-- Core model type cleanup: removed stale `gemini-1.5-pro` lane from `core/GeminiClient.ts`.
+  - `MCP agents/voice-agent-mcp/index.ts`: translate lane now uses `leeway_TRANSLATE_MODEL` defaulting to `leeway-2.0-flash`.
+  - `MCP agents/health-agent-mcp/index.ts`: health probe lane now uses `leeway_HEALTH_MODEL` defaulting to `leeway-2.0-flash`.
+  - `MCP agents/stitch-agent-mcp/lib/leeway.ts`: stitch lane now uses `leeway_STITCH_MODEL` defaulting to `leeway-2.0-flash`.
+- Core model type cleanup: removed stale `leeway-1.5-pro` lane from `core/leewayClient.ts`.
 - Revalidation status: no editor-reported errors in all touched files after redo.
+

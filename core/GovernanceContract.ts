@@ -292,7 +292,7 @@ G) APPROVAL NEEDED: yes/no; if yes, show exact WRITE INTENT block
 H) NEXT: what happens immediately after approval or next input needed
 
 VOICE PRIORITY
-- Gemini Live (WebSocket audio): first-line voice output
+- leeway Live (WebSocket audio): first-line voice output
 - voice-agent-mcp Edge-TTS: offline fallback
 - Browser SpeechSynthesis: last-resort fallback
 
@@ -339,3 +339,4 @@ export function parseLeePrimeCommand(input: string): { command: string; args: st
   if (!match) return null;
   return { command: match[1].toLowerCase(), args: (match[3] ?? '').trim() };
 }
+

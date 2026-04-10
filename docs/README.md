@@ -6,7 +6,7 @@ LAST_UPDATED: 2026-04-04
 -->
 
 
-# Agent Lee Voxel OS — Developer Documentation
+# Agent Lee Agentic Operating System — Developer Documentation
 
 ---
 
@@ -51,13 +51,10 @@ This directory is the **canonical source of truth** for all developer-facing doc
 
 ## Quick Links (April 2026)
 
+
 | What | Doc |
 |---|---|
 | LeeWay-Edge-RTC partner repo | [https://github.com/4citeB4U/LeeWay-Edge-RTC](https://github.com/4citeB4U/LeeWay-Edge-RTC) |
-
-
-| What | Doc |
-|---|---|
 | All 20 agents + families | [`reference/full-stack-manifest.md`](reference/full-stack-manifest.md) |
 | Agent quick-reference | [`reference/agent-manifest.md`](reference/agent-manifest.md) |
 | 7-layer runtime architecture | [`architecture/leeway-runtime-universe.md`](architecture/leeway-runtime-universe.md) |
@@ -66,6 +63,11 @@ This directory is the **canonical source of truth** for all developer-facing doc
 | System diagrams | [`systemimages/`](systemimages/) |
 | Universal DB audit wrapper | [`core/dbOps.ts`](../../core/dbOps.ts) |
 | Governance enforcement | [`core/CentralGovernance.ts`](../../core/CentralGovernance.ts) |
+
+---
+
+## Note
+The previous "primetime-deployment-guide.md" has been removed as part of system hardening and documentation cleanup. All deployment, admin, and integration instructions are now consolidated in this README, the internal-admin-guide.md, and the architecture docs. Please refer to those for the latest setup and operational guidance.
 
 
 ## Rules (2026)

@@ -34,16 +34,18 @@ export const SOUND_KEYS = {
 export type SoundKey = keyof typeof SOUND_KEYS;
 
 const SOUND_FILES: Record<string, string> = {
-  appLoading:      '/sound/introtoapp.wav',
-  appOpen:         '/sound/introtoagentlee.wav',
-  buttonClick:     '/sound/buttonsound3.wav',
-  navClick:        '/sound/button4.wav',
-  universeIntro:   '/sound/Universe-intro.wav',
-  universeAmbient: '/sound/otnoise.wav',
-  universeCar:     '/sound/universe-car.wav',
+  appLoading:      '/sound/introtoagentlee.mp3',
+  appOpen:         '/sound/movieentro.mp3',  // Cinematic reveal for Home Screen
+  buttonClick:     '/sound/buttonsound3.mp3',
+  navClick:        '/sound/button4.mp3',
+  universeIntro:   '/sound/Universe-intro.mp3',
+  universeAmbient: '/sound/introtoagentlee.mp3',
+  universeCar:     '/sound/universe-car.mp3',
   universeExit:    '/sound/buttonsound2.mp3',
-  settingsOpen:    '/sound/settingsopening.wav',
-  idle:            '/sound/introtoapp.wav',
+  settingsOpen:    '/sound/settingsopening.mp3',
+  idle:            '/sound/introtoagentlee.mp3',
+  chatReceived:    '/sound/mixkit-revealing-bonus-notification-958.mp3', 
+  pulse:           '/sound/buttonsound2.mp3',
 };
 
 export const audioManager = {

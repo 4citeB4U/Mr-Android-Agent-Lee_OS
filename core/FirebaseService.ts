@@ -24,7 +24,7 @@ HOW = Static class wrapping Firestore, Auth, and Analytics with dependency injec
 AGENTS:
 ASSESS
 AUDIT
-GEMINI
+leeway
 SECURITY
 
 LICENSE:
@@ -95,7 +95,7 @@ export interface AgentTaskRecord {
   metadata?: Record<string, any>;
 }
 
-export interface MemoryLakeEntry {
+export interface PalliumEntry {
   id: string;
   userId: string;
   timestamp: string;
@@ -125,7 +125,7 @@ export class FirebaseService {
   private static instance: FirebaseService;
   private auth: Auth;
   private db: Firestore;
-  private googleProvider: GoogleAuthProvider;
+  private leewayProvider: GoogleAuthProvider;
   private currentUser: User | null = null;
   private listeners: Map<string, () => void> = new Map();
 
@@ -146,7 +146,7 @@ export class FirebaseService {
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     this.auth = getAuth(app);
     this.db = getFirestore(app);
-    this.googleProvider = new GoogleAuthProvider();
+    this.leewayProvider = new GoogleAuthProvider();
 
     // Set up auth state listener
     onAuthStateChanged(this.auth, (user) => {
@@ -173,9 +173,9 @@ export class FirebaseService {
   // AUTH METHODS
   // ─────────────────────────────────────────────────────────────────────
 
-  async signInWithGoogle(): Promise<User> {
+  async signInWithleeway(): Promise<User> {
     try {
-      const result = await signInWithPopup(this.auth, this.googleProvider);
+      const result = await signInWithPopup(this.auth, this.leewayProvider);
       this.currentUser = result.user;
       eventBus.emit('firebase:signed-in', { user: result.user });
       return result.user;
@@ -346,10 +346,10 @@ export class FirebaseService {
 
   async logMemoryEntry(
     userId: string,
-    entry: Partial<MemoryLakeEntry>
-  ): Promise<MemoryLakeEntry> {
+    entry: Partial<PalliumEntry>
+  ): Promise<PalliumEntry> {
     const entryId = `memory_${uuidv4()}`;
-    const memoryEntry: MemoryLakeEntry = {
+    const memoryEntry: PalliumEntry = {
       id: entryId,
       userId,
       timestamp: entry.timestamp || new Date().toISOString(),
@@ -364,11 +364,11 @@ export class FirebaseService {
     try {
       // 1. Always save to local MemoryDB first (Sovereign Recovery Layer)
       const localKey = `memory_lake_${userId}`;
-      const existing = await MemoryDB.get<MemoryLakeEntry[]>(localKey) || [];
+      const existing = await MemoryDB.get<PalliumEntry[]>(localKey) || [];
       await MemoryDB.set(localKey, [memoryEntry, ...existing].slice(0, 1000));
 
       // 2. Sync to Firebase (Cloud Mirror)
-      const entryRef = doc(this.db, 'users', userId, 'memoryLake', entryId);
+      const entryRef = doc(this.db, 'users', userId, 'pallium', entryId);
       await setDoc(entryRef, memoryEntry);
       
       eventBus.emit('firebase:memory-logged', { entryId, userId });
@@ -384,12 +384,12 @@ export class FirebaseService {
   async getMemoryEntries(
     userId: string,
     limitCount: number = 100
-  ): Promise<MemoryLakeEntry[]> {
+  ): Promise<PalliumEntry[]> {
     try {
-      const memoryRef = collection(this.db, 'users', userId, 'memoryLake');
+      const memoryRef = collection(this.db, 'users', userId, 'pallium');
       const q = query(memoryRef, orderBy('timestamp', 'desc'), limit(limitCount));
       const snapshot = await getDocs(q);
-      return snapshot.docs.map((doc) => doc.data() as MemoryLakeEntry);
+      return snapshot.docs.map((doc) => doc.data() as PalliumEntry);
     } catch (error) {
       eventBus.emit('firebase:db-error', { operation: 'getMemoryEntries', error });
       throw error;
@@ -560,3 +560,4 @@ export class FirebaseService {
 export const firebaseService = FirebaseService.getInstance();
 
 export default FirebaseService;
+

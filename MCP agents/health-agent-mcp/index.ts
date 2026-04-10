@@ -62,41 +62,8 @@ function isSafeTargetUrl(url: string): boolean {
   }
 }
 
-// Known model lane probe endpoints
-const MODEL_LANE_PROBES: Record<string, { url: string; body: object }> = {
-  glm_flash: {
-    url: "https://open.bigmodel.cn/api/paas/v4/chat/completions",
-    body: {
-      model: "glm-4-flash",
-      messages: [{ role: "user", content: "ping" }],
-      max_tokens: 1,
-    },
-  },
-  gemini: {
-    url: `https://generativelanguage.googleapis.com/v1beta/models/${process.env.GEMINI_HEALTH_MODEL ?? "gemini-2.0-flash"}:generateContent?key=${process.env.GEMINI_API_KEY ?? ""}`,
-    body: { contents: [{ parts: [{ text: "ping" }] }] },
-  },
-  qwen_local: {
-    url: `${process.env.OLLAMA_HOST ?? "http://127.0.0.1:11434"}/api/generate`,
-    body: { model: "qwen2.5:latest", prompt: "ping", stream: false },
-  },
-  glm_vision: {
-    url: "https://open.bigmodel.cn/api/paas/v4/chat/completions",
-    body: {
-      model: "glm-4v-flash",
-      messages: [{ role: "user", content: "ping" }],
-      max_tokens: 1,
-    },
-  },
-  qwen_3d: {
-    url: `${process.env.OLLAMA_HOST ?? "http://127.0.0.1:11434"}/api/generate`,
-    body: { model: "qwen3-3d:1.8b", prompt: "ping", stream: false },
-  },
-  notebooklm: {
-    url: "https://notebooklm.googleapis.com",
-    body: {},
-  },
-};
+// No cloud model lanes. Only local DB/service probes remain.
+// MODEL_LANE_PROBES removed for offline-only operation.
 
 // ── tool implementations ──────────────────────────────────────────────────
 
@@ -146,53 +113,7 @@ async function pingService(
   }
 }
 
-async function checkModelLane(
-  model_lane: string,
-): Promise<{
-  model_lane: string;
-  status: "ok" | "timeout" | "error";
-  latency_ms: number;
-  error?: string;
-}> {
-  const probe = MODEL_LANE_PROBES[model_lane];
-  if (!probe)
-    return {
-      model_lane,
-      status: "error",
-      latency_ms: 0,
-      error: "Unknown model lane",
-    };
-  const t0 = Date.now();
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 8000);
-    const res = await fetch(probe.url, {
-      method: model_lane === "notebooklm" ? "GET" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(process.env.ZAI_API_KEY && model_lane.startsWith("glm")
-          ? { Authorization: `Bearer ${process.env.ZAI_API_KEY}` }
-          : {}),
-      },
-      body:
-        model_lane === "notebooklm" ? undefined : JSON.stringify(probe.body),
-      signal: controller.signal,
-    });
-    clearTimeout(timer);
-    return {
-      model_lane,
-      status: res.status < 500 ? "ok" : "error",
-      latency_ms: Date.now() - t0,
-    };
-  } catch (e: unknown) {
-    return {
-      model_lane,
-      status: "error",
-      latency_ms: Date.now() - t0,
-      error: String(e),
-    };
-  }
-}
+
 
 async function checkDbConnection(
   target: "vercel_postgres" | "insforge" | "local_cache" = "vercel_postgres",
@@ -284,19 +205,7 @@ async function sweepAllServices(
     error?: string;
   }[] = [];
 
-  // Model lanes
-  if (includeLanes) {
-    const lanes = Object.keys(MODEL_LANE_PROBES);
-    for (const lane of lanes) {
-      const r = await checkModelLane(lane);
-      results.push({
-        name: `model:${lane}`,
-        status: r.status,
-        latency_ms: r.latency_ms,
-        error: r.error,
-      });
-    }
-  }
+  // Model lane checks removed for offline-only operation.
 
   // Backend service
   const backendPing = await pingService(
@@ -371,15 +280,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
       },
     },
-    {
-      name: "check_model_lane",
-      description: "Test a model lane with a minimal probe.",
-      inputSchema: {
-        type: "object",
-        required: ["model_lane"],
-        properties: { model_lane: { type: "string" } },
-      },
-    },
+    // check_model_lane tool removed for offline-only operation.
     {
       name: "check_db_connection",
       description: "Verify DB connectivity.",
